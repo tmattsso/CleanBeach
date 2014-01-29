@@ -31,6 +31,11 @@ public class MyTouchKitUI extends UI {
         TouchKitIcon.ambulance.addTo(tab);
         tab = tabBarView.addTab(new Label("Tab 3"), "Tab 3");
         TouchKitIcon.download.addTo(tab);
+        
+        MapView mapView = new MapView();
+        Tab maptab = tabBarView.addTab(mapView, "Map");
+        TouchKitIcon.globe.addTo(maptab);
+        
         setContent(tabBarView);
     }
 }
