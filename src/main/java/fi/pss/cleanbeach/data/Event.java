@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,12 +27,20 @@ public class Event extends AbstractEntity {
 	@ManyToOne
 	private Group organizer;
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@OrderColumn(name = "order")
-	private final List<Comment> comments = new ArrayList<>();
+	private List<Comment> comments = new ArrayList<>();
 
 	public String getDescription() {
 		return description;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 	public void setDescription(String description) {

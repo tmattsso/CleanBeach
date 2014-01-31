@@ -1,18 +1,22 @@
 package fi.pss.cleanbeach.data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "username, oid" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "username",
+		"oid" }) })
 public class User extends AbstractEntity {
 
+	@Column(nullable = false)
 	private String name;
 	private String username;
 	private byte[] hashedPass;
 	private String oid;
 	private String oidProvider;
+	@Column(nullable = false)
 	private String email;
 
 	public String getName() {
