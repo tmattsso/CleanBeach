@@ -90,6 +90,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+
 		<!-- used under development -->
 		<dependency>
 			<groupId>hsqldb</groupId>

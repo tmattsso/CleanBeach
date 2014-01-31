@@ -1,10 +1,9 @@
 package fi.pss.cleanbeach.services;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import fi.pss.cleanbeach.data.User;
 
@@ -12,8 +11,8 @@ import fi.pss.cleanbeach.data.User;
 @Startup
 public class BootstrapService {
 
-	@PersistenceContext(unitName = "cleanbeach")
-	private EntityManager em;
+	@EJB
+	private AuthenticationService auth;
 
 	@PostConstruct
 	public void init() {
@@ -22,13 +21,12 @@ public class BootstrapService {
 		user.setName("Thomas");
 		user.setEmail("thomas@vaadin.com");
 		user.setUsername("thomas");
-		em.persist(user);
 
 		System.out.println(user.getId());
 
-		em.flush();
+		auth.createUser(user, "vaadin");
 
-		user = em.find(User.class, user.getId());
+		user = auth.login("thomas", "vaadin");
 		System.out.println(user.getName());
 	}
 }
