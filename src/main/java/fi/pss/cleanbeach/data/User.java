@@ -10,14 +10,13 @@ import javax.persistence.UniqueConstraint;
 		"oid" }) })
 public class User extends AbstractEntity {
 
-	public static final int SALT_LENGTH_BYTES = 128 / 8;
-	public static final int PASS_FIELD_LENGTH_BYTES = SALT_LENGTH_BYTES + 256 / 8; // SHA-256
+	public static final int SALT_LENGTH_BYTES = 32;
+	private static final int PASS_FIELD_LENGTH_BIT = SALT_LENGTH_BYTES * 8 + 256; // SHA-256
 
 	@Column(nullable = false)
 	private String name;
 	private String username;
-	@Column(columnDefinition = "BINARY(" + PASS_FIELD_LENGTH_BYTES * 8
-			+ ") NOT NULL")
+	@Column(columnDefinition = "BINARY(" + PASS_FIELD_LENGTH_BIT + ") NOT NULL")
 	private byte[] hashedPass;
 	private String oid;
 	private String oidProvider;
