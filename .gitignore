@@ -1,2 +1,6 @@
 src/main/webapp/VAADIN/widgetsets
 /target
+.settings
+.project
+.classpath
+.DS_Store
