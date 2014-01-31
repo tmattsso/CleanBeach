@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach;
+package fi.pss.cleanbeach.ui;
 
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Button;

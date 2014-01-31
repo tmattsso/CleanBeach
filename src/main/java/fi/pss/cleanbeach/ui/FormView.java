@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach;
+package fi.pss.cleanbeach.ui;
 
 import com.vaadin.addon.touchkit.ui.DatePicker;
 import com.vaadin.addon.touchkit.ui.EmailField;

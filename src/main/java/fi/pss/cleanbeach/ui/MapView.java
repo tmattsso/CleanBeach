@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package fi.pss.cleanbeach;
+package fi.pss.cleanbeach.ui;
 
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import org.vaadin.addon.leaflet.LMap;

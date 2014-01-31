@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach;
+package fi.pss.cleanbeach.ui;
 
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.server.UIProvider;

@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach;
+package fi.pss.cleanbeach.ui;
 
 
 import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
@@ -15,7 +15,7 @@ import com.vaadin.ui.UI;
  * The UI's "main" class
  */
 @SuppressWarnings("serial")
-@Widgetset("fi.pss.cleanbeach.gwt.AppWidgetSet")
+@Widgetset("fi.pss.cleanbeach.ui.gwt.AppWidgetSet")
 @Theme("touchkit")
 public class MyTouchKitUI extends UI {
     @Override

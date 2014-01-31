@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach;
+package fi.pss.cleanbeach.ui;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
