@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -26,7 +27,12 @@ public class AuthenticationService {
 		Query q = em.createQuery("SELECT u FROM User u WHERE username=?");
 		q.setParameter(1, username);
 
-		User u = (User) q.getSingleResult();
+		User u = null;
+		try {
+			u = (User) q.getSingleResult();
+		} catch (NoResultException e) {
+			// Ignore
+		}
 
 		if (u == null) {
 			// no such user

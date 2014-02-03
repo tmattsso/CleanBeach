@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 
 import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationManager;
@@ -8,9 +9,12 @@ import com.vaadin.addon.touchkit.ui.TabBarView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -36,9 +40,11 @@ import fi.pss.cleanbeach.services.AuthenticationService;
 @CDIUI
 public class MyTouchKitUI extends UI {
 
+	private static final String COOKIE_NAME = "CleanBeachUser";
 	@Inject
 	private AuthenticationService authService;
 	private User currentUser;
+	private Label errorLabel;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -51,6 +57,8 @@ public class MyTouchKitUI extends UI {
 
 		// build login
 		VerticalLayout vl = new VerticalLayout();
+		vl.setSpacing(true);
+		vl.setMargin(true);
 		setContent(vl);
 
 		Image logo = new Image();
@@ -61,10 +69,25 @@ public class MyTouchKitUI extends UI {
 		vl.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 
 		final TextField username = new TextField("Username");
+		username.setImmediate(true);
 		vl.addComponent(username);
 
 		final PasswordField password = new PasswordField("Username");
+		password.setImmediate(true);
 		vl.addComponent(password);
+
+		ValueChangeListener vlc = new ValueChangeListener() {
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				errorLabel.setValue("");
+			}
+		};
+		username.addValueChangeListener(vlc);
+		password.addValueChangeListener(vlc);
+
+		errorLabel = new Label();
+		vl.addComponent(errorLabel);
 
 		Button login = new Button("Login", new ClickListener() {
 
@@ -76,6 +99,13 @@ public class MyTouchKitUI extends UI {
 		login.setClickShortcut(KeyCode.ENTER);
 		vl.addComponent(login);
 
+		// auto-fill username
+		Cookie c = getUsernameCookie();
+		if (c != null) {
+			username.setValue(c.getValue());
+			password.focus();
+		}
+
 	}
 
 	public void login(String user, String pass) {
@@ -83,6 +113,8 @@ public class MyTouchKitUI extends UI {
 		User u = authService.login(user, pass);
 		if (u != null) {
 			currentUser = u;
+
+			setCookie();
 
 			final TabBarView tabBarView = new TabBarView();
 			final NavigationManager navigationManager = new NavigationManager();
@@ -101,6 +133,34 @@ public class MyTouchKitUI extends UI {
 			TouchKitIcon.globe.addTo(maptab);
 
 			setContent(tabBarView);
+		} else {
+			errorLabel.setValue("Invalid credentials");
+
 		}
 	}
+
+	private Cookie getUsernameCookie() {
+		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
+		for (Cookie c : cookies) {
+			if (c.getName().equals(COOKIE_NAME)) {
+				return c;
+			}
+		}
+		return null;
+	}
+
+	private void setCookie() {
+		// check for old
+		if (getUsernameCookie() != null) {
+			return;
+		}
+
+		Cookie newCookie = new Cookie(COOKIE_NAME, currentUser.getUsername());
+		// newCookie.setSecure(true); TODO enable
+		// store for 30 days
+		newCookie.setMaxAge(60 * 60 * 24 * 30);
+
+		VaadinService.getCurrentResponse().addCookie(newCookie);
+	}
+
 }

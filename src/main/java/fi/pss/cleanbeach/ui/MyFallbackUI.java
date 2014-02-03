@@ -1,6 +1,5 @@
 package fi.pss.cleanbeach.ui;
 
-import com.vaadin.annotations.Theme;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Button;
@@ -12,7 +11,6 @@ import com.vaadin.ui.UI;
  * This UI is served for browsers that don't support TouchKit.
  * 
  */
-@Theme("cleanbeachtheme")
 @SuppressWarnings("serial")
 @CDIUI("/fallback")
 public class MyFallbackUI extends UI {
