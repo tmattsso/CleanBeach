@@ -3,22 +3,16 @@ package fi.pss.cleanbeach.ui;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
-import com.vaadin.addon.touchkit.ui.NavigationManager;
-import com.vaadin.addon.touchkit.ui.TabBarView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
-import com.vaadin.cdi.CDIViewProvider;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.UI;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService;
+import fi.pss.cleanbeach.ui.views.login.LoginView;
 
 /**
  * The UI's "main" class
@@ -36,7 +30,10 @@ public class MyTouchKitUI extends UI {
 	private User currentUser;
 
 	@Inject
-	private CDIViewProvider provider;
+	private MainView mainView;
+
+	@Inject
+	private LoginView login;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -50,9 +47,7 @@ public class MyTouchKitUI extends UI {
 		}
 
 		// build login
-		Navigator n = new Navigator(this, this);
-		n.addProvider(provider);
-		n.navigateTo("login");
+		setContent(login);
 	}
 
 	public boolean login(String user, String pass) {
@@ -63,23 +58,9 @@ public class MyTouchKitUI extends UI {
 
 			setCookie();
 
-			final TabBarView tabBarView = new TabBarView();
-			final NavigationManager navigationManager = new NavigationManager();
-			navigationManager.setCaption("Tab 1");
-			navigationManager.setCurrentComponent(new MenuView());
-			Tab tab;
-			tab = tabBarView.addTab(navigationManager);
-			TouchKitIcon.book.addTo(tab);
-			tab = tabBarView.addTab(new Label("Tab 2"), "Tab 2");
-			TouchKitIcon.ambulance.addTo(tab);
-			tab = tabBarView.addTab(new Label("Tab 3"), "Tab 3");
-			TouchKitIcon.download.addTo(tab);
+			setContent(mainView);
+			mainView.init();
 
-			MapView mapView = new MapView();
-			Tab maptab = tabBarView.addTab(mapView, "Map");
-			TouchKitIcon.globe.addTo(maptab);
-
-			setContent(tabBarView);
 			return true;
 		} else {
 			return false;

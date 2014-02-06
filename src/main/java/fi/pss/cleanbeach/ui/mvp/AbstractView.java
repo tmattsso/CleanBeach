@@ -1,12 +1,12 @@
 package fi.pss.cleanbeach.ui.mvp;
 
+import java.io.Serializable;
+
 import javax.annotation.PostConstruct;
 
+import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.cdi.CDIView;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.CustomComponent;
 
 /**
  * Abstract View superclass. Annotate the view implementation with
@@ -16,7 +16,7 @@ import com.vaadin.ui.CustomComponent;
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractView<P extends AbstractPresenter> extends
-		CustomComponent implements IView, View {
+		NavigationView implements IView, Serializable {
 
 	private static final long serialVersionUID = 3338257225854006391L;
 
@@ -31,18 +31,14 @@ public abstract class AbstractView<P extends AbstractPresenter> extends
 	@PostConstruct
 	private void init() {
 		presenter.setView(this);
-		setCompositionRoot(getContent());
+		setContent(getMainContent());
 	}
 
-	protected abstract ComponentContainer getContent();
+	protected abstract ComponentContainer getMainContent();
 
-	/**
-	 * OK to override
-	 * 
-	 * @see View#enter(ViewChangeEvent)
-	 */
 	@Override
-	public void enter(ViewChangeEvent event) {
+	public void attach() {
+		super.attach();
 		presenter.init();
 	}
 }
