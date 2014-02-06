@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui;
 
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 
 import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationManager;
@@ -10,30 +11,42 @@ import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet.Tab;
 
+import fi.pss.cleanbeach.ui.views.events.EventsView;
+import fi.pss.cleanbeach.ui.views.locations.MapView;
+
 @SessionScoped
 public class MainView extends TabBarView implements ViewDisplay {
 
 	private static final long serialVersionUID = 2092286827739040407L;
+
+	@Inject
+	private EventsView eventsView;
+
+	@Inject
+	private MapView mapView;
 
 	public MainView() {
 
 	}
 
 	public void init() {
+
+		// TODO refactor to be inside view itself; this level doesn't care
 		final NavigationManager navigationManager = new NavigationManager();
-		navigationManager.setCaption("Tab 1");
-		navigationManager.setCurrentComponent(new MenuView());
+		navigationManager.setCaption("Events");
+		navigationManager.setCurrentComponent(eventsView);
 		Tab tab;
 		tab = addTab(navigationManager);
-		TouchKitIcon.book.addTo(tab);
-		tab = addTab(new Label("Tab 2"), "Tab 2");
-		TouchKitIcon.ambulance.addTo(tab);
-		tab = addTab(new Label("Tab 3"), "Tab 3");
-		TouchKitIcon.download.addTo(tab);
+		TouchKitIcon.flag.addTo(tab);
 
-		MapView mapView = new MapView();
-		Tab maptab = addTab(mapView, "Map");
-		TouchKitIcon.globe.addTo(maptab);
+		tab = addTab(new Label("Tab 2"), "Groups");
+		TouchKitIcon.group.addTo(tab);
+
+		tab = addTab(mapView, "Locations");
+		TouchKitIcon.globe.addTo(tab);
+
+		tab = addTab(new Label("Tab 3"), "Settings");
+		TouchKitIcon.cogs.addTo(tab);
 	}
 
 	@Override

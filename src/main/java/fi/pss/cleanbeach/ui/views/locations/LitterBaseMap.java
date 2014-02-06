@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package fi.pss.cleanbeach.ui;
+package fi.pss.cleanbeach.ui.views.locations;
 
 import org.vaadin.addon.leaflet.LMap;
 import org.vaadin.addon.leaflet.LTileLayer;
