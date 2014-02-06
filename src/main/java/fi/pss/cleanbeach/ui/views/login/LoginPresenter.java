@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.ui.view.login;
+package fi.pss.cleanbeach.ui.views.login;
 
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 

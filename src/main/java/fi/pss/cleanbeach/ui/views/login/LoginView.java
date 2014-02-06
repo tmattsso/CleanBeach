@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.ui.view.login;
+package fi.pss.cleanbeach.ui.views.login;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
