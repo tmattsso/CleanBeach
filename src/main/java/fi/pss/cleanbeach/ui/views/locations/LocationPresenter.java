@@ -14,6 +14,22 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 	}
 
 	public void addLocation(double latitude, double longitude, String name) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void showEvents() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void createEvent() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void showTrends() {
+		// TODO Auto-generated method stub
 
 	}
 

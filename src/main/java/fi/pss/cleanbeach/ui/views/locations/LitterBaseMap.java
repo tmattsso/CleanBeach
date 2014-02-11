@@ -21,8 +21,12 @@ public class LitterBaseMap extends LMap {
 	private static final String MML_KAPSI_ATTRIBUTION_STRING = "Maanmittauslaitos, hosted by kartat.kapsi.fi";
 
 	private LMarker tempMarker;
+	private final LocationPresenter presenter;
 
-	public LitterBaseMap() {
+	public LitterBaseMap(LocationPresenter presenter,
+			final MapPointSelectedListener l) {
+
+		this.presenter = presenter;
 
 		LTileLayer mapBoxTiles = new LTileLayer(
 				"http://{s}.tiles.mapbox.com/v3/mstahv.h4mbchln/{z}/{x}/{y}.png");
@@ -54,9 +58,15 @@ public class LitterBaseMap extends LMap {
 				}
 				tempMarker.setPoint(event.getPoint());
 				tempMarker.setPopup("Ola!");
+
+				l.selected(event.getPoint());
 			}
 		});
 
+	}
+
+	LMarker getMarker() {
+		return tempMarker;
 	}
 
 }
