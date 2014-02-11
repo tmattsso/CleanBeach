@@ -1,9 +1,9 @@
 package fi.pss.cleanbeach.ui.views.login;
 
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
+import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -26,7 +26,7 @@ import com.vaadin.ui.themes.BaseTheme;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 
-@SessionScoped
+@UIScoped
 public class LoginView extends AbstractView<LoginPresenter> {
 
 	private static final long serialVersionUID = -259521650823470699L;

@@ -2,8 +2,11 @@ package fi.pss.cleanbeach.ui.views.login;
 
 import java.io.Serializable;
 
+import com.vaadin.cdi.UIScoped;
+
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
+@UIScoped
 public class LoginPresenter extends AbstractPresenter<ILogin> implements
 		Serializable {
 

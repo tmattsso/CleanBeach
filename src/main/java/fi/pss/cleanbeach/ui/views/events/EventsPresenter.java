@@ -2,8 +2,11 @@ package fi.pss.cleanbeach.ui.views.events;
 
 import java.io.Serializable;
 
+import com.vaadin.cdi.UIScoped;
+
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
+@UIScoped
 public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		Serializable {
 

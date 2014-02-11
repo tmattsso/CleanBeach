@@ -2,11 +2,11 @@ package fi.pss.cleanbeach.ui.mvp;
 
 import java.util.logging.Logger;
 
-import javax.enterprise.context.SessionScoped;
+import com.vaadin.cdi.UIScoped;
 
 /**
- * Abstract Presenter superclass. Annotate subclass with {@link SessionScoped}.
- * You are free to inject any beans/resources into this class.
+ * Abstract Presenter superclass. Annotate subclass with {@link UIScoped}. You
+ * are free to inject any beans/resources into this class.
  * 
  * @author thomas
  * 

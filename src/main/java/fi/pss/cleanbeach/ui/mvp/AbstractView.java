@@ -5,12 +5,12 @@ import java.io.Serializable;
 import javax.annotation.PostConstruct;
 
 import com.vaadin.addon.touchkit.ui.NavigationView;
-import com.vaadin.cdi.CDIView;
+import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.ComponentContainer;
 
 /**
  * Abstract View superclass. Annotate the view implementation with
- * {@link CDIView}.
+ * {@link UIScoped}.
  * 
  * @author thomas
  */

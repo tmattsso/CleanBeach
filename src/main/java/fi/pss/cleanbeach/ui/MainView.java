@@ -1,20 +1,20 @@
 package fi.pss.cleanbeach.ui;
 
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 
 import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationManager;
 import com.vaadin.addon.touchkit.ui.TabBarView;
+import com.vaadin.cdi.UIScoped;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet.Tab;
 
 import fi.pss.cleanbeach.ui.views.events.EventsView;
-import fi.pss.cleanbeach.ui.views.locations.MapView;
+import fi.pss.cleanbeach.ui.views.locations.LocationView;
 
-@SessionScoped
+@UIScoped
 public class MainView extends TabBarView implements ViewDisplay {
 
 	private static final long serialVersionUID = 2092286827739040407L;
@@ -23,7 +23,7 @@ public class MainView extends TabBarView implements ViewDisplay {
 	private EventsView eventsView;
 
 	@Inject
-	private MapView mapView;
+	private LocationView mapView;
 
 	public MainView() {
 
