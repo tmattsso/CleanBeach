@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
-import javax.annotation.PostConstruct;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import org.vaadin.addon.leaflet.shared.Point;
@@ -15,6 +16,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 
 @UIScoped
@@ -32,10 +34,6 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 		this.presenter = presenter;
 	}
 
-	@PostConstruct
-	private void postContruct() {
-	}
-
 	@Override
 	protected ComponentContainer getMainContent() {
 
@@ -51,12 +49,12 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.addLocation(lMap.getMarker().getPoint().getLat(),
-						lMap.getMarker().getPoint().getLon(), "New point");
+				Point p = lMap.getMarker().getPoint();
+				presenter.addLocation(p.getLat(), p.getLon(), "New point");
 			}
 		});
 
-		Button createEvent = new Button("create");
+		Button createEvent = new Button("event");
 		createEvent.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 682703780760294261L;
@@ -67,7 +65,7 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 			}
 		});
 
-		Button showTrends = new Button("add");
+		Button showTrends = new Button("trends");
 		showTrends.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -9055053032611311553L;
@@ -78,7 +76,7 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 			}
 		});
 
-		Button showEvents = new Button("history");
+		Button showEvents = new Button("events");
 		showEvents.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -7853451135198225867L;
@@ -99,11 +97,22 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 		vl.setExpandRatio(lMap, 1);
 		vl.setComponentAlignment(actionButtons, Alignment.MIDDLE_CENTER);
 
+		// add points
+		presenter.readyForPoints(lMap.getLat(), lMap.getLong());
+
 		return vl;
 	}
 
 	@Override
 	public void selected(Point point) {
 		actionButtons.setEnabled(point != null);
+	}
+
+	@Override
+	public void addLocations(Set<Location> locs) {
+
+		for (Location l : locs) {
+			lMap.addPoint(l);
+		}
 	}
 }

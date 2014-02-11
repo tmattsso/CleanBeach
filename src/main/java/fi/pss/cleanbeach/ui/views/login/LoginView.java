@@ -19,7 +19,6 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
@@ -27,7 +26,7 @@ import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 
 @UIScoped
-public class LoginView extends AbstractView<LoginPresenter> {
+public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 
 	private static final long serialVersionUID = -259521650823470699L;
 
@@ -93,10 +92,7 @@ public class LoginView extends AbstractView<LoginPresenter> {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				if (!((MyTouchKitUI) UI.getCurrent()).login(
-						username.getValue(), password.getValue())) {
-					errorLabel.setValue("Invalid credentials");
-				}
+				presenter.login(username.getValue(), password.getValue());
 			}
 		});
 		login.setClickShortcut(KeyCode.ENTER);
@@ -133,6 +129,11 @@ public class LoginView extends AbstractView<LoginPresenter> {
 	@Inject
 	public void injectPresenter(LoginPresenter presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public void showError() {
+		errorLabel.setValue("Invalid credentials");
 	}
 
 }

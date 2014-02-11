@@ -17,7 +17,7 @@ public class PSSErrorHandler implements ErrorHandler, Serializable {
 
 	private static final long serialVersionUID = 2471422708554126603L;
 
-	private Logger log;
+	private final Logger log = Logger.getLogger("ErrorLogger");
 
 	@Override
 	public void error(ErrorEvent event) {

@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.ui;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
@@ -11,7 +12,7 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.ui.UI;
 
 import fi.pss.cleanbeach.data.User;
-import fi.pss.cleanbeach.services.AuthenticationService;
+import fi.pss.cleanbeach.ui.views.login.LoginEvent;
 import fi.pss.cleanbeach.ui.views.login.LoginView;
 
 /**
@@ -25,8 +26,7 @@ import fi.pss.cleanbeach.ui.views.login.LoginView;
 public class MyTouchKitUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
-	@Inject
-	private AuthenticationService authService;
+
 	private User currentUser;
 
 	@Inject
@@ -50,21 +50,14 @@ public class MyTouchKitUI extends UI {
 		setContent(login);
 	}
 
-	public boolean login(String user, String pass) {
+	public void login(@Observes LoginEvent e) {
 
-		User u = authService.login(user, pass);
-		if (u != null) {
-			currentUser = u;
+		currentUser = e.user;
 
-			setCookie();
+		setCookie();
 
-			setContent(mainView);
-			mainView.init();
-
-			return true;
-		} else {
-			return false;
-		}
+		setContent(mainView);
+		mainView.init();
 	}
 
 	public static Cookie getUsernameCookie() {

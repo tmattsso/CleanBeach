@@ -12,6 +12,8 @@ import org.vaadin.addon.leaflet.LTileLayer;
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
 
+import fi.pss.cleanbeach.data.Location;
+
 /**
  * 
  * @author mattitahvonenitmill
@@ -67,6 +69,20 @@ public class LitterBaseMap extends LMap {
 
 	LMarker getMarker() {
 		return tempMarker;
+	}
+
+	public Double getLong() {
+		return getCenter().getLon();
+	}
+
+	public Double getLat() {
+		return getCenter().getLat();
+	}
+
+	public void addPoint(Location l) {
+		LMarker m = new LMarker(l.getLatitude(), l.getLongitude());
+		addComponent(m);
+		m.setPopup(l.getName());
 	}
 
 }
