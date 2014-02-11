@@ -36,6 +36,16 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 	}
 
 	@Override
+	public void attach() {
+		super.attach();
+
+		lMap.runPositioning();
+		// add points
+		presenter.readyForPoints(lMap.getLat(), lMap.getLong());
+
+	}
+
+	@Override
 	protected ComponentContainer getMainContent() {
 
 		setCaption("Törkykartal");
@@ -108,9 +118,6 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 		vl.setSizeFull();
 		vl.setExpandRatio(lMap, 1);
 		vl.setComponentAlignment(actionButtons, Alignment.MIDDLE_CENTER);
-
-		// add points
-		presenter.readyForPoints(lMap.getLat(), lMap.getLong());
 
 		return vl;
 	}

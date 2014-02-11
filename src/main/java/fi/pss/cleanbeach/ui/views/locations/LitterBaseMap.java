@@ -12,13 +12,19 @@ import org.vaadin.addon.leaflet.LTileLayer;
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
 
+import com.vaadin.addon.touchkit.extensions.Geolocator;
+import com.vaadin.addon.touchkit.extensions.PositionCallback;
+import com.vaadin.addon.touchkit.gwt.client.vcom.Position;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+
 import fi.pss.cleanbeach.data.Location;
 
 /**
  * 
  * @author mattitahvonenitmill
  */
-public class LitterBaseMap extends LMap {
+public class LitterBaseMap extends LMap implements PositionCallback {
 
 	private static final String MML_KAPSI_ATTRIBUTION_STRING = "Maanmittauslaitos, hosted by kartat.kapsi.fi";
 
@@ -47,6 +53,7 @@ public class LitterBaseMap extends LMap {
 		peruskartta.setMaxZoom(18);
 		peruskartta.setDetectRetina(true);
 
+		// default
 		setCenter(60.08504, 22.15187);
 
 		addClickListener(new LeafletClickListener() {
@@ -83,6 +90,24 @@ public class LitterBaseMap extends LMap {
 		LMarker m = new LMarker(l.getLatitude(), l.getLongitude());
 		addComponent(m);
 		m.setPopup(l.getName());
+	}
+
+	@Override
+	public void onSuccess(Position position) {
+		setCenter(position.getLatitude(), position.getLongitude());
+		presenter.readyForPoints(position.getLatitude(),
+				position.getLongitude());
+	}
+
+	@Override
+	public void onFailure(int errorCode) {
+		Notification.show("Could not get device position!",
+				Type.WARNING_MESSAGE);
+	}
+
+	public void runPositioning() {
+
+		Geolocator.detect(this);
 	}
 
 }
