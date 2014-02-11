@@ -18,6 +18,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
+import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmListener;
 
 @UIScoped
 public class LocationView extends AbstractView<LocationPresenter> implements
@@ -49,8 +50,19 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Point p = lMap.getMarker().getPoint();
-				presenter.addLocation(p.getLat(), p.getLon(), "New point");
+
+				CreateLocationPopover pop = new CreateLocationPopover(
+						new ConfirmListener() {
+
+							@Override
+							public void confirm(String name) {
+								Point p = lMap.getMarker().getPoint();
+								presenter.addLocation(p.getLat(), p.getLon(),
+										name);
+							}
+						});
+				pop.showRelativeTo(actionButtons);
+
 			}
 		});
 
