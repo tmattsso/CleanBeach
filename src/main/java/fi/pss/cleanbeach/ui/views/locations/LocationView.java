@@ -27,7 +27,11 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 	private static final long serialVersionUID = 6914178286159188531L;
 
 	private LitterBaseMap lMap;
+
 	private Layout actionButtons;
+	private HorizontalLayout addButtons;
+
+	private Location selected;
 
 	@Override
 	@Inject
@@ -87,6 +91,17 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 			}
 		});
 
+		Button markDirty = new Button("markAsDirty");
+		markDirty.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 682703780760294261L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.createEvent();
+			}
+		});
+
 		Button showTrends = new Button("trends");
 		showTrends.addClickListener(new ClickListener() {
 
@@ -109,22 +124,37 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 			}
 		});
 
-		actionButtons = new HorizontalLayout(addLocation, createEvent,
+		actionButtons = new HorizontalLayout(createEvent, markDirty,
 				showTrends, showEvents);
 		actionButtons.setSizeUndefined();
-		actionButtons.setEnabled(false);
+		actionButtons.setVisible(false);
 
-		VerticalLayout vl = new VerticalLayout(lMap, actionButtons);
+		addButtons = new HorizontalLayout(addLocation);
+		addButtons.setSizeUndefined();
+		addButtons.setVisible(false);
+
+		VerticalLayout vl = new VerticalLayout(lMap, actionButtons, addButtons);
 		vl.setSizeFull();
 		vl.setExpandRatio(lMap, 1);
 		vl.setComponentAlignment(actionButtons, Alignment.MIDDLE_CENTER);
+		vl.setComponentAlignment(addButtons, Alignment.MIDDLE_CENTER);
 
 		return vl;
 	}
 
 	@Override
-	public void selected(Point point) {
-		actionButtons.setEnabled(point != null);
+	public void selected(Point point, Location loc) {
+
+		actionButtons.setVisible(false);
+		addButtons.setVisible(false);
+
+		selected = loc;
+
+		if (loc == null) {
+			addButtons.setVisible(true);
+		} else {
+			actionButtons.setVisible(true);
+		}
 	}
 
 	@Override
