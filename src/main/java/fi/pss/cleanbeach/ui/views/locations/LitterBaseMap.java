@@ -6,6 +6,9 @@
 
 package fi.pss.cleanbeach.ui.views.locations;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.vaadin.addon.leaflet.LMap;
 import org.vaadin.addon.leaflet.LMarker;
 import org.vaadin.addon.leaflet.LTileLayer;
@@ -23,7 +26,7 @@ import fi.pss.cleanbeach.data.Location;
 
 /**
  * 
- * @author mattitahvonenitmill
+ * @author mattitahvonenitmill, thomas
  */
 public class LitterBaseMap extends LMap implements PositionCallback {
 
@@ -35,6 +38,8 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 	private final LocationPresenter presenter;
 
 	private final MapPointSelectedListener listener;
+
+	private final Map<Location, LMarker> markers = new HashMap<>();
 
 	public LitterBaseMap(LocationPresenter presenter,
 			final MapPointSelectedListener l) {
@@ -67,7 +72,7 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 			@Override
 			public void onClick(LeafletClickEvent event) {
 				// Notification.show("Lol: " + event.getPoint().getLat());
-				if (tempMarker == null) {
+				if (tempMarker == null || !tempMarker.isAttached()) {
 					tempMarker = new LMarker();
 					addComponent(tempMarker);
 				}
@@ -95,21 +100,8 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 		LMarker m = new LMarker(l.getLatitude(), l.getLongitude());
 		m.setData(l);
 		addComponent(m);
-		// m.setPopup(l.getName());
-		switch (l.getStatus()) {
-		case OK:
-			m.setIcon(new ClassResource("flag_green.png"));
-			break;
-		case DIRTY:
-			m.setIcon(new ClassResource("flag_red.png"));
-			break;
-		case NO_DATA:
-			m.setIcon(new ClassResource("flag_gray.png"));
-			break;
-
-		default:
-			break;
-		}
+		setIcon(m, l);
+		m.setPopup(l.getName());
 		m.addClickListener(new LeafletClickListener() {
 
 			@Override
@@ -117,6 +109,8 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 				listener.selected(event.getPoint(), l);
 			}
 		});
+
+		markers.put(l, m);
 	}
 
 	@Override
@@ -133,8 +127,39 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 	}
 
 	public void runPositioning() {
-
 		Geolocator.detect(this);
+	}
+
+	public void update(Location selected) {
+		LMarker m = markers.get(selected);
+		if (m == null) {
+			addPoint(selected);
+		} else {
+			setIcon(m, selected);
+		}
+
+	}
+
+	private static void setIcon(LMarker m, Location loc) {
+		switch (loc.getStatus()) {
+		case OK:
+			m.setIcon(new ClassResource("flag_green.png"));
+			break;
+		case DIRTY:
+			m.setIcon(new ClassResource("flag_red.png"));
+			break;
+		case NO_DATA:
+			m.setIcon(new ClassResource("flag_gray.png"));
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	public void clearTempMarker() {
+		removeComponent(tempMarker);
 	}
 
 }

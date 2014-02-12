@@ -43,21 +43,19 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 	public void attach() {
 		super.attach();
 
+		// Start positioning
 		lMap.runPositioning();
-		// add points
-		presenter.readyForPoints(lMap.getLat(), lMap.getLong());
-
 	}
 
 	@Override
 	protected ComponentContainer getMainContent() {
 
-		setCaption("Törkykartal");
+		setCaption("Reported locations");
 
 		lMap = new LitterBaseMap(presenter, this);
 		lMap.setSizeFull();
 
-		Button addLocation = new Button("add");
+		Button addLocation = new Button("Add location");
 		addLocation.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 5940636967467650018L;
@@ -65,6 +63,9 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 			@Override
 			public void buttonClick(ClickEvent event) {
 
+				// TODO check if too close to existing location
+
+				// ask name for new location
 				CreateLocationPopover pop = new CreateLocationPopover(
 						new ConfirmListener() {
 
@@ -73,10 +74,10 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 								Point p = lMap.getMarker().getPoint();
 								presenter.addLocation(p.getLat(), p.getLon(),
 										name);
+								lMap.clearTempMarker();
 							}
 						});
 				pop.showRelativeTo(actionButtons);
-
 			}
 		});
 
@@ -87,18 +88,18 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.createEvent();
+				presenter.createEvent(selected);
 			}
 		});
 
-		Button markDirty = new Button("markAsDirty");
+		Button markDirty = new Button("report");
 		markDirty.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 682703780760294261L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.createEvent();
+				presenter.markBeachDirty(selected);
 			}
 		});
 
@@ -109,7 +110,7 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.showTrends();
+				presenter.showTrends(selected);
 			}
 		});
 
@@ -120,7 +121,7 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.showEvents();
+				presenter.showEvents(selected);
 			}
 		});
 
@@ -153,6 +154,7 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 		if (loc == null) {
 			addButtons.setVisible(true);
 		} else {
+			lMap.clearTempMarker();
 			actionButtons.setVisible(true);
 		}
 	}
@@ -163,5 +165,15 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 		for (Location l : locs) {
 			lMap.addPoint(l);
 		}
+	}
+
+	@Override
+	public void updateMarker(Location selected) {
+		lMap.update(selected);
+	}
+
+	@Override
+	public void selectMarker(Location l) {
+		selected(null, l);
 	}
 }

@@ -9,4 +9,8 @@ public interface ILocation extends IView {
 
 	void addLocations(Set<Location> locs);
 
+	void updateMarker(Location selected);
+
+	void selectMarker(Location l);
+
 }

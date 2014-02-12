@@ -43,4 +43,9 @@ public class LocationService {
 		em.persist(l);
 		return l;
 	}
+
+	public Location save(Location selected) {
+		em.merge(selected);
+		return selected;
+	}
 }
