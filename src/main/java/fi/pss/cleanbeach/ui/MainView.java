@@ -12,47 +12,51 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet.Tab;
 
 import fi.pss.cleanbeach.ui.views.events.EventsView;
+import fi.pss.cleanbeach.ui.views.group.GroupView;
 import fi.pss.cleanbeach.ui.views.locations.LocationView;
 
 @UIScoped
 public class MainView extends TabBarView implements ViewDisplay {
 
-	private static final long serialVersionUID = 2092286827739040407L;
+    private static final long serialVersionUID = 2092286827739040407L;
 
-	@Inject
-	private EventsView eventsView;
+    @Inject
+    private EventsView eventsView;
 
-	@Inject
-	private LocationView mapView;
+    @Inject
+    private LocationView mapView;
 
-	public MainView() {
+    @Inject
+    private GroupView groupView;
 
-	}
+    public MainView() {
 
-	public void init() {
+    }
 
-		// TODO refactor to be inside view itself; this level doesn't care
-		final NavigationManager navigationManager = new NavigationManager();
-		navigationManager.setCaption("Events");
-		navigationManager.setCurrentComponent(eventsView);
-		Tab tab;
-		tab = addTab(navigationManager);
-		TouchKitIcon.flag.addTo(tab);
+    public void init() {
 
-		tab = addTab(new Label("Tab 2"), "Groups");
-		TouchKitIcon.group.addTo(tab);
+        // TODO refactor to be inside view itself; this level doesn't care
+        final NavigationManager navigationManager = new NavigationManager();
+        navigationManager.setCaption("Events");
+        navigationManager.setCurrentComponent(eventsView);
+        Tab tab;
+        tab = addTab(navigationManager);
+        TouchKitIcon.flag.addTo(tab);
 
-		tab = addTab(mapView, "Locations");
-		TouchKitIcon.globe.addTo(tab);
+        tab = addTab(groupView, "Groups");
+        TouchKitIcon.group.addTo(tab);
 
-		tab = addTab(new Label("Tab 3"), "Settings");
-		TouchKitIcon.cogs.addTo(tab);
-	}
+        tab = addTab(mapView, "Locations");
+        TouchKitIcon.globe.addTo(tab);
 
-	@Override
-	public void showView(View view) {
-		// TODO Auto-generated method stub
+        tab = addTab(new Label("Tab 3"), "Settings");
+        TouchKitIcon.cogs.addTo(tab);
+    }
 
-	}
+    @Override
+    public void showView(View view) {
+        // TODO Auto-generated method stub
+
+    }
 
 }
