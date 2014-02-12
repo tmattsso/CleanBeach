@@ -8,29 +8,38 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.data.UsersGroup;
 
 @Singleton
 @Startup
 public class BootstrapService {
 
-	@EJB
-	private AuthenticationService auth;
+    @EJB
+    private AuthenticationService auth;
 
-	@PersistenceContext(unitName = "cleanbeach")
-	private EntityManager em;
+    @PersistenceContext(unitName = "cleanbeach")
+    private EntityManager em;
 
-	@PostConstruct
-	public void init() {
-		User user = new User();
-		user.setName("Thomas");
-		user.setEmail("thomas@vaadin.com");
-		user.setUsername("thomas");
+    @EJB
+    private GroupService groupService;
 
-		System.out.println(user.getId());
+    @PostConstruct
+    public void init() {
+        User user = new User();
+        user.setName("Thomas");
+        user.setEmail("thomas@vaadin.com");
+        user.setUsername("thomas");
 
-		auth.createUser(user, "vaadin");
+        System.out.println(user.getId());
 
-		user = auth.login("thomas", "vaadin");
-		System.out.println(user.getName());
-	}
+        auth.createUser(user, "vaadin");
+
+        user = auth.login("thomas", "vaadin");
+        System.out.println(user.getName());
+
+        UsersGroup group = new UsersGroup();
+        group.setName("group");
+        group.setDescription("descr");
+        groupService.addAdmin(group, user);
+    }
 }

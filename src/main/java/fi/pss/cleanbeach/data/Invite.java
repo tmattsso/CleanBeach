@@ -12,7 +12,7 @@ public class Invite extends AbstractEntity {
 	private User inviter;
 
 	@ManyToOne
-	private Group invitee;
+	private UsersGroup invitee;
 
 	@ManyToOne
 	private Event event;
@@ -41,11 +41,11 @@ public class Invite extends AbstractEntity {
 		this.inviter = inviter;
 	}
 
-	public Group getInvitee() {
+	public UsersGroup getInvitee() {
 		return invitee;
 	}
 
-	public void setInvitee(Group invitee) {
+	public void setInvitee(UsersGroup invitee) {
 		this.invitee = invitee;
 	}
 }

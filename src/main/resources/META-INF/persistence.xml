@@ -10,7 +10,6 @@
 		<class>fi.pss.cleanbeach.data.AbstractEntity</class>
 		<class>fi.pss.cleanbeach.data.Comment</class>
 		<class>fi.pss.cleanbeach.data.Event</class>
-		<class>fi.pss.cleanbeach.data.Group</class>
 		<class>fi.pss.cleanbeach.data.Image</class>
 		<class>fi.pss.cleanbeach.data.Invite</class>
 		<class>fi.pss.cleanbeach.data.Location</class>
@@ -18,6 +17,7 @@
 		<class>fi.pss.cleanbeach.data.Thrash</class>
 		<class>fi.pss.cleanbeach.data.ThrashType</class>
 		<class>fi.pss.cleanbeach.data.User</class>
+		<class>fi.pss.cleanbeach.data.UsersGroup</class>
 
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="create-drop" />

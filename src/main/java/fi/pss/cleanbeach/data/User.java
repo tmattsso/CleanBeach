@@ -1,73 +1,88 @@
 package fi.pss.cleanbeach.data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "username",
-		"oid" }) })
+        "oid" }) })
 public class User extends AbstractEntity {
 
-	public static final int SALT_LENGTH_BYTES = 32;
-	private static final int PASS_FIELD_LENGTH_BIT = SALT_LENGTH_BYTES * 8 + 256; // SHA-256
+    public static final int SALT_LENGTH_BYTES = 32;
+    private static final int PASS_FIELD_LENGTH_BIT = SALT_LENGTH_BYTES * 8 + 256; // SHA-256
 
-	@Column(nullable = false)
-	private String name;
-	private String username;
-	@Column(columnDefinition = "BINARY(" + PASS_FIELD_LENGTH_BIT + ") NOT NULL")
-	private byte[] hashedPass;
-	private String oid;
-	private String oidProvider;
-	@Column(nullable = false)
-	private String email;
+    @Column(nullable = false)
+    private String name;
+    private String username;
+    @Column(columnDefinition = "BINARY(" + PASS_FIELD_LENGTH_BIT + ") NOT NULL")
+    private byte[] hashedPass;
+    private String oid;
+    private String oidProvider;
+    @Column(nullable = false)
+    private String email;
 
-	public String getName() {
-		return name;
-	}
+    @ManyToMany(mappedBy = "members")
+    private Set<UsersGroup> memberIn = new HashSet<>();
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Set<UsersGroup> getMemberIn() {
+        return memberIn;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public void setMemberIn(Set<UsersGroup> memberIn) {
+        this.memberIn = memberIn;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public byte[] getHashedPass() {
-		return hashedPass;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setHashedPass(byte[] hashedPass) {
-		this.hashedPass = hashedPass;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getOid() {
-		return oid;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public void setOid(String oid) {
-		this.oid = oid;
-	}
+    public byte[] getHashedPass() {
+        return hashedPass;
+    }
 
-	public String getOidProvider() {
-		return oidProvider;
-	}
+    public void setHashedPass(byte[] hashedPass) {
+        this.hashedPass = hashedPass;
+    }
 
-	public void setOidProvider(String oidProvider) {
-		this.oidProvider = oidProvider;
-	}
+    public String getOid() {
+        return oid;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getOidProvider() {
+        return oidProvider;
+    }
+
+    public void setOidProvider(String oidProvider) {
+        this.oidProvider = oidProvider;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

@@ -25,7 +25,7 @@ public class Event extends AbstractEntity {
 	private Location location;
 
 	@ManyToOne
-	private Group organizer;
+	private UsersGroup organizer;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@OrderColumn(name = "order")
@@ -63,11 +63,11 @@ public class Event extends AbstractEntity {
 		this.location = location;
 	}
 
-	public Group getOrganizer() {
+	public UsersGroup getOrganizer() {
 		return organizer;
 	}
 
-	public void setOrganizer(Group organizer) {
+	public void setOrganizer(UsersGroup organizer) {
 		this.organizer = organizer;
 	}
 }
