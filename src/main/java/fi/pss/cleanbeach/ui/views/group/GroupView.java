@@ -17,6 +17,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.ResourceService;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 
 /**
@@ -25,6 +26,9 @@ import fi.pss.cleanbeach.ui.mvp.AbstractView;
  */
 @UIScoped
 public class GroupView extends AbstractView<GroupPresenter> {
+
+    @Inject
+    private ResourceService resourceService;
 
     public GroupView() {
         setCaption("Groups");
@@ -38,12 +42,12 @@ public class GroupView extends AbstractView<GroupPresenter> {
 
     @Override
     protected ComponentContainer getMainContent() {
+
         CssLayout mainLayout = new CssLayout();
         mainLayout.setWidth(100, Unit.PERCENTAGE);
         mainLayout.addStyleName("groups");
 
-        Label title = new Label(
-                "Groups allow you to find more events and create events yourself. You can join any group, don't be shy!");
+        Label title = new Label(getMessage("Groups.view.title"));
         mainLayout.addComponent(title);
         title.addStyleName("groups-title");
 
@@ -57,8 +61,7 @@ public class GroupView extends AbstractView<GroupPresenter> {
 
         Collection<? extends Component> adminComponents = getAdminComponents();
         if (!adminComponents.isEmpty()) {
-            Label adminTitle = new Label(
-                    "You are an admin of the following groups:");
+            Label adminTitle = new Label(getMessage("Groups.view.admin.label"));
             adminTitle.addStyleName("admin-title");
             mainLayout.addComponent(adminTitle);
             for (Component component : adminComponents) {
@@ -69,7 +72,7 @@ public class GroupView extends AbstractView<GroupPresenter> {
         Collection<? extends Component> memberComponents = getMemberComponents();
         if (!memberComponents.isEmpty()) {
             Label memberTitle = new Label(
-                    "You are a member of the following groups:");
+                    getMessage("Groups.view.member.label"));
             memberTitle.addStyleName("admin-title");
             mainLayout.addComponent(memberTitle);
 
@@ -97,16 +100,20 @@ public class GroupView extends AbstractView<GroupPresenter> {
     }
 
     private Button createSearchButton() {
-        Button button = new Button("Search for Groups");
+        Button button = new Button(getMessage("Groups.view.search.button"));
         button.addStyleName("search-button");
         // TOOD : add listener and forward event to presenter
         return button;
     }
 
     private Button createGroupButton() {
-        Button button = new Button("Create a Group");
+        Button button = new Button(getMessage("Groups.view.create.button"));
         button.addStyleName("create-button");
         // TOOD : add listener and forward event to presenter
         return button;
+    }
+
+    private String getMessage(String key) {
+        return resourceService.getMessage(getLocale(), key);
     }
 }
