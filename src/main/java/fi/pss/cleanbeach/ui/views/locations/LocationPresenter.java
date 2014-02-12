@@ -1,11 +1,13 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.inject.Inject;
 
 import com.vaadin.cdi.UIScoped;
 
+import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.Location.STATUS;
 import fi.pss.cleanbeach.services.LocationService;
@@ -31,18 +33,15 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 	}
 
 	public void showEvents(Location selected) {
-		// TODO Auto-generated method stub
-
+		view.showEvents(selected, new ArrayList<Event>());
 	}
 
 	public void createEvent(Location selected) {
-		// TODO Auto-generated method stub
-
+		view.showCreateEvent(selected);
 	}
 
 	public void showTrends(Location selected) {
-		// TODO Auto-generated method stub
-
+		view.showTrends(selected, new ArrayList<Event>());
 	}
 
 	public void readyForPoints(Double lat, Double long1) {

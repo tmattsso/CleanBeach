@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 
-import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.addon.touchkit.ui.NavigationManager;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.ComponentContainer;
 
@@ -16,7 +16,7 @@ import com.vaadin.ui.ComponentContainer;
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractView<P extends AbstractPresenter> extends
-		NavigationView implements IView, Serializable {
+		NavigationManager implements IView, Serializable {
 
 	private static final long serialVersionUID = 3338257225854006391L;
 
@@ -31,7 +31,6 @@ public abstract class AbstractView<P extends AbstractPresenter> extends
 	@PostConstruct
 	private void init() {
 		presenter.setView(this);
-		setContent(getMainContent());
 	}
 
 	protected abstract ComponentContainer getMainContent();
@@ -40,5 +39,6 @@ public abstract class AbstractView<P extends AbstractPresenter> extends
 	public void attach() {
 		super.attach();
 		presenter.init();
+		navigateTo(getMainContent());
 	}
 }
