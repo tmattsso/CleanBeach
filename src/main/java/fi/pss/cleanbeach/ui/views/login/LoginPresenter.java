@@ -27,7 +27,7 @@ public class LoginPresenter extends AbstractPresenter<ILogin> implements
 	}
 
 	@Override
-	public void init() {
+	public void init(User currentUser) {
 	}
 
 	public void login(String user, String pass) {

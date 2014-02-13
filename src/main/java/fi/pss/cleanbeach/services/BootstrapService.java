@@ -1,12 +1,15 @@
 package fi.pss.cleanbeach.services;
 
+import java.util.Date;
+import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
+import fi.pss.cleanbeach.data.Event;
+import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 
@@ -14,32 +17,60 @@ import fi.pss.cleanbeach.data.UsersGroup;
 @Startup
 public class BootstrapService {
 
-    @EJB
-    private AuthenticationService auth;
+	private final Logger log = Logger
+			.getLogger(this.getClass().getSimpleName());
 
-    @PersistenceContext(unitName = "cleanbeach")
-    private EntityManager em;
+	@EJB
+	private AuthenticationService auth;
 
-    @EJB
-    private GroupService groupService;
+	@EJB
+	private GroupService groupService;
 
-    @PostConstruct
-    public void init() {
-        User user = new User();
-        user.setName("Thomas");
-        user.setEmail("thomas@vaadin.com");
-        user.setUsername("thomas");
+	@EJB
+	private LocationService locService;
 
-        System.out.println(user.getId());
+	@EJB
+	private EventService eventService;
 
-        auth.createUser(user, "vaadin");
+	@PostConstruct
+	public void init() {
 
-        user = auth.login("thomas", "vaadin");
-        System.out.println(user.getName());
+		log.warning("===Starting bootstrap===");
 
-        UsersGroup group = new UsersGroup();
-        group.setName("group");
-        group.setDescription("descr");
-        groupService.addAdmin(group, user);
-    }
+		User user = new User();
+		user.setName("Thomas");
+		user.setEmail("thomas@vaadin.com");
+		user.setUsername("thomas");
+		auth.createUser(user, "vaadin");
+
+		log.info("Added user " + user.getId());
+
+		User user2 = new User();
+		user2.setName("Demo");
+		user2.setEmail("demo@vaadin.com");
+		user2.setUsername("demo");
+		auth.createUser(user2, "demo");
+
+		log.info("Added user " + user2.getId());
+
+		UsersGroup group = new UsersGroup();
+		group.setName("Vaadin Ltd");
+		group.setDescription("descr");
+		group.setCreator(user);
+		groupService.addAdmin(group, user2);
+
+		log.info("Added group " + group.getId());
+
+		Location loc = locService.createLocation(60.45232937494697,
+				22.300100326538086, "Vaadin Office");
+
+		log.info("Added location " + loc.getId());
+
+		Event e = eventService.createEvent(new Date(), loc, group, "Demo");
+
+		log.info("Added event " + e.getId());
+
+		log.warning("===Bootstrap done===");
+
+	}
 }

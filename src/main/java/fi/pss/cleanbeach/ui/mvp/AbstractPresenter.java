@@ -4,6 +4,8 @@ import java.util.logging.Logger;
 
 import com.vaadin.cdi.UIScoped;
 
+import fi.pss.cleanbeach.data.User;
+
 /**
  * Abstract Presenter superclass. Annotate subclass with {@link UIScoped}. You
  * are free to inject any beans/resources into this class.
@@ -15,7 +17,7 @@ import com.vaadin.cdi.UIScoped;
  */
 public abstract class AbstractPresenter<V extends IView> {
 
-	protected Logger log = Logger.getLogger(this.getClass().getName());
+	protected Logger log = Logger.getLogger(this.getClass().getSimpleName());
 
 	protected V view;
 
@@ -27,5 +29,5 @@ public abstract class AbstractPresenter<V extends IView> {
 
 	}
 
-	public abstract void init();
+	public abstract void init(User currentUser);
 }

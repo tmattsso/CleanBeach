@@ -86,4 +86,8 @@ public class MyTouchKitUI extends UI {
 		VaadinService.getCurrentResponse().addCookie(newCookie);
 	}
 
+	public static User getCurrentUser() {
+		return ((MyTouchKitUI) getCurrent()).currentUser;
+	}
+
 }

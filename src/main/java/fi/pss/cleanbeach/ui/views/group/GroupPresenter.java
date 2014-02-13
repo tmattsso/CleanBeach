@@ -5,6 +5,7 @@ package fi.pss.cleanbeach.ui.views.group;
 
 import java.io.Serializable;
 
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
 /**
@@ -12,12 +13,12 @@ import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
  * 
  */
 public class GroupPresenter extends AbstractPresenter<IGroup> implements
-        Serializable {
+		Serializable {
 
-    @Override
-    public void init() {
-        // TODO Auto-generated method stub
+	@Override
+	public void init(User currentUser) {
+		// TODO Auto-generated method stub
 
-    }
+	}
 
 }
