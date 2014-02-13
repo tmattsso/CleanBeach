@@ -14,6 +14,7 @@ import org.vaadin.addon.leaflet.LMarker;
 import org.vaadin.addon.leaflet.LTileLayer;
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
+import org.vaadin.addon.leaflet.shared.Point;
 
 import com.vaadin.addon.touchkit.extensions.Geolocator;
 import com.vaadin.addon.touchkit.extensions.PositionCallback;
@@ -32,7 +33,8 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 
 	private static final long serialVersionUID = -4582977579039441885L;
 
-	private static final String MML_KAPSI_ATTRIBUTION_STRING = "Maanmittauslaitos, hosted by kartat.kapsi.fi";
+	// private static final String MML_KAPSI_ATTRIBUTION_STRING =
+	// "Maanmittauslaitos, hosted by kartat.kapsi.fi";
 
 	private LMarker tempMarker;
 	private final LocationPresenter presenter;
@@ -113,7 +115,7 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 				listener.selectedExisting(l);
 			}
 		});
-
+		m.setIconAnchor(new Point(16, 32));
 		markers.put(l, m);
 	}
 
