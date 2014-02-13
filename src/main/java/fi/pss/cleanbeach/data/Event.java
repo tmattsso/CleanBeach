@@ -1,7 +1,9 @@
 package fi.pss.cleanbeach.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 public class Event extends AbstractEntity {
@@ -28,8 +31,23 @@ public class Event extends AbstractEntity {
 	private UsersGroup organizer;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@OrderColumn(name = "order")
+	@OrderColumn(name = "eventorder")
 	private List<Comment> comments = new ArrayList<>();
+
+	private int numComments = 0;
+
+	private int numCommentsWithImage = 0;
+
+	@Transient
+	private Collection<User> joinedUsers = new HashSet<>();
+
+	public Collection<User> getJoinedUsers() {
+		return joinedUsers;
+	}
+
+	public void setJoinedUsers(Collection<User> joinedUsers) {
+		this.joinedUsers = joinedUsers;
+	}
 
 	public String getDescription() {
 		return description;
@@ -69,5 +87,21 @@ public class Event extends AbstractEntity {
 
 	public void setOrganizer(UsersGroup organizer) {
 		this.organizer = organizer;
+	}
+
+	public int getNumComments() {
+		return numComments;
+	}
+
+	public void setNumComments(int numComments) {
+		this.numComments = numComments;
+	}
+
+	public int getNumCommentsWithImage() {
+		return numCommentsWithImage;
+	}
+
+	public void setNumCommentsWithImage(int numCommentsWithImage) {
+		this.numCommentsWithImage = numCommentsWithImage;
 	}
 }

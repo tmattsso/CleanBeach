@@ -47,7 +47,7 @@ public class LocationService {
 	}
 
 	public Location save(Location selected) {
-		em.merge(selected);
+		selected = em.merge(selected);
 		return selected;
 	}
 }

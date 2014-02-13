@@ -11,4 +11,6 @@ public interface IEvents extends IView {
 
 	void showAllEvents(List<Event> l);
 
+	void showDetails(Event e);
+
 }

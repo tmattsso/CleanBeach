@@ -72,10 +72,6 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 		return vl;
 	}
 
-	public void initAllEvents() {
-
-	}
-
 	@Override
 	@Inject
 	public void injectPresenter(EventsPresenter presenter) {
@@ -109,6 +105,11 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	@Override
 	public void showAllEvents(List<fi.pss.cleanbeach.data.Event> l) {
 		allEventsLayout.update(l);
+	}
+
+	@Override
+	public void showDetails(fi.pss.cleanbeach.data.Event e) {
+		navigateTo(new EventDetailLayout(e));
 	}
 
 }

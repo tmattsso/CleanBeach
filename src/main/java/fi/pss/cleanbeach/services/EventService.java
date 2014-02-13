@@ -8,8 +8,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import fi.pss.cleanbeach.data.Comment;
 import fi.pss.cleanbeach.data.Event;
+import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.Location;
+import fi.pss.cleanbeach.data.Signup;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 
@@ -112,6 +115,56 @@ public class EventService {
 		List<Event> l = query.getResultList();
 
 		return l;
+	}
+
+	public Event loadDetails(Event e) {
+
+		e = em.find(e.getClass(), e.getId());
+
+		// init comments
+		e.getComments().size();
+
+		// get users
+		String q = "SELECT s FROM Signup s WHERE s.event=:event";
+		Query query = em.createQuery(q);
+		query.setParameter("event", e);
+		@SuppressWarnings("unchecked")
+		List<Signup> l = query.getResultList();
+		for (Signup s : l) {
+			e.getJoinedUsers().add(s.getUser());
+		}
+
+		return e;
+	}
+
+	public Comment addComment(Event e, String text, Image img, User u) {
+
+		Comment c = new Comment();
+		c.setAuthor(u);
+		c.setContent(text);
+		c.setImage(img);
+		c.setWritetime(new Date());
+
+		if (img != null) {
+			img.setUploaded(new Date());
+		}
+
+		e = em.merge(e);
+		em.refresh(e);
+
+		// make sure the collection is loaded
+		e.getComments().size();
+
+		e.getComments().add(c);
+
+		e.setNumComments(e.getNumComments() + 1);
+		if (img != null) {
+			e.setNumCommentsWithImage(e.getNumCommentsWithImage() + 1);
+		}
+
+		em.merge(e);
+
+		return c;
 	}
 
 }

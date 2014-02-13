@@ -39,4 +39,9 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		List<Event> l = service.getEventsForUser(currentUser, null, null);
 		view.showAllEvents(l);
 	}
+
+	public void openSingleEvent(Event event) {
+		event = service.loadDetails(event);
+		view.showDetails(event);
+	}
 }

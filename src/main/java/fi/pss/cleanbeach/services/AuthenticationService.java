@@ -76,7 +76,7 @@ public class AuthenticationService {
 
 	public User getUser(String oid, String oidProvider) {
 		Query q = em
-				.createQuery("Select u From user u where oid=? and oidProvider=?");
+				.createQuery("Select u From User u where oid=? and oidProvider=?");
 		q.setParameter(1, oid);
 		q.setParameter(2, oidProvider);
 
