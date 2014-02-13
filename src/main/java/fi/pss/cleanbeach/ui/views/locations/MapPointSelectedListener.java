@@ -6,5 +6,7 @@ import fi.pss.cleanbeach.data.Location;
 
 public interface MapPointSelectedListener {
 
-	public void selected(Point point, Location l);
+	public void selectedNew(Point point);
+
+	public void selectedExisting(Location l);
 }

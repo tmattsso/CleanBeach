@@ -71,14 +71,18 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 
 			@Override
 			public void onClick(LeafletClickEvent event) {
-				// Notification.show("Lol: " + event.getPoint().getLat());
+
 				if (tempMarker == null || !tempMarker.isAttached()) {
 					tempMarker = new LMarker();
 					addComponent(tempMarker);
-				}
-				tempMarker.setPoint(event.getPoint());
 
-				l.selected(event.getPoint(), null);
+					tempMarker.setPoint(event.getPoint());
+					l.selectedNew(event.getPoint());
+				} else {
+					clearTempMarker();
+					l.selectedNew(null);
+				}
+
 			}
 		});
 
@@ -106,7 +110,7 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 
 			@Override
 			public void onClick(LeafletClickEvent event) {
-				listener.selected(event.getPoint(), l);
+				listener.selectedExisting(l);
 			}
 		});
 
@@ -159,7 +163,9 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 	}
 
 	public void clearTempMarker() {
-		removeComponent(tempMarker);
+		if (tempMarker != null && tempMarker.isAttached()) {
+			removeComponent(tempMarker);
+		}
 	}
 
 }

@@ -123,22 +123,6 @@ public class MapLayout extends NavigationView implements
 	}
 
 	@Override
-	public void selected(Point point, Location loc) {
-
-		actionButtons.setVisible(false);
-		addButtons.setVisible(false);
-
-		selected = loc;
-
-		if (loc == null) {
-			addButtons.setVisible(true);
-		} else {
-			lMap.clearTempMarker();
-			actionButtons.setVisible(true);
-		}
-	}
-
-	@Override
 	protected void onBecomingVisible() {
 		super.onBecomingVisible();
 
@@ -157,7 +141,23 @@ public class MapLayout extends NavigationView implements
 		lMap.update(selected);
 	}
 
-	public void selectMarker(Location l) {
-		selected(null, l);
+	@Override
+	public void selectedNew(Point point) {
+
+		actionButtons.setVisible(false);
+		addButtons.setVisible(false);
+
+		if (point != null) {
+			addButtons.setVisible(true);
+		}
+	}
+
+	@Override
+	public void selectedExisting(Location loc) {
+		actionButtons.setVisible(true);
+		addButtons.setVisible(false);
+
+		selected = loc;
+		lMap.clearTempMarker();
 	}
 }

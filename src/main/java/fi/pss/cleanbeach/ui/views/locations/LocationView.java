@@ -46,7 +46,7 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 
 	@Override
 	public void selectMarker(Location l) {
-		map.selectMarker(l);
+		map.selectedExisting(l);
 	}
 
 	@Override
@@ -54,13 +54,11 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 			ArrayList<fi.pss.cleanbeach.data.Event> arrayList) {
 
 		navigateTo(new HistoryLayout());
-		// setPreviousComponent(map);
 	}
 
 	@Override
 	public void showCreateEvent(Location selected) {
 		navigateTo(new CreateEventLayout());
-		// setPreviousComponent(map);
 
 	}
 
@@ -68,7 +66,6 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 	public void showTrends(Location selected,
 			ArrayList<fi.pss.cleanbeach.data.Event> arrayList) {
 		navigateTo(new TrendsLayout());
-		// setPreviousComponent(map);
 	}
 
 }
