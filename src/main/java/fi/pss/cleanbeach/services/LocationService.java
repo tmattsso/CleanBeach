@@ -18,16 +18,14 @@ public class LocationService {
 	private EntityManager em;
 
 	public Set<Location> getLocationsNear(double latitude, double longitude) {
-		// Query q = em.createQuery("SELECT l FROM Location l WHERE "
-		// + "(latitude<:latMax AND latitude>:latMin) "
-		// + "AND (longitude<:longMax AND longitude>:longMin)");
-		//
-		// q.setParameter("latMax", latitude + 1);
-		// q.setParameter("latMin", latitude - 1);
-		// q.setParameter("longMax", longitude + 1);
-		// q.setParameter("longMin", longitude - 1);
+		Query q = em.createQuery("SELECT l FROM Location l WHERE "
+				+ "(latitude<:latMax AND latitude>:latMin) "
+				+ "AND (longitude<:longMax AND longitude>:longMin)");
 
-		Query q = em.createQuery("SELECT l FROM Location l");
+		q.setParameter("latMax", latitude + 1);
+		q.setParameter("latMin", latitude - 1);
+		q.setParameter("longMax", longitude + 1);
+		q.setParameter("longMin", longitude - 1);
 
 		@SuppressWarnings("unchecked")
 		java.util.List<Location> list = q.getResultList();

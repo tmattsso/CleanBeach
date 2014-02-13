@@ -24,8 +24,9 @@ public class AuthenticationService {
 	private EntityManager em;
 
 	public User login(String username, String password) {
-		Query q = em.createQuery("SELECT u FROM User u WHERE username=?");
-		q.setParameter(1, username);
+		Query q = em
+				.createQuery("SELECT u FROM User u WHERE username=:username");
+		q.setParameter("username", username);
 
 		User u = null;
 		try {

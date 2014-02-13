@@ -27,7 +27,7 @@ public class Event extends AbstractEntity {
 	@ManyToOne
 	private UsersGroup organizer;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@OrderColumn(name = "order")
 	private List<Comment> comments = new ArrayList<>();
 

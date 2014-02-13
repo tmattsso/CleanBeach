@@ -2,7 +2,6 @@ package fi.pss.cleanbeach.ui.views.events;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.inject.Inject;
 
@@ -27,7 +26,17 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 
 	@Override
 	public void init(User currentUser) {
+
+	}
+
+	public void loadJoinedEvents(User currentUser) {
+		List<Event> l = service.getJoinedEventsForUser(currentUser);
+		view.showJoinedEvents(l);
+
+	}
+
+	public void loadAllEvents(User currentUser) {
 		List<Event> l = service.getEventsForUser(currentUser, null, null);
-		log.log(Level.WARNING, l.size() + "");
+		view.showAllEvents(l);
 	}
 }

@@ -1,5 +1,7 @@
 package fi.pss.cleanbeach.ui.views.events;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import com.vaadin.addon.touchkit.ui.Toolbar;
@@ -13,17 +15,21 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 
 @UIScoped
 public class EventsView extends AbstractView<EventsPresenter> implements
-		ClickListener {
+		IEvents, ClickListener {
 
 	private static final long serialVersionUID = -259521650823470699L;
 	private Button allEvents;
 	private Button joinedEvents;
 	private Button search;
 	private CssLayout content;
+
+	private WallLayout allEventsLayout;
+	private WallLayout joinedEventsLayout;
 
 	public EventsView() {
 		setCaption("Events");
@@ -40,13 +46,13 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 
 		allEvents = new Button("All events");
 		allEvents.addClickListener(this);
-		allEvents.setData(new WallLayout());
+		allEvents.setData(allEventsLayout = new WallLayout(presenter));
 		allEvents.addStyleName("selected");
 		tabs.addComponent(allEvents);
 
 		joinedEvents = new Button("Joined events");
 		joinedEvents.addClickListener(this);
-		joinedEvents.setData(new WallLayout());
+		joinedEvents.setData(joinedEventsLayout = new WallLayout(presenter));
 		tabs.addComponent(joinedEvents);
 
 		search = new Button("Search");
@@ -60,7 +66,14 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 		vl.addComponent(tabs);
 		vl.addComponent(content);
 		vl.setExpandRatio(content, 1);
+
+		presenter.loadAllEvents(MyTouchKitUI.getCurrentUser());
+
 		return vl;
+	}
+
+	public void initAllEvents() {
+
 	}
 
 	@Override
@@ -79,6 +92,23 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 		content.addComponent((Component) event.getButton().getData());
 		event.getButton().addStyleName("selected");
 
+		if (event.getButton() == allEvents) {
+			presenter.loadAllEvents(MyTouchKitUI.getCurrentUser());
+		}
+		if (event.getButton() == joinedEvents) {
+			presenter.loadJoinedEvents(MyTouchKitUI.getCurrentUser());
+		}
+
+	}
+
+	@Override
+	public void showJoinedEvents(List<fi.pss.cleanbeach.data.Event> l) {
+		joinedEventsLayout.update(l);
+	}
+
+	@Override
+	public void showAllEvents(List<fi.pss.cleanbeach.data.Event> l) {
+		allEventsLayout.update(l);
 	}
 
 }
