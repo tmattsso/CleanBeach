@@ -1,4 +1,10 @@
 /* No need to import anything; touchkit imports it's theme with GWT */
+
+.v-caption {
+	color: #00a3e8;
+}
+
+
 .login .desc span {
 	display: block;
 	font-size: 24pt;

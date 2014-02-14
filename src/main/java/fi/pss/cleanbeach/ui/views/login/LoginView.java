@@ -44,7 +44,8 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		vl.addStyleName("login");
 
 		Label desc = new Label(
-				"<span>Siisti Biitsi 2014</span>Siisti Biitsi is a volunteer project organized by Pidä Saaristo Siistinä ry. The purpose is to clean all beaches in Finland. The app helps you and your friends to organize your efforts, as well as provide the organization wiht invaluable data.",
+				"<span>Siisti Biitsi 2014</span>"
+						+ "Siisti Biitsi is a volunteer project organized by Pidä Saaristo Siistinä ry. The purpose is to clean all beaches in Finland. The app helps you and your friends to organize your efforts, as well as provide the organization with invaluable data.",
 				ContentMode.HTML);
 		desc.addStyleName("desc");
 

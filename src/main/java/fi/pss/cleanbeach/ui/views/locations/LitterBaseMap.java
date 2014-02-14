@@ -14,6 +14,7 @@ import org.vaadin.addon.leaflet.LMarker;
 import org.vaadin.addon.leaflet.LTileLayer;
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
+import org.vaadin.addon.leaflet.client.PopupState;
 import org.vaadin.addon.leaflet.shared.Point;
 
 import com.vaadin.addon.touchkit.extensions.Geolocator;
@@ -108,8 +109,20 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 		LMarker m = new LMarker(l.getLatitude(), l.getLongitude());
 		m.setData(l);
 		addComponent(m);
+
 		setIcon(m, l);
+		m.setIconAnchor(new Point(16, 32));
+
 		m.setPopup(l.getName());
+		PopupState state = new PopupState();
+		state.closeButton = false;
+		state.zoomAnimation = false;
+		state.minWidth = 150;
+		state.offset = new Point(0, -32);
+		state.autoPan = true;
+		state.autoPanPadding = new Point(10, 10);
+		m.setPopupState(state);
+
 		m.addClickListener(new LeafletClickListener() {
 
 			@Override
@@ -117,7 +130,6 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 				listener.selectedExisting(l);
 			}
 		});
-		m.setIconAnchor(new Point(16, 32));
 		markers.put(l, m);
 	}
 
