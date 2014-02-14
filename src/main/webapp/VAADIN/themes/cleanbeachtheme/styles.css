@@ -23,3 +23,24 @@
 	padding-left: 10px;
 	padding-right: 10px;
 }
+
+.eventbox {
+	background-color: #FFF;
+	border-radius: 5px;
+	border: 1px solid gray;
+}
+
+.eventbox .people,
+.eventbox .numpieces,
+.eventbox .date {
+	font-size: 10pt
+}
+
+.eventbox .numpieces div {
+	margin-left: auto;
+	margin-right: auto;
+	width: 60px;
+}
+.eventbox .numpieces span {
+	font-size: 24pt;
+}

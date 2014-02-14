@@ -23,6 +23,7 @@ public class EventPanel extends CustomComponent {
 
 		GridLayout root = new GridLayout(3, 3);
 		root.setSpacing(true);
+		root.setMargin(true);
 		setCompositionRoot(root);
 		root.setWidth("100%");
 		root.setColumnExpandRatio(0, 1);
@@ -30,18 +31,21 @@ public class EventPanel extends CustomComponent {
 
 		Label l = new Label(e.getLocation().getName());
 		l.setSizeUndefined();
+		l.addStyleName("location");
 		root.addComponent(l, 0, 0, 1, 0);
 
 		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		l = new Label(df.format(e.getStart()));
 		l.setSizeUndefined();
+		l.addStyleName("date");
 		root.addComponent(l);
 
 		// group logo
 		HorizontalLayout hl = new HorizontalLayout();
 		root.addComponent(hl);
 
-		l = new Label("101<br/><span>pieces collected</span>", ContentMode.HTML);
+		l = new Label("<div><span>101</span></div><br/>pieces collected",
+				ContentMode.HTML);
 		l.addStyleName("numpieces");
 		l.setWidth("100px");
 		root.addComponent(l);
@@ -49,11 +53,13 @@ public class EventPanel extends CustomComponent {
 		l = new Label(e.getNumComments() + " Comments<br/>"
 				+ e.getNumCommentsWithImage() + " Pictures", ContentMode.HTML);
 		l.setSizeUndefined();
+		l.addStyleName("comments");
 		root.addComponent(l);
 		root.setComponentAlignment(l, Alignment.MIDDLE_CENTER);
 
 		l = new Label("Joined people", ContentMode.HTML);
 		l.setSizeUndefined();
+		l.addStyleName("people");
 		root.addComponent(l, 0, 2, 2, 2);
 
 		root.addLayoutClickListener(new LayoutClickListener() {

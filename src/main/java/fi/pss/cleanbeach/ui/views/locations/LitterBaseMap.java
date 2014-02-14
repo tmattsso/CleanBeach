@@ -36,13 +36,14 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 
 	// private static final String MML_KAPSI_ATTRIBUTION_STRING =
 	// "Maanmittauslaitos, hosted by kartat.kapsi.fi";
-
-	private LMarker tempMarker;
 	private final LocationPresenter presenter;
 
 	private final MapPointSelectedListener listener;
 
 	private final Map<Location, LMarker> markers = new HashMap<>();
+	private LMarker tempMarker;
+
+	private boolean positioningHasBeenRun;
 
 	public LitterBaseMap(LocationPresenter presenter,
 			final MapPointSelectedListener l) {
@@ -147,7 +148,10 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 	}
 
 	public void runPositioning() {
-		Geolocator.detect(this);
+		if (!positioningHasBeenRun) {
+			Geolocator.detect(this);
+			positioningHasBeenRun = true;
+		}
 	}
 
 	public void update(Location selected) {
