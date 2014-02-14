@@ -44,4 +44,9 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		event = service.loadDetails(event);
 		view.showDetails(event);
 	}
+
+	public void searchForEvents(String value, User currentUser) {
+		List<Event> l = service.searchForEvents(currentUser, value);
+		view.populateSearchResults(l);
+	}
 }

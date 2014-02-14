@@ -68,6 +68,12 @@ public class BootstrapService {
 
 		log.info("Added event " + e.getId());
 
+		eventService.addThrashType("Glass");
+		eventService.addThrashType("Paper");
+		eventService.addThrashType("Wood");
+		eventService.addThrashType("Metal");
+		eventService.addThrashType("Plastic");
+
 		log.warning("===Bootstrap done===");
 
 	}

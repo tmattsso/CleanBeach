@@ -19,6 +19,7 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	private MainEventsLayout events;
 
 	public EventsView() {
+		setCaption("Events");
 	}
 
 	@Override
@@ -50,6 +51,11 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	@Override
 	public void showDetails(fi.pss.cleanbeach.data.Event e) {
 		navigateTo(new EventDetailLayout(e));
+	}
+
+	@Override
+	public void populateSearchResults(List<fi.pss.cleanbeach.data.Event> l) {
+		events.populateSearchResults(l);
 	}
 
 }

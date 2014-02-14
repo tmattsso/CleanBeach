@@ -13,4 +13,6 @@ public interface IEvents extends IView {
 
 	void showDetails(Event e);
 
+	void populateSearchResults(List<Event> l);
+
 }

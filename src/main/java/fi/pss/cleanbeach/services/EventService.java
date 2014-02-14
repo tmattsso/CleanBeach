@@ -2,6 +2,7 @@ package fi.pss.cleanbeach.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -13,11 +14,14 @@ import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.Signup;
+import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 
 @Stateless
 public class EventService {
+
+	private final Logger log = Logger.getLogger(getClass().getSimpleName());
 
 	@PersistenceContext(unitName = "cleanbeach")
 	private EntityManager em;
@@ -106,13 +110,19 @@ public class EventService {
 	 */
 	public List<Event> searchForEvents(User u, String searchText) {
 
-		String q = "SELECT e FROM Event e WHERE e.description LIKE :param";
+		String q = "SELECT e FROM Event e "
+				+ "WHERE e.description LIKE :param "
+				+ "OR e.organizer.name LIKE :param "
+				+ "OR e.organizer.description LIKE :param "
+				+ "OR e.location.name LIKE :param";
 
 		Query query = em.createQuery(q);
 		query.setParameter("param", "%" + searchText + "%");
 
 		@SuppressWarnings("unchecked")
 		List<Event> l = query.getResultList();
+		log.info("Search with string '" + searchText + "' returned " + l.size()
+				+ " results");
 
 		return l;
 	}
@@ -167,4 +177,18 @@ public class EventService {
 		return c;
 	}
 
+	public void addThrashType(String name) {
+		ThrashType t = new ThrashType();
+		t.setName(name);
+		em.persist(t);
+	}
+
+	public List<ThrashType> getThrashTypes() {
+		String q = "SELECT s FROM ThrashType s";
+		Query query = em.createQuery(q);
+		@SuppressWarnings("unchecked")
+		List<ThrashType> l = query.getResultList();
+
+		return l;
+	}
 }

@@ -9,7 +9,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
@@ -25,6 +24,7 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 
 	private WallLayout allEventsLayout;
 	private WallLayout joinedEventsLayout;
+	private EventSearchLayout searchLayout;
 
 	private final EventsPresenter presenter;
 
@@ -53,7 +53,7 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 
 		search = new Button("Search");
 		search.addClickListener(this);
-		search.setData(new Label("search!"));
+		search.setData(searchLayout = new EventSearchLayout(presenter));
 		tabs.addComponent(search);
 
 		content = new CssLayout((Component) allEvents.getData());
@@ -91,5 +91,9 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 
 	public void showAllEvents(List<fi.pss.cleanbeach.data.Event> l) {
 		allEventsLayout.update(l);
+	}
+
+	public void populateSearchResults(List<fi.pss.cleanbeach.data.Event> l) {
+		searchLayout.populate(l);
 	}
 }
