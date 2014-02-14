@@ -1,0 +1,6 @@
+/* No need to import anything; touchkit imports it's theme with GWT */
+
+
+.desc {
+	color: red;
+}

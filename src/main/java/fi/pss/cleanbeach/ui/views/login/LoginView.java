@@ -7,7 +7,7 @@ import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.server.ThemeResource;
+import com.vaadin.server.ClassResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -49,7 +49,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		desc.addStyleName("desc");
 
 		Image logo = new Image();
-		logo.setSource(new ThemeResource("img/logo.png"));
+		logo.setSource(new ClassResource("logo.png"));
 		logo.setHeight("102px");
 		logo.setWidth("102px");
 		logo.addStyleName("logo");
