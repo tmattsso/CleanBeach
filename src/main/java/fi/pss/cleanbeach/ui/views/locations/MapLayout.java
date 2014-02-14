@@ -126,6 +126,8 @@ public class MapLayout extends NavigationView implements
 	protected void onBecomingVisible() {
 		super.onBecomingVisible();
 
+		getNavigationManager().setPreviousComponent(null);
+
 		// Start positioning
 		lMap.runPositioning();
 	}

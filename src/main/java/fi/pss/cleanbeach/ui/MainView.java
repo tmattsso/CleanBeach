@@ -34,7 +34,7 @@ public class MainView extends TabBarView {
 
 		Tab tab;
 
-		tab = addTab(eventsView);
+		tab = addTab(eventsView, "Events");
 		TouchKitIcon.flag.addTo(tab);
 
 		tab = addTab(groupView, "Groups");

@@ -59,7 +59,6 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 	@Override
 	public void showCreateEvent(Location selected) {
 		navigateTo(new CreateEventLayout());
-
 	}
 
 	@Override

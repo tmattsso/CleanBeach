@@ -85,6 +85,14 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 
 	}
 
+	@Override
+	protected void onBecomingVisible() {
+		super.onBecomingVisible();
+
+		// clear navigation data
+		getNavigationManager().setPreviousComponent(null);
+	}
+
 	public void showJoinedEvents(List<fi.pss.cleanbeach.data.Event> l) {
 		joinedEventsLayout.update(l);
 	}

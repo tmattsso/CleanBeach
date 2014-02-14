@@ -20,8 +20,7 @@ import fi.pss.cleanbeach.ui.views.login.LoginView;
  */
 @SuppressWarnings("serial")
 @Widgetset("fi.pss.cleanbeach.ui.gwt.AppWidgetSet")
-// @Theme("cleanbeachtheme")
-@Theme("touchkit")
+@Theme("cleanbeachtheme")
 @CDIUI
 public class MyTouchKitUI extends UI {
 
