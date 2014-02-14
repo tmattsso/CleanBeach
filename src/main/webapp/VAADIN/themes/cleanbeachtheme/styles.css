@@ -1,6 +1,19 @@
 /* No need to import anything; touchkit imports it's theme with GWT */
+.login .desc span {
+	display: block;
+	font-size: 24pt;
+}
 
+.login .logo {
+	
+}
 
-.desc {
-	color: red;
+.maplayout .actionbuttons {
+	position: absolute;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+	width: 100%;
+	padding-left: 10px;
+	padding-right: 10px;
 }

@@ -55,17 +55,21 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		logo.addStyleName("logo");
 
 		HorizontalLayout hl = new HorizontalLayout(desc, logo);
+		hl.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
+		hl.setSpacing(true);
 		hl.setWidth("100%");
 		hl.setExpandRatio(desc, 1);
 		hl.addStyleName("logolayout");
 		vl.addComponent(hl);
 
 		final TextField username = new TextField("Username");
+		username.setWidth("100%");
 		username.setImmediate(true);
 		username.addStyleName("username");
 		vl.addComponent(username);
 
 		final PasswordField password = new PasswordField("Password");
+		password.setWidth("100%");
 		password.setImmediate(true);
 		password.addStyleName("password");
 		vl.addComponent(password);

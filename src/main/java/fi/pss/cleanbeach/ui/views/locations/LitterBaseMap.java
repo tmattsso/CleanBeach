@@ -46,6 +46,8 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 	public LitterBaseMap(LocationPresenter presenter,
 			final MapPointSelectedListener l) {
 
+		addStyleName("map");
+
 		this.presenter = presenter;
 		listener = l;
 

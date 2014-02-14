@@ -5,13 +5,11 @@ import java.util.Set;
 import org.vaadin.addon.leaflet.shared.Point;
 
 import com.vaadin.addon.touchkit.ui.NavigationView;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmListener;
@@ -24,12 +22,13 @@ public class MapLayout extends NavigationView implements
 	private final LitterBaseMap lMap;
 	private Location selected;
 
-	private final Layout actionButtons;
+	private final HorizontalLayout actionButtons;
 	private final HorizontalLayout addButtons;
 
 	public MapLayout(final LocationPresenter presenter) {
 
 		setCaption("Reported locations");
+		addStyleName("maplayout");
 
 		lMap = new LitterBaseMap(presenter, this);
 		lMap.setSizeFull();
@@ -106,18 +105,19 @@ public class MapLayout extends NavigationView implements
 
 		actionButtons = new HorizontalLayout(createEvent, markDirty,
 				showTrends, showEvents);
-		actionButtons.setSizeUndefined();
+		actionButtons.setWidth("100%");
+		actionButtons.setSpacing(true);
 		actionButtons.setVisible(false);
+		actionButtons.addStyleName("actionbuttons");
 
 		addButtons = new HorizontalLayout(addLocation);
-		addButtons.setSizeUndefined();
+		addButtons.setWidth("100%");
+		addButtons.setSpacing(true);
 		addButtons.setVisible(false);
+		addButtons.addStyleName("actionbuttons");
 
-		VerticalLayout vl = new VerticalLayout(lMap, actionButtons, addButtons);
+		CssLayout vl = new CssLayout(lMap, actionButtons, addButtons);
 		vl.setSizeFull();
-		vl.setExpandRatio(lMap, 1);
-		vl.setComponentAlignment(actionButtons, Alignment.MIDDLE_CENTER);
-		vl.setComponentAlignment(addButtons, Alignment.MIDDLE_CENTER);
 
 		setContent(vl);
 	}
