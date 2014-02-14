@@ -77,7 +77,7 @@ public class MyTouchKitUI extends UI {
 		}
 
 		Cookie newCookie = new Cookie(COOKIE_NAME,
-				((MyTouchKitUI) UI.getCurrent()).currentUser.getUsername());
+				((MyTouchKitUI) UI.getCurrent()).currentUser.getEmail());
 		newCookie.setDomain("localhost");
 		// newCookie.setSecure(true); TODO enable
 		// store for 30 days

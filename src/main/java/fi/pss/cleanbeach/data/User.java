@@ -11,7 +11,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "applicationusers", uniqueConstraints = { @UniqueConstraint(columnNames = {
-		"username", "oid" }) })
+		"email", "oid" }) })
 public class User extends AbstractEntity {
 
 	public static final int SALT_LENGTH_BYTES = 32;
@@ -19,7 +19,6 @@ public class User extends AbstractEntity {
 
 	@Column(nullable = false)
 	private String name;
-	private String username;
 	private byte[] hashedPass;
 	private String oid;
 	private String oidProvider;
@@ -43,14 +42,6 @@ public class User extends AbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public byte[] getHashedPass() {

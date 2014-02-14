@@ -23,10 +23,9 @@ public class AuthenticationService {
 	@PersistenceContext(unitName = "cleanbeach")
 	private EntityManager em;
 
-	public User login(String username, String password) {
-		Query q = em
-				.createQuery("SELECT u FROM User u WHERE username=:username");
-		q.setParameter("username", username);
+	public User login(String email, String password) {
+		Query q = em.createQuery("SELECT u FROM User u WHERE email=:email");
+		q.setParameter("email", email);
 
 		User u = null;
 		try {

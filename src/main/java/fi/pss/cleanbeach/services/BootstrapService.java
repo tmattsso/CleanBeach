@@ -39,16 +39,14 @@ public class BootstrapService {
 
 		User user = new User();
 		user.setName("Thomas");
-		user.setEmail("thomas@vaadin.com");
-		user.setUsername("thomas");
+		user.setEmail("thomas");
 		auth.createUser(user, "vaadin");
 
 		log.info("Added user " + user.getId());
 
 		User user2 = new User();
 		user2.setName("Demo");
-		user2.setEmail("demo@vaadin.com");
-		user2.setUsername("demo");
+		user2.setEmail("demo");
 		auth.createUser(user2, "demo");
 
 		log.info("Added user " + user2.getId());
