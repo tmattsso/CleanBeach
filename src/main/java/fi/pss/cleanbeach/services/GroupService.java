@@ -26,6 +26,7 @@ public class GroupService {
 
     public Set<UsersGroup> getMemberGroups(User user) {
         return Collections.unmodifiableSet(user.getMemberIn());
+
     }
 
     public Set<UsersGroup> getAdminGroups(User user) {

@@ -44,3 +44,25 @@
 .eventbox .numpieces span {
 	font-size: 24pt;
 }
+
+.user-group {
+	position: relative;
+	overflow:hidden;
+}
+
+.user-group-logo, .user-group-event-invitations {
+	float:right;
+}
+
+.user-group {
+	padding: 10px;
+	margin:10px;
+	background-color: white;
+	border-radius: 5px;
+	border: 1px solid gray;
+}
+
+.user-group-members-count.align-bottom {
+	position: absolute;
+	bottom: 0;
+}
