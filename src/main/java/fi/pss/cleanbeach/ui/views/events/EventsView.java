@@ -17,9 +17,11 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	private static final long serialVersionUID = -259521650823470699L;
 
 	private MainEventsLayout events;
+	private EventDetailLayout details;
 
 	public EventsView() {
 		setCaption("Events");
+		addStyleName("events");
 	}
 
 	@Override
@@ -50,12 +52,17 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 
 	@Override
 	public void showDetails(fi.pss.cleanbeach.data.Event e) {
-		navigateTo(new EventDetailLayout(e));
+		navigateTo(details = new EventDetailLayout(e, presenter));
 	}
 
 	@Override
 	public void populateSearchResults(List<fi.pss.cleanbeach.data.Event> l) {
 		events.populateSearchResults(l);
+	}
+
+	@Override
+	public void updateEventDetails(fi.pss.cleanbeach.data.Event e) {
+		details.update(e);
 	}
 
 }

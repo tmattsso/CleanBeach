@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -65,11 +66,16 @@ public class EventService {
 
 		u = em.merge(u);
 
-		String q = "SELECT e FROM Event e WHERE " + "e.organizer IN (:orgs) "
-				+ "OR e IN (SELECT s.event FROM Signup s WHERE s.user=:user)";
+		String q = "SELECT e FROM Event e WHERE ";
+		if (!u.getMemberIn().isEmpty()) {
+			q += "e.organizer IN (:orgs) OR ";
+		}
+		q += "e IN (SELECT s.event FROM Signup s WHERE s.user=:user)";
 
 		Query query = em.createQuery(q);
-		query.setParameter("orgs", u.getMemberIn());
+		if (!u.getMemberIn().isEmpty()) {
+			query.setParameter("orgs", u.getMemberIn());
+		}
 		query.setParameter("user", u);
 
 		@SuppressWarnings("unchecked")
@@ -190,5 +196,40 @@ public class EventService {
 		List<ThrashType> l = query.getResultList();
 
 		return l;
+	}
+
+	public Event setUserJoined(Event e, User currentUser, boolean join) {
+		String q = "SELECT s FROM Signup s WHERE s.event=:event AND s.user=:user";
+		Query query = em.createQuery(q);
+		query.setParameter("event", e);
+		query.setParameter("user", currentUser);
+
+		Signup s = null;
+		try {
+			s = (Signup) query.getSingleResult();
+		} catch (NoResultException ex) {
+			// fine
+		}
+
+		if (s != null) {
+			s.setAccepted(join);
+			s = em.merge(s);
+		} else {
+			s = new Signup();
+			s.setUser(currentUser);
+			s.setEvent(e);
+			s.setAccepted(join);
+			em.persist(s);
+		}
+
+		e = em.find(e.getClass(), e.getId());
+
+		if (join) {
+			e.getJoinedUsers().add(currentUser);
+		} else {
+			e.getJoinedUsers().remove(currentUser);
+		}
+
+		return e;
 	}
 }

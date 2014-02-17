@@ -49,4 +49,15 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		List<Event> l = service.searchForEvents(currentUser, value);
 		view.populateSearchResults(l);
 	}
+
+	public void joinEvent(fi.pss.cleanbeach.data.Event e, User currentUser) {
+		e = service.setUserJoined(e, currentUser, true);
+		view.updateEventDetails(e);
+
+	}
+
+	public void leaveEvent(fi.pss.cleanbeach.data.Event e, User currentUser) {
+		e = service.setUserJoined(e, currentUser, false);
+		view.updateEventDetails(e);
+	}
 }

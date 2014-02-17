@@ -2,16 +2,20 @@ package fi.pss.cleanbeach.data;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id",
+		"event_id" }) })
 public class Signup extends AbstractEntity {
 
 	private boolean accepted = false;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private User user;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Event event;
 
 	public Event getEvent() {

@@ -15,4 +15,6 @@ public interface IEvents extends IView {
 
 	void populateSearchResults(List<Event> l);
 
+	void updateEventDetails(Event e);
+
 }
