@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.GroupService;
+import fi.pss.cleanbeach.services.InviteService;
+import fi.pss.cleanbeach.services.ResourceService;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
@@ -22,6 +24,12 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
     @Inject
     private GroupService groupService;
+
+    @Inject
+    private ResourceService resourceService;
+
+    @Inject
+    private InviteService inviteService;
 
     @Override
     public void init(User currentUser) {
@@ -38,13 +46,20 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
     }
 
     public String getEventsInvitations(UsersGroup group) {
-        // TODO Auto-generated method stub
-        return null;
+        int size = inviteService.getPendingInvitations(group).size();
+        if (size == 1) {
+            return getMessage("Groups.view.events.amount.singular", size);
+        }
+        return getMessage("Groups.view.events.amount.plural", size);
     }
 
     public String getMembers(UsersGroup group) {
-        // TODO Auto-generated method stub
-        return group.getMembers().size() + " members";
+        if (group.getMembers().size() == 1) {
+            return getMessage("Groups.view.members.amount.singular", group
+                    .getMembers().size());
+        }
+        return getMessage("Groups.view.members.amount.plural", group
+                .getMembers().size());
     }
 
     public void showGroup(UsersGroup group) {
@@ -60,6 +75,10 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
     public void createGroup() {
         // TODO Auto-generated method stub
 
+    }
+
+    private String getMessage(String key, Object... params) {
+        return resourceService.getMessage(view.getLocale(), key, params);
     }
 
 }

@@ -3,6 +3,7 @@
  */
 package fi.pss.cleanbeach.ui.views.group;
 
+import java.util.Locale;
 import java.util.Set;
 
 import fi.pss.cleanbeach.data.UsersGroup;
@@ -17,5 +18,7 @@ public interface IGroup extends IView {
     void showAdminGroups(Set<UsersGroup> groups);
 
     void showMemberGroups(Set<UsersGroup> groups);
+
+    Locale getLocale();
 
 }

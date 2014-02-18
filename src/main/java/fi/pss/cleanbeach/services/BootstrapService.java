@@ -9,6 +9,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import fi.pss.cleanbeach.data.Event;
+import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
@@ -17,64 +18,71 @@ import fi.pss.cleanbeach.data.UsersGroup;
 @Startup
 public class BootstrapService {
 
-	private final Logger log = Logger
-			.getLogger(this.getClass().getSimpleName());
+    private final Logger log = Logger
+            .getLogger(this.getClass().getSimpleName());
 
-	@EJB
-	private AuthenticationService auth;
+    @EJB
+    private AuthenticationService auth;
 
-	@EJB
-	private GroupService groupService;
+    @EJB
+    private GroupService groupService;
 
-	@EJB
-	private LocationService locService;
+    @EJB
+    private LocationService locService;
 
-	@EJB
-	private EventService eventService;
+    @EJB
+    private EventService eventService;
 
-	@PostConstruct
-	public void init() {
+    @EJB
+    private InviteService inviteService;
 
-		log.warning("===Starting bootstrap===");
+    @PostConstruct
+    public void init() {
 
-		User user = new User();
-		user.setName("Thomas");
-		user.setEmail("thomas");
-		auth.createUser(user, "vaadin");
+        log.warning("===Starting bootstrap===");
 
-		log.info("Added user " + user.getId());
+        User user = new User();
+        user.setName("Thomas");
+        user.setEmail("thomas");
+        auth.createUser(user, "vaadin");
 
-		User user2 = new User();
-		user2.setName("Demo");
-		user2.setEmail("demo");
-		auth.createUser(user2, "demo");
+        log.info("Added user " + user.getId());
 
-		log.info("Added user " + user2.getId());
+        User user2 = new User();
+        user2.setName("Demo");
+        user2.setEmail("demo");
+        auth.createUser(user2, "demo");
 
-		UsersGroup group = new UsersGroup();
-		group.setName("Vaadin Ltd");
-		group.setDescription("descr");
-		group.setCreator(user);
-		groupService.addAdmin(group, user2);
+        log.info("Added user " + user2.getId());
 
-		log.info("Added group " + group.getId());
+        UsersGroup group = new UsersGroup();
+        group.setName("Vaadin Ltd");
+        group.setDescription("descr");
+        group.setCreator(user);
+        groupService.addAdmin(group, user2);
 
-		Location loc = locService.createLocation(60.45232937494697,
-				22.300100326538086, "Vaadin Office");
+        log.info("Added group " + group.getId());
 
-		log.info("Added location " + loc.getId());
+        Location loc = locService.createLocation(60.45232937494697,
+                22.300100326538086, "Vaadin Office");
 
-		Event e = eventService.createEvent(new Date(), loc, group, "Demo");
+        log.info("Added location " + loc.getId());
 
-		log.info("Added event " + e.getId());
+        Event e = eventService.createEvent(new Date(), loc, group, "Demo");
 
-		eventService.addThrashType("Glass");
-		eventService.addThrashType("Paper");
-		eventService.addThrashType("Wood");
-		eventService.addThrashType("Metal");
-		eventService.addThrashType("Plastic");
+        log.info("Added event " + e.getId());
 
-		log.warning("===Bootstrap done===");
+        eventService.addThrashType("Glass");
+        eventService.addThrashType("Paper");
+        eventService.addThrashType("Wood");
+        eventService.addThrashType("Metal");
+        eventService.addThrashType("Plastic");
 
-	}
+        Invite invite = inviteService.invite(user, group, e);
+
+        log.info("Sent invitation " + invite.getId());
+
+        log.warning("===Bootstrap done===");
+
+    }
 }

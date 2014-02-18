@@ -45,16 +45,17 @@
 	font-size: 24pt;
 }
 
-.user-group {
-	position: relative;
-	overflow:hidden;
-}
-
 .user-group-logo, .user-group-event-invitations {
 	float:right;
 }
 
-.user-group {
+.user-group .v-label {
+	display: block;
+}
+
+.v-csslayout.user-group {
+	position: relative;
+	overflow:hidden;
 	padding: 10px;
 	margin:10px;
 	background-color: white;
@@ -65,4 +66,17 @@
 .user-group-members-count.align-bottom {
 	position: absolute;
 	bottom: 0;
+}
+
+.admin-title {
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.member-title {
+	margin-left: 10px;
+}
+
+.v-button.search-button, .v-button.create-button {
+	margin: 10px;
 }

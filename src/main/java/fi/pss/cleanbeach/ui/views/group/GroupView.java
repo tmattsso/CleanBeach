@@ -81,7 +81,7 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
             adminTitle.addStyleName("admin-title");
             mainLayout.addComponent(adminTitle);
             for (UsersGroup group : groups) {
-                mainLayout.addComponent(createGroupComponent(group));
+                mainLayout.addComponent(createGroupComponent(group, true));
             }
         }
     }
@@ -91,15 +91,16 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
         if (!groups.isEmpty()) {
             Label memberTitle = new Label(
                     getMessage("Groups.view.member.label"));
-            memberTitle.addStyleName("admin-title");
+            memberTitle.addStyleName("member-title");
             mainLayout.addComponent(memberTitle);
             for (UsersGroup group : groups) {
-                mainLayout.addComponent(createGroupComponent(group));
+                mainLayout.addComponent(createGroupComponent(group, false));
             }
         }
     }
 
-    private Component createGroupComponent(final UsersGroup group) {
+    private Component createGroupComponent(final UsersGroup group,
+            boolean isAdmin) {
         CssLayout component = new CssLayout();
         component.addStyleName("user-group");
         component.addLayoutClickListener(new LayoutClickListener() {
@@ -129,18 +130,23 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
             component.addComponent(image);
         }
 
-        String eventInvitations = presenter.getEventsInvitations(group);
-        if (eventInvitations != null) {
-            Label invitations = new Label(eventInvitations);
-            invitations.addStyleName("user-group-event-invitations");
-            component.addComponent(invitations);
+        if (isAdmin) {
+            String eventInvitations = presenter.getEventsInvitations(group);
+            if (eventInvitations != null) {
+                Label invitations = new Label(eventInvitations);
+                invitations.setSizeUndefined();
+                invitations.addStyleName("user-group-event-invitations");
+                component.addComponent(invitations);
+            }
         }
 
         Label name = new Label(group.getName());
+        name.setSizeUndefined();
         name.addStyleName("user-group-name");
         component.addComponent(name);
 
         Label members = createMembersCount(group);
+        members.setSizeUndefined();
         members.addStyleName("user-group-members-count");
         if (hasLogo) {
             members.addStyleName("align-bottom");
