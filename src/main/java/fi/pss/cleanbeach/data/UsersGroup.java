@@ -35,7 +35,7 @@ public class UsersGroup extends AbstractEntity {
     @JoinTable(name = "admins", joinColumns = { @JoinColumn(name = "admin_id") }, inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<User> admins = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "organizer")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "organizer", fetch = FetchType.EAGER)
     private List<Event> events = new ArrayList<>();
 
     public String getName() {

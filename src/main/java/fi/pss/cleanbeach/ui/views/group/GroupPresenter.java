@@ -45,12 +45,21 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
         }
     }
 
-    public String getEventsInvitations(UsersGroup group) {
+    public String getEventInvitations(UsersGroup group) {
         int size = inviteService.getPendingInvitations(group).size();
         if (size == 1) {
             return getMessage("Groups.view.events.amount.singular", size);
         }
         return getMessage("Groups.view.events.amount.plural", size);
+    }
+
+    public String getPendingEventInvitations(UsersGroup group) {
+        int size = inviteService.getPendingInvitations(group).size();
+        if (size == 1) {
+            return getMessage("Groups.view.pending.events.amount.singular",
+                    size);
+        }
+        return getMessage("Groups.view.pending.events.amount.plural", size);
     }
 
     public String getMembers(UsersGroup group) {

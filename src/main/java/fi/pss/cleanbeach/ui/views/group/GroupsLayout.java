@@ -104,7 +104,7 @@ class GroupsLayout extends NavigationView {
         }
 
         if (isAdmin) {
-            String eventInvitations = presenter.getEventsInvitations(group);
+            String eventInvitations = presenter.getEventInvitations(group);
             if (eventInvitations != null) {
                 Label invitations = new Label(eventInvitations);
                 invitations.setSizeUndefined();

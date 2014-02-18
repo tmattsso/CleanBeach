@@ -1,5 +1,7 @@
 package fi.pss.cleanbeach.ui.views.group;
 
+import java.util.List;
+
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -48,6 +50,7 @@ class GroupDetailsLayout extends NavigationView {
         CssLayout mainLayout = new CssLayout();
         mainLayout.addStyleName("groupview-details");
         mainLayout.addComponent(createGroupInfoComponent());
+        mainLayout.addComponent(createInvitationsInfo());
         if (isAdmin) {
             mainLayout.addComponent(createButtonsComponent());
         }
@@ -56,9 +59,45 @@ class GroupDetailsLayout extends NavigationView {
         setContent(mainLayout);
     }
 
+    private Component createInvitationsInfo() {
+        CssLayout layout = new CssLayout();
+        layout.addStyleName("groupview-details-invitations");
+
+        Label prefix = new Label(getMessage("Group.details.invitations.prefix"));
+        prefix.setSizeUndefined();
+        prefix.addStyleName("invitations-prefix");
+        layout.addComponent(prefix);
+
+        String link = presenter.getPendingEventInvitations(group);
+        Button invitations = new Button(link);
+        invitations.setStyleName(BaseTheme.BUTTON_LINK);
+        invitations.addStyleName("invitations-link");
+        layout.addComponent(invitations);
+
+        return layout;
+    }
+
     private Component createEventsComponent() {
-        // TODO Auto-generated method stub
-        return new Label();
+        CssLayout layout = new CssLayout();
+        layout.addStyleName("groupview-details-events");
+
+        Label header = new Label(getMessage("Group.details.events.caption"));
+        header.addStyleName("groupview-details-events-caption");
+        layout.addComponent(header);
+
+        List<fi.pss.cleanbeach.data.Event> events = group.getEvents();
+        for (fi.pss.cleanbeach.data.Event event : events) {
+            layout.addComponent(createEventComponent(event));
+        }
+
+        return layout;
+    }
+
+    private Component createEventComponent(fi.pss.cleanbeach.data.Event event) {
+        CssLayout layout = new CssLayout();
+        layout.addStyleName("groupview-details-event");
+        // TODO
+        return layout;
     }
 
     private Component createButtonsComponent() {
@@ -132,6 +171,11 @@ class GroupDetailsLayout extends NavigationView {
         rightLayout.addComponent(membersButton);
 
         return layout;
+    }
+
+    @Override
+    public CssLayout getContent() {
+        return (CssLayout) super.getContent();
     }
 
     private String getMessage(String key) {

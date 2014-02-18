@@ -80,3 +80,9 @@
 .v-button.search-button, .v-button.create-button {
 	margin: 10px;
 }
+
+.groupview-details-invitations .invitations-prefix, .groupview-details-invitations .invitations-link,
+.groupview-details-invitations .invitations-link .v-button-wrap {
+	display: inline;
+}
+
