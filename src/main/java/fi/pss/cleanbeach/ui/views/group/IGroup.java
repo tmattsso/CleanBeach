@@ -21,4 +21,6 @@ public interface IGroup extends IView {
 
     Locale getLocale();
 
+    void showGroupDetails(UsersGroup group, boolean adminView);
+
 }

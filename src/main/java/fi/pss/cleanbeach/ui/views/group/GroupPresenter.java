@@ -63,8 +63,8 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
     }
 
     public void showGroup(UsersGroup group) {
-        // TODO Auto-generated method stub
-
+        view.showGroupDetails(group,
+                group.getAdmins().contains(MyTouchKitUI.getCurrentUser()));
     }
 
     public void searchGroups() {
@@ -77,8 +77,27 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
     }
 
-    private String getMessage(String key, Object... params) {
+    public void leaveGroup(UsersGroup group) {
+        // TODO Auto-generated method stub
+    }
+
+    public String getMessage(String key, Object... params) {
         return resourceService.getMessage(view.getLocale(), key, params);
+    }
+
+    public void createEvent() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void showManageAdmins() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void showMembers(UsersGroup group) {
+        // TODO Auto-generated method stub
+
     }
 
 }
