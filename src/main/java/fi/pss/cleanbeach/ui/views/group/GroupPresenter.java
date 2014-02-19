@@ -72,8 +72,7 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
     }
 
     public void showGroup(UsersGroup group) {
-        view.showGroupDetails(group,
-                group.getAdmins().contains(MyTouchKitUI.getCurrentUser()));
+        view.showGroupDetails(group);
     }
 
     public void searchGroups() {
@@ -86,8 +85,24 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
     }
 
+    public void requestLeaveGroup(UsersGroup group) {
+        view.showLeaveConfirmation();
+    }
+
+    public void requestJoinGroup(UsersGroup group) {
+        view.showJoinConfirmation();
+    }
+
     public void leaveGroup(UsersGroup group) {
-        // TODO Auto-generated method stub
+        UsersGroup userGroup = groupService.removeMember(group,
+                MyTouchKitUI.getCurrentUser());
+        view.updateMembershipState(userGroup);
+    }
+
+    public void joinGroup(UsersGroup group) {
+        UsersGroup userGroup = groupService.addMember(group,
+                MyTouchKitUI.getCurrentUser());
+        view.updateMembershipState(userGroup);
     }
 
     public String getMessage(String key, Object... params) {
@@ -107,6 +122,24 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
     public void showMembers(UsersGroup group) {
         // TODO Auto-generated method stub
 
+    }
+
+    public boolean canJoin(UsersGroup group) {
+        return !group.getMembers().contains(MyTouchKitUI.getCurrentUser());
+    }
+
+    public boolean canLeave(UsersGroup group) {
+        if (group.getMembers().contains(MyTouchKitUI.getCurrentUser())) {
+            if (group.getAdmins().contains(MyTouchKitUI.getCurrentUser())) {
+                return group.getAdmins().size() != 1;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean canManage(UsersGroup group) {
+        return group.getAdmins().contains(MyTouchKitUI.getCurrentUser());
     }
 
 }

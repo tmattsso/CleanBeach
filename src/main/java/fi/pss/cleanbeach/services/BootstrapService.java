@@ -55,11 +55,10 @@ public class BootstrapService {
 
         log.info("Added user " + user2.getId());
 
-        UsersGroup group = new UsersGroup();
-        group.setName("Vaadin Ltd");
-        group.setDescription("descr");
-        group.setCreator(user);
+        UsersGroup group = groupService
+                .createGroup(user, "Vaadin Ltd", "descr");
         groupService.addAdmin(group, user2);
+        groupService.addAdmin(group, user);
 
         log.info("Added group " + group.getId());
 
