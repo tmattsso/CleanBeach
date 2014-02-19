@@ -2,6 +2,8 @@ package fi.pss.cleanbeach.ui.views.group;
 
 import java.util.List;
 
+import org.vaadin.dialogs.ConfirmDialog;
+
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -10,6 +12,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.BaseTheme;
 
 import fi.pss.cleanbeach.data.Image;
@@ -23,40 +26,64 @@ class GroupDetailsLayout extends NavigationView {
 
     private final GroupPresenter presenter;
 
-    private final UsersGroup group;
+    private UsersGroup group;
 
-    private final boolean isAdmin;
-
-    GroupDetailsLayout(final GroupPresenter presenter, final UsersGroup group,
-            boolean adminView) {
+    GroupDetailsLayout(final GroupPresenter presenter, final UsersGroup group) {
         this.presenter = presenter;
         this.group = group;
-        isAdmin = adminView;
 
         setCaption(getMessage("Group.details.caption"));
 
-        Button button = new Button(getMessage("Group.details.leave.group"));
-        button.setStyleName(BaseTheme.BUTTON_LINK);
-        button.addStyleName("groupview-details-leave");
-        button.addClickListener(new ClickListener() {
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                presenter.leaveGroup(group);
-            }
-        });
-        getNavigationBar().setRightComponent(button);
+        setRightButton(presenter, group);
 
         CssLayout mainLayout = new CssLayout();
         mainLayout.addStyleName("groupview-details");
         mainLayout.addComponent(createGroupInfoComponent());
         mainLayout.addComponent(createInvitationsInfo());
-        if (isAdmin) {
+        if (presenter.canManage(group)) {
             mainLayout.addComponent(createButtonsComponent());
         }
         mainLayout.addComponent(createEventsComponent());
 
         setContent(mainLayout);
+    }
+
+    @Override
+    public CssLayout getContent() {
+        return (CssLayout) super.getContent();
+    }
+
+    public void showLeaveConfirmation() {
+        ConfirmDialog.show(UI.getCurrent(),
+                getMessage("Group.details.leave.message", group.getName()),
+                new ConfirmDialog.Listener() {
+
+                    @Override
+                    public void onClose(ConfirmDialog dialog) {
+                        if (dialog.isConfirmed()) {
+                            presenter.leaveGroup(group);
+                        }
+                    }
+                });
+    }
+
+    public void showJoinConfirmation() {
+        ConfirmDialog.show(UI.getCurrent(),
+                getMessage("Group.details.join.message", group.getName()),
+                new ConfirmDialog.Listener() {
+
+                    @Override
+                    public void onClose(ConfirmDialog dialog) {
+                        if (dialog.isConfirmed()) {
+                            presenter.joinGroup(group);
+                        }
+                    }
+                });
+    }
+
+    public void updateMembershipState(UsersGroup group) {
+        this.group = group;
+        setRightButton(presenter, group);
     }
 
     private Component createInvitationsInfo() {
@@ -130,6 +157,19 @@ class GroupDetailsLayout extends NavigationView {
         return layout;
     }
 
+    private void setRightButton(final GroupPresenter presenter,
+            final UsersGroup group) {
+        if (presenter.canJoin(group)) {
+            getNavigationBar().setRightComponent(
+                    createJoinButton(presenter, group));
+        } else if (presenter.canLeave(group)) {
+            getNavigationBar().setRightComponent(
+                    createLeaveButton(presenter, group));
+        } else {
+            getNavigationBar().setRightComponent(null);
+        }
+    }
+
     private Component createGroupInfoComponent() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.setWidth(100, Unit.PERCENTAGE);
@@ -173,12 +213,38 @@ class GroupDetailsLayout extends NavigationView {
         return layout;
     }
 
-    @Override
-    public CssLayout getContent() {
-        return (CssLayout) super.getContent();
+    private Button createLeaveButton(final GroupPresenter presenter,
+            final UsersGroup group) {
+        Button button = new Button(getMessage("Group.details.leave.group"));
+        button.setStyleName(BaseTheme.BUTTON_LINK);
+        button.addStyleName("groupview-details-leave");
+        button.addClickListener(new ClickListener() {
+
+            @Override
+            public void buttonClick(ClickEvent event) {
+                presenter.requestLeaveGroup(group);
+            }
+        });
+        return button;
     }
 
-    private String getMessage(String key) {
-        return presenter.getMessage(key);
+    private Component createJoinButton(final GroupPresenter presenter,
+            final UsersGroup group) {
+        Button button = new Button(getMessage("Group.details.join.group"));
+        button.setStyleName(BaseTheme.BUTTON_LINK);
+        button.addStyleName("groupview-details-join");
+        button.addClickListener(new ClickListener() {
+
+            @Override
+            public void buttonClick(ClickEvent event) {
+                presenter.requestJoinGroup(group);
+            }
+        });
+        return button;
     }
+
+    private String getMessage(String key, Object... params) {
+        return presenter.getMessage(key, params);
+    }
+
 }

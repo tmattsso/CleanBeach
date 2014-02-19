@@ -21,6 +21,12 @@ public interface IGroup extends IView {
 
     Locale getLocale();
 
-    void showGroupDetails(UsersGroup group, boolean adminView);
+    void showGroupDetails(UsersGroup group);
+
+    void showLeaveConfirmation();
+
+    void showJoinConfirmation();
+
+    void updateMembershipState(UsersGroup userGroup);
 
 }

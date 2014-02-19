@@ -26,6 +26,8 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
 
     private GroupsLayout groupsComponent;
 
+    private GroupDetailsLayout detailsComponent;
+
     @Inject
     @Override
     public void injectPresenter(GroupPresenter presenter) {
@@ -43,8 +45,9 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
     }
 
     @Override
-    public void showGroupDetails(UsersGroup group, boolean adminView) {
-        navigateTo(new GroupDetailsLayout(presenter, group, adminView));
+    public void showGroupDetails(UsersGroup group) {
+        detailsComponent = new GroupDetailsLayout(presenter, group);
+        navigateTo(detailsComponent);
     }
 
     @Override
@@ -52,6 +55,21 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
         groupsComponent = new GroupsLayout(presenter);
         presenter.loadGroups();
         return groupsComponent;
+    }
+
+    @Override
+    public void showLeaveConfirmation() {
+        detailsComponent.showLeaveConfirmation();
+    }
+
+    @Override
+    public void showJoinConfirmation() {
+        detailsComponent.showJoinConfirmation();
+    }
+
+    @Override
+    public void updateMembershipState(UsersGroup group) {
+        detailsComponent.updateMembershipState(group);
     }
 
 }
