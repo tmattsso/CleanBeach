@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
+import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.GroupService;
@@ -14,13 +15,14 @@ import fi.pss.cleanbeach.services.InviteService;
 import fi.pss.cleanbeach.services.ResourceService;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
+import fi.pss.cleanbeach.ui.views.events.IEventPresenter;
 
 /**
  * @author denis
  * 
  */
 public class GroupPresenter extends AbstractPresenter<IGroup> implements
-        Serializable {
+        Serializable, IEventPresenter {
 
     @Inject
     private GroupService groupService;
@@ -140,6 +142,12 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
     public boolean canManage(UsersGroup group) {
         return group.getAdmins().contains(MyTouchKitUI.getCurrentUser());
+    }
+
+    @Override
+    public void openSingleEvent(Event event) {
+        // TODO Auto-generated method stub
+
     }
 
 }

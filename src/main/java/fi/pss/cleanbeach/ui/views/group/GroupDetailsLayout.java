@@ -127,10 +127,7 @@ class GroupDetailsLayout extends NavigationView {
     }
 
     private Component createEventComponent(fi.pss.cleanbeach.data.Event event) {
-        CssLayout layout = new CssLayout();
-        layout.addStyleName("groupview-details-event");
-        // TODO
-        return layout;
+        return new EventComponent(event, presenter);
     }
 
     private Component createButtonsComponent() {
