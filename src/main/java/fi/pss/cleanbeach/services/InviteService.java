@@ -36,9 +36,9 @@ public class InviteService {
      */
     public Invite invite(User inviter, UsersGroup group, Event event) {
         Invite invite = new Invite();
-        invite.setInviter(inviter);
-        invite.setInvitee(group);
-        invite.setEvent(event);
+        invite.setInviter(entityManager.merge(inviter));
+        invite.setInvitee(entityManager.merge(group));
+        invite.setEvent(entityManager.merge(event));
         entityManager.persist(invite);
         return invite;
     }
