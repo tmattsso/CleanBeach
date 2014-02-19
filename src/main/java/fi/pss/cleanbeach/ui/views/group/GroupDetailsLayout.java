@@ -28,6 +28,8 @@ class GroupDetailsLayout extends NavigationView {
 
     private UsersGroup group;
 
+    private Component adminComponent;
+
     GroupDetailsLayout(final GroupPresenter presenter, final UsersGroup group) {
         this.presenter = presenter;
         this.group = group;
@@ -41,7 +43,8 @@ class GroupDetailsLayout extends NavigationView {
         mainLayout.addComponent(createGroupInfoComponent());
         mainLayout.addComponent(createInvitationsInfo());
         if (presenter.canManage(group)) {
-            mainLayout.addComponent(createButtonsComponent());
+            adminComponent = createButtonsComponent();
+            mainLayout.addComponent(adminComponent);
         }
         mainLayout.addComponent(createEventsComponent());
 
@@ -83,6 +86,9 @@ class GroupDetailsLayout extends NavigationView {
 
     public void updateMembershipState(UsersGroup group) {
         this.group = group;
+        if (!presenter.canManage(group) && adminComponent != null) {
+            getContent().removeComponent(adminComponent);
+        }
         setRightButton(presenter, group);
     }
 

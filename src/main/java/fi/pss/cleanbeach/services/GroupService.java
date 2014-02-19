@@ -43,29 +43,31 @@ public class GroupService {
     }
 
     public UsersGroup addMember(UsersGroup group, User user) {
-        doAddMember(group, user);
-        UsersGroup userGroup = entityManager.merge(group);
+        UsersGroup userGroup = doAddMember(group, user);
+        userGroup = entityManager.merge(userGroup);
         entityManager.merge(user);
 
         return userGroup;
     }
 
     public UsersGroup addAdmin(UsersGroup group, User user) {
-        doAddMember(group, user);
-        group.getAdmins().add(user);
+        UsersGroup userGroup = doAddMember(group, user);
+        userGroup.getAdmins().add(user);
 
-        UsersGroup userGroup = entityManager.merge(group);
+        userGroup = entityManager.merge(userGroup);
         entityManager.merge(user);
 
         return userGroup;
     }
 
     public UsersGroup removeMember(UsersGroup group, User user) {
-        group.getMembers().remove(user);
-        group.getAdmins().remove(user);
+        UsersGroup userGroup = entityManager.find(UsersGroup.class,
+                group.getId());
+        userGroup.getMembers().remove(user);
+        userGroup.getAdmins().remove(user);
         user.getMemberIn().remove(group);
 
-        UsersGroup userGroup = entityManager.merge(group);
+        userGroup = entityManager.merge(userGroup);
         entityManager.merge(user);
 
         return userGroup;
@@ -83,13 +85,16 @@ public class GroupService {
         return group;
     }
 
-    public void save(UsersGroup group) {
-        entityManager.persist(group);
+    public UsersGroup save(UsersGroup group) {
+        return entityManager.merge(group);
     }
 
-    private void doAddMember(UsersGroup group, User user) {
-        group.getMembers().add(user);
+    private UsersGroup doAddMember(UsersGroup group, User user) {
+        UsersGroup userGroup = entityManager.find(UsersGroup.class,
+                group.getId());
+        userGroup.getMembers().add(user);
         user.getMemberIn().add(group);
+        return userGroup;
     }
 
 }
