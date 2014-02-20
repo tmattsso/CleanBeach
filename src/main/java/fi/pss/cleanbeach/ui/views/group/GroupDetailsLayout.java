@@ -118,7 +118,7 @@ class GroupDetailsLayout extends NavigationView {
         header.addStyleName("groupview-details-events-caption");
         layout.addComponent(header);
 
-        List<fi.pss.cleanbeach.data.Event> events = group.getEvents();
+        List<fi.pss.cleanbeach.data.Event> events = presenter.getEvents(group);
         for (fi.pss.cleanbeach.data.Event event : events) {
             layout.addComponent(createEventComponent(event));
         }

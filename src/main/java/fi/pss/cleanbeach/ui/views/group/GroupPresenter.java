@@ -4,12 +4,14 @@
 package fi.pss.cleanbeach.ui.views.group;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.GroupService;
 import fi.pss.cleanbeach.services.InviteService;
 import fi.pss.cleanbeach.services.ResourceService;
@@ -32,6 +34,9 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
     @Inject
     private InviteService inviteService;
+
+    @Inject
+    private EventService eventService;
 
     @Override
     public void init(User currentUser) {
@@ -148,6 +153,10 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
     public void openSingleEvent(Event event) {
         // TODO Auto-generated method stub
 
+    }
+
+    public List<fi.pss.cleanbeach.data.Event> getEvents(UsersGroup group) {
+        return eventService.getEvents(group);
     }
 
 }
