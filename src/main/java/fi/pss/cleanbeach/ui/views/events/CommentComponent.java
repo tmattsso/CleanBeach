@@ -2,6 +2,8 @@ package fi.pss.cleanbeach.ui.views.events;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
@@ -17,6 +19,8 @@ public class CommentComponent extends CustomComponent {
 
 	private static final long serialVersionUID = -457189718760395829L;
 
+	private final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
 	public CommentComponent(final Comment c) {
 
 		CssLayout root = new CssLayout();
@@ -24,14 +28,14 @@ public class CommentComponent extends CustomComponent {
 		root.setWidth("100%");
 		addStyleName("comment");
 
-		Label author = new Label(c.getWritetime() + " "
-				+ c.getAuthor().getName(), ContentMode.HTML);
+		Label author = new Label(c.getAuthor().getName() + ", "
+				+ df.format(c.getWritetime()), ContentMode.HTML);
 		author.addStyleName("author");
 		root.addComponent(author);
 
 		if (c.getImage() != null) {
 			Image img = new Image();
-			img.setWidth("100%");
+			// TODO make image max 100% wide (or keep smaller size as-is)
 
 			StreamSource ss = new StreamSource() {
 

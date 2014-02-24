@@ -41,6 +41,8 @@ public class EventDetailLayout extends NavigationView {
 		setCaption("Event details");
 
 		VerticalLayout content = new VerticalLayout();
+		content.setMargin(true);
+		content.setSpacing(true);
 		setContent(content);
 
 		caption = new Label("", ContentMode.HTML);
@@ -105,6 +107,7 @@ public class EventDetailLayout extends NavigationView {
 		actions.addComponent(invite);
 
 		comments = new VerticalLayout();
+		comments.setSpacing(true);
 		content.addComponent(comments);
 
 		update(e);

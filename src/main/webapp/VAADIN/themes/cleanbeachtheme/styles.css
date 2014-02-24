@@ -86,3 +86,20 @@
 	display: inline;
 }
 
+.v-customcomponent-comment {
+	padding: 10px;
+	background-color: white;
+	border-radius: 5px;
+	border: 1px solid gray;
+}
+
+.comment .author {
+	font-size: 10pt;
+	padding-bottom: 5px;
+}
+
+.comment .v-image {
+	padding: 5px;
+	padding-top: 0;
+}
+
