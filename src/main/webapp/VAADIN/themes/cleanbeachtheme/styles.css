@@ -121,3 +121,17 @@
 .eventdetail .eventmembers {
 	font-size: 10pt;
 }
+
+.eventtabs .v-button-caption {
+	display: block;
+	font-size: 10pt;
+	line-height: 1.5;
+}
+.eventtabs .v-button .v-button-wrap:before {
+	line-height: 35px;
+}
+
+.events .noevents {
+	line-height: 50px;
+	text-align: center;
+}

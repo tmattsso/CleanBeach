@@ -6,6 +6,7 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -23,7 +24,7 @@ public class EventSearchLayout extends VerticalLayout {
 
 		this.presenter = presenter;
 
-		setMargin(true);
+		setMargin(false);
 		setSpacing(true);
 
 		final TextField tf = new TextField();
@@ -52,6 +53,15 @@ public class EventSearchLayout extends VerticalLayout {
 
 	public void populate(List<fi.pss.cleanbeach.data.Event> l) {
 		resultContainer.removeAllComponents();
+
+		if (l.isEmpty()) {
+
+			Label empty = new Label("No events found.");
+			empty.addStyleName("noevents");
+			resultContainer.addComponent(empty);
+
+			return;
+		}
 
 		for (fi.pss.cleanbeach.data.Event e : l) {
 			resultContainer.addComponent(new EventPanel(e, presenter));

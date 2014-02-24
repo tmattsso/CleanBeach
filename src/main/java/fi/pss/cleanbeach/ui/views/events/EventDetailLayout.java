@@ -101,6 +101,8 @@ public class EventDetailLayout extends NavigationView {
 		TouchKitIcon.comment.addTo(comment);
 		comment.addClickListener(new ClickListener() {
 
+			private static final long serialVersionUID = 3214768233962554854L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 
@@ -111,6 +113,8 @@ public class EventDetailLayout extends NavigationView {
 		Button photo = new Button("Add a photo");
 		TouchKitIcon.cameraRetro.addTo(photo);
 		photo.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = -5417239994058318781L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -123,6 +127,8 @@ public class EventDetailLayout extends NavigationView {
 		TouchKitIcon.exclamationSign.addTo(addThrash);
 		addThrash.addClickListener(new ClickListener() {
 
+			private static final long serialVersionUID = -2718050820972847459L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 
@@ -133,6 +139,8 @@ public class EventDetailLayout extends NavigationView {
 		Button invite = new Button("Invite Group");
 		TouchKitIcon.user.addTo(invite);
 		invite.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 3852409971806848078L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {

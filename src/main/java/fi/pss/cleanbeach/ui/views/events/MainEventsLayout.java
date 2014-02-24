@@ -2,13 +2,14 @@ package fi.pss.cleanbeach.ui.views.events;
 
 import java.util.List;
 
+import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
-import com.vaadin.addon.touchkit.ui.Toolbar;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
@@ -36,24 +37,30 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 
 		VerticalLayout vl = new VerticalLayout();
 		vl.setSpacing(true);
-		vl.setMargin(false);
+		vl.setMargin(true);
 
-		Toolbar tabs = new Toolbar();
+		HorizontalLayout tabs = new HorizontalLayout();
+		tabs.addStyleName("eventtabs");
+		tabs.setSpacing(true);
+		tabs.setWidth("100%");
 
 		allEvents = new Button("All events");
 		allEvents.addClickListener(this);
 		allEvents.setData(allEventsLayout = new WallLayout(presenter));
 		allEvents.addStyleName("selected");
+		TouchKitIcon.group.addTo(allEvents);
 		tabs.addComponent(allEvents);
 
 		joinedEvents = new Button("Joined events");
 		joinedEvents.addClickListener(this);
 		joinedEvents.setData(joinedEventsLayout = new WallLayout(presenter));
+		TouchKitIcon.star.addTo(joinedEvents);
 		tabs.addComponent(joinedEvents);
 
-		search = new Button("Search");
+		search = new Button("Search for events");
 		search.addClickListener(this);
 		search.setData(searchLayout = new EventSearchLayout(presenter));
+		TouchKitIcon.search.addTo(search);
 		tabs.addComponent(search);
 
 		content = new CssLayout((Component) allEvents.getData());
