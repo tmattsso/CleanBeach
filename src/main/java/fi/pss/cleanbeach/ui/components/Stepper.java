@@ -32,11 +32,9 @@ public class Stepper extends CustomField<Integer> {
 	protected Component initContent() {
 		Button minus = new Button();
 		TouchKitIcon.minusSign.addTo(minus);
-		// minus.setWidth("50px");
 
 		Button plus = new Button();
 		TouchKitIcon.plusSign.addTo(plus);
-		// plus.setWidth("50px");
 
 		currentValue.setValue(getValue() + "");
 		currentValue.setWidth("100px");

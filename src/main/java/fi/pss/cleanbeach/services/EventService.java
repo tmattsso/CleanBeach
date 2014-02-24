@@ -94,6 +94,10 @@ public class EventService {
 
 	private void fillWithThrashDetails(List<Event> l) {
 
+		if (l == null || l.isEmpty()) {
+			return;
+		}
+
 		// fetch trash numbers
 		String q = "SELECT t FROM Thrash t WHERE t.event IN (:events)";
 		Query query = em.createQuery(q);

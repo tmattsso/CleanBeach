@@ -70,13 +70,13 @@ public class EventDetailLayout extends NavigationView {
 		gl.addComponent(items, 1, 0, 2, 0);
 
 		Button fb = new Button();
-		fb.setSizeFull();
+		fb.setWidth("100%");
 		fb.setEnabled(false);
 		TouchKitIcon.facebookSign.addTo(fb);
 		gl.addComponent(fb, 1, 1);
 
 		Button twitter = new Button();
-		twitter.setSizeFull();
+		twitter.setWidth("100%");
 		twitter.setEnabled(false);
 		TouchKitIcon.twitterSign.addTo(twitter);
 		gl.addComponent(twitter, 2, 1);
