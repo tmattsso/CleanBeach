@@ -3,6 +3,7 @@ package fi.pss.cleanbeach.data;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -12,6 +13,7 @@ import javax.persistence.TemporalType;
 @Entity
 public class Comment extends AbstractEntity {
 
+	@Column(length = 2048)
 	private String content;
 
 	@Temporal(TemporalType.TIMESTAMP)

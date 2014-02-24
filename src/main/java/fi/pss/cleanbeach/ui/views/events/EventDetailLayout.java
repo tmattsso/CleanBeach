@@ -11,6 +11,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.pss.cleanbeach.data.Comment;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 
@@ -28,6 +29,8 @@ public class EventDetailLayout extends NavigationView {
 	private final Label creator;
 
 	private final HorizontalLayout actions;
+
+	private final VerticalLayout comments;
 
 	public EventDetailLayout(final fi.pss.cleanbeach.data.Event e,
 			final EventsPresenter presenter) {
@@ -101,6 +104,9 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(invite);
 
+		comments = new VerticalLayout();
+		content.addComponent(comments);
+
 		update(e);
 	}
 
@@ -155,6 +161,10 @@ public class EventDetailLayout extends NavigationView {
 		actions.setVisible(e.getJoinedUsers().contains(
 				MyTouchKitUI.getCurrentUser()));
 
+		comments.removeAllComponents();
+		for (Comment c : e.getComments()) {
+			comments.addComponent(new CommentComponent(c));
+		}
 	}
 
 }

@@ -13,75 +13,79 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 
 public abstract class AbstractEventPanel<P extends IEventPresenter> extends
-        CustomComponent {
+		CustomComponent {
 
-    private P presenter;
+	private static final long serialVersionUID = 5844647536868509786L;
 
-    public AbstractEventPanel(final fi.pss.cleanbeach.data.Event e,
-            final P presenter) {
+	private final P presenter;
 
-        setWidth("100%");
-        addStyleName("eventbox");
+	public AbstractEventPanel(final fi.pss.cleanbeach.data.Event e,
+			final P presenter) {
 
-        GridLayout root = new GridLayout(3, 3);
-        root.setSpacing(true);
-        root.setMargin(true);
-        setCompositionRoot(root);
-        root.setWidth("100%");
-        root.setColumnExpandRatio(0, 1);
-        root.setRowExpandRatio(1, 1);
+		this.presenter = presenter;
 
-        Label l = new Label(e.getLocation().getName());
-        l.setSizeUndefined();
-        l.addStyleName("location");
-        root.addComponent(l, 0, 0, 1, 0);
+		setWidth("100%");
+		addStyleName("eventbox");
 
-        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        l = new Label(df.format(e.getStart()));
-        l.setSizeUndefined();
-        l.addStyleName("date");
-        root.addComponent(l);
+		GridLayout root = new GridLayout(3, 3);
+		root.setSpacing(true);
+		root.setMargin(true);
+		setCompositionRoot(root);
+		root.setWidth("100%");
+		root.setColumnExpandRatio(0, 1);
+		root.setRowExpandRatio(1, 1);
 
-        for (Component component : createContent(e)) {
-            root.addComponent(component);
-        }
+		Label l = new Label(e.getLocation().getName());
+		l.setSizeUndefined();
+		l.addStyleName("location");
+		root.addComponent(l, 0, 0, 1, 0);
 
-        l = new Label(e.getNumComments() + " Comments<br/>"
-                + e.getNumCommentsWithImage() + " Pictures", ContentMode.HTML);
-        l.setSizeUndefined();
-        l.addStyleName("comments");
-        root.addComponent(l);
-        root.setComponentAlignment(l, Alignment.MIDDLE_CENTER);
+		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		l = new Label(df.format(e.getStart()));
+		l.setSizeUndefined();
+		l.addStyleName("date");
+		root.addComponent(l);
 
-        l = new Label("Joined people", ContentMode.HTML);
-        l.setSizeUndefined();
-        l.addStyleName("people");
-        root.addComponent(l, 0, 2, 2, 2);
+		for (Component component : createContent(e)) {
+			root.addComponent(component);
+		}
 
-        root.addLayoutClickListener(new LayoutClickListener() {
+		l = new Label(e.getNumComments() + " Comments<br/>"
+				+ e.getNumCommentsWithImage() + " Pictures", ContentMode.HTML);
+		l.setSizeUndefined();
+		l.addStyleName("comments");
+		root.addComponent(l);
+		root.setComponentAlignment(l, Alignment.MIDDLE_CENTER);
 
-            private static final long serialVersionUID = 2235608101030585861L;
+		l = new Label("Joined people", ContentMode.HTML);
+		l.setSizeUndefined();
+		l.addStyleName("people");
+		root.addComponent(l, 0, 2, 2, 2);
 
-            @Override
-            public void layoutClick(LayoutClickEvent event) {
-                getPresenter().openSingleEvent(e);
-            }
-        });
-    }
+		root.addLayoutClickListener(new LayoutClickListener() {
 
-    protected abstract Collection<? extends Component> createContent(
-            fi.pss.cleanbeach.data.Event e);
+			private static final long serialVersionUID = 2235608101030585861L;
 
-    protected P getPresenter() {
-        return presenter;
-    }
+			@Override
+			public void layoutClick(LayoutClickEvent event) {
+				presenter.openSingleEvent(e);
+			}
+		});
+	}
 
-    protected Component createCollectedComponent(fi.pss.cleanbeach.data.Event e) {
-        Label label = new Label(
-                "<div><span>101</span></div><br/>pieces collected",
-                ContentMode.HTML);
-        label.addStyleName("numpieces");
-        label.setWidth("100px");
-        return label;
-    }
+	protected abstract Collection<? extends Component> createContent(
+			fi.pss.cleanbeach.data.Event e);
+
+	protected P getPresenter() {
+		return presenter;
+	}
+
+	protected Component createCollectedComponent(fi.pss.cleanbeach.data.Event e) {
+		Label label = new Label(
+				"<div><span>101</span></div><br/>pieces collected",
+				ContentMode.HTML);
+		label.addStyleName("numpieces");
+		label.setWidth("100px");
+		return label;
+	}
 }
