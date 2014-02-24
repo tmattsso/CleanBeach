@@ -302,4 +302,33 @@ public class EventService {
 		fillWithThrashDetails(l);
 		return l;
 	}
+
+	public void setThrash(int value, ThrashType type, Event event,
+			User currentUser) {
+		TypedQuery<Thrash> query = em
+				.createQuery(
+						"SELECT t from Thrash t WHERE "
+								+ "t.type=:type AND t.reporter=:user AND t.event=:event",
+						Thrash.class);
+		query.setParameter("type", type);
+		query.setParameter("user", currentUser);
+		query.setParameter("event", event);
+
+		Thrash t;
+		try {
+			t = query.getSingleResult();
+		} catch (NoResultException e) {
+			// no input yet, create
+			t = new Thrash();
+			t.setEvent(event);
+			t.setLocation(null);
+			t.setPickupTime(new Date());
+			t.setReporter(currentUser);
+			t.setType(type);
+			em.persist(t);
+		}
+
+		t.setNum(value);
+		em.merge(t);
+	}
 }

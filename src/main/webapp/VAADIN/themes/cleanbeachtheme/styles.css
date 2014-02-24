@@ -149,3 +149,12 @@
 .eventdetail .thrash .v-button-caption span {
 	font-size: 24pt;
 }
+
+.stepper .v-label {
+	font-size: 18pt;
+	text-align: center;
+}
+
+.thrashinput .typename {
+	font-size: 16pt;
+}

@@ -65,4 +65,9 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 		details.update(e);
 	}
 
+	@Override
+	public void openThrashDetails(fi.pss.cleanbeach.data.Event e) {
+		navigateTo(new ThrashInputLayout(e, presenter));
+	}
+
 }

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.vaadin.cdi.UIScoped;
 
 import fi.pss.cleanbeach.data.Event;
+import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
@@ -62,5 +63,18 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		e = service.setUserJoined(e, currentUser, false);
 		e = service.loadDetails(e);
 		view.updateEventDetails(e);
+	}
+
+	public List<ThrashType> getThrashTypes() {
+		return service.getThrashTypes();
+	}
+
+	public void setNumThrash(Integer value, ThrashType t, Event e,
+			User currentUser) {
+		service.setThrash(value, t, e, currentUser);
+	}
+
+	public void openAddThrash(Event e) {
+		view.openThrashDetails(e);
 	}
 }

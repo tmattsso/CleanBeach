@@ -134,7 +134,7 @@ public class EventDetailLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				presenter.openAddThrash(e);
 			}
 		});
 		actions.addComponent(addThrash);

@@ -17,4 +17,6 @@ public interface IEvents extends IView {
 
 	void updateEventDetails(Event e);
 
+	void openThrashDetails(Event e);
+
 }
