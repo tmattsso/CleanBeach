@@ -35,6 +35,7 @@ public class EventService {
 	 * @param where
 	 * @param owner
 	 * @param description
+	 *            Maximum length is 248 characters.
 	 * @return the persisted {@link Event} object.
 	 */
 	public Event createEvent(Date time, Location where, UsersGroup owner,
@@ -154,6 +155,15 @@ public class EventService {
 		return e;
 	}
 
+	/**
+	 * 
+	 * @param e
+	 * @param text
+	 *            Maximum length is 248 characters.
+	 * @param img
+	 * @param u
+	 * @return
+	 */
 	public Comment addComment(Event e, String text, Image img, User u) {
 
 		Comment c = new Comment();

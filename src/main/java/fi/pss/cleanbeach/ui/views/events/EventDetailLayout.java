@@ -1,17 +1,23 @@
 package fi.pss.cleanbeach.ui.views.events;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
+import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Comment;
+import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 
@@ -19,13 +25,12 @@ public class EventDetailLayout extends NavigationView {
 
 	private static final long serialVersionUID = 4303038489004245363L;
 
+	private final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 	private final EventsPresenter presenter;
 
 	private final Label caption;
 	private final Label desc;
-
 	private final Label members;
-
 	private final Label creator;
 
 	private final HorizontalLayout actions;
@@ -37,7 +42,7 @@ public class EventDetailLayout extends NavigationView {
 
 		this.presenter = presenter;
 
-		getNavigationBar().addStyleName("eventdetail");
+		addStyleName("eventdetail");
 		setCaption("Event details");
 
 		VerticalLayout content = new VerticalLayout();
@@ -48,6 +53,30 @@ public class EventDetailLayout extends NavigationView {
 		caption = new Label("", ContentMode.HTML);
 		caption.addStyleName("eventcaption");
 		content.addComponent(caption);
+
+		GridLayout gl = new GridLayout(3, 2);
+		gl.setWidth("100%");
+		gl.setHeight("150px");
+		gl.setSpacing(true);
+		gl.setColumnExpandRatio(0, 1);
+		gl.setRowExpandRatio(0, 1);
+		content.addComponent(gl);
+
+		Component map = getMap(e.getLocation());
+		map.setSizeFull();
+		gl.addComponent(map, 0, 0, 0, 1);
+
+		Component items = getItemsButton(e);
+		items.setSizeFull();
+		gl.addComponent(items, 1, 0, 2, 0);
+
+		Button fb = new Button();
+		TouchKitIcon.facebookSign.addTo(fb);
+		gl.addComponent(fb, 1, 1);
+
+		Button twitter = new Button();
+		TouchKitIcon.twitterSign.addTo(twitter);
+		gl.addComponent(twitter, 2, 1);
 
 		desc = new Label();
 		desc.addStyleName("eventdescriptions");
@@ -62,11 +91,14 @@ public class EventDetailLayout extends NavigationView {
 		content.addComponent(members);
 
 		actions = new HorizontalLayout();
+		actions.addStyleName("actionbuttons");
 		actions.setVisible(false);
 		actions.setWidth("100%");
+		actions.setSpacing(true);
 		content.addComponent(actions);
 
 		Button comment = new Button("Comment");
+		TouchKitIcon.comment.addTo(comment);
 		comment.addClickListener(new ClickListener() {
 
 			@Override
@@ -76,7 +108,8 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(comment);
 
-		Button photo = new Button("Photo");
+		Button photo = new Button("Add a photo");
+		TouchKitIcon.cameraRetro.addTo(photo);
 		photo.addClickListener(new ClickListener() {
 
 			@Override
@@ -86,7 +119,8 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(photo);
 
-		Button addThrash = new Button("Report");
+		Button addThrash = new Button("Report scrap");
+		TouchKitIcon.exclamationSign.addTo(addThrash);
 		addThrash.addClickListener(new ClickListener() {
 
 			@Override
@@ -96,7 +130,8 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(addThrash);
 
-		Button invite = new Button("Invite");
+		Button invite = new Button("Invite Group");
+		TouchKitIcon.user.addTo(invite);
 		invite.addClickListener(new ClickListener() {
 
 			@Override
@@ -107,10 +142,21 @@ public class EventDetailLayout extends NavigationView {
 		actions.addComponent(invite);
 
 		comments = new VerticalLayout();
+		comments.setCaption("Comments:");
 		comments.setSpacing(true);
 		content.addComponent(comments);
 
 		update(e);
+	}
+
+	private Component getItemsButton(fi.pss.cleanbeach.data.Event e) {
+		// TODO Auto-generated method stub
+		return new Button("ITEMS");
+
+	}
+
+	private Component getMap(Location location) {
+		return new SimpleMap(location);
 	}
 
 	public void update(final fi.pss.cleanbeach.data.Event e) {
@@ -140,8 +186,8 @@ public class EventDetailLayout extends NavigationView {
 			});
 		}
 
-		caption.setValue(e.getLocation().getName() + "<br/><span>"
-				+ e.getStart().toString() + "</span>");
+		caption.setValue(e.getLocation().getName() + "<span>"
+				+ df.format(e.getStart()) + "</span>");
 
 		desc.setValue(e.getDescription());
 

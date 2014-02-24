@@ -73,7 +73,12 @@ public class BootstrapService {
 
 		log.info("Added location " + loc.getId());
 
-		Event e = eventService.createEvent(new Date(), loc, group, "Demo");
+		Event e = eventService
+				.createEvent(
+						new Date(),
+						loc,
+						group,
+						"Ullamco fatback pork, strip steak anim do irure meatloaf shoulder frankfurter non fugiat tri-tip. Cow kevin cupidatat venison chuck biltong in laborum. Mollit pastrami pork belly, ex ad est id ullamco do exercitation landjaeger dolor shoulder qui. Anim jowl ea proident non, prosciutto nulla. Ut voluptate proident, shoulder sed magna ex. Chuck filet mignon eu jowl veniam deserunt. Capicola jowl do excepteur meatloaf quis, jerky pork belly dolore labore voluptate porchetta.");
 
 		log.info("Added event " + e.getId());
 

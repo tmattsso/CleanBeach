@@ -77,6 +77,12 @@
 	margin-left: 10px;
 }
 
+.actionbuttons .v-button-caption {
+	display: block;
+	font-size: 10pt;
+	line-height: 1.5;
+}
+
 .v-button.search-button, .v-button.create-button {
 	margin: 10px;
 }
@@ -86,20 +92,32 @@
 	display: inline;
 }
 
-.v-customcomponent-comment {
+.eventdetail .v-customcomponent-comment {
 	padding: 10px;
 	background-color: white;
 	border-radius: 5px;
 	border: 1px solid gray;
 }
 
-.comment .author {
+.eventdetail .comment .author {
 	font-size: 10pt;
 	padding-bottom: 5px;
 }
 
-.comment .v-image {
+.eventdetail .comment .v-image {
 	padding: 5px;
 	padding-top: 0;
 }
 
+.eventdetail .eventcaption span {
+	float: right;
+}
+
+.eventdetail .simplemap .leaflet-control-container {
+	display: none;
+}
+
+.eventdetail .eventcreator,
+.eventdetail .eventmembers {
+	font-size: 10pt;
+}
