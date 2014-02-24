@@ -67,14 +67,17 @@ public class EventDetailLayout extends NavigationView {
 		gl.addComponent(map, 0, 0, 0, 1);
 
 		Component items = getItemsButton(e);
-		items.setSizeFull();
 		gl.addComponent(items, 1, 0, 2, 0);
 
 		Button fb = new Button();
+		fb.setSizeFull();
+		fb.setEnabled(false);
 		TouchKitIcon.facebookSign.addTo(fb);
 		gl.addComponent(fb, 1, 1);
 
 		Button twitter = new Button();
+		twitter.setSizeFull();
+		twitter.setEnabled(false);
 		TouchKitIcon.twitterSign.addTo(twitter);
 		gl.addComponent(twitter, 2, 1);
 
@@ -158,9 +161,16 @@ public class EventDetailLayout extends NavigationView {
 	}
 
 	private Component getItemsButton(fi.pss.cleanbeach.data.Event e) {
-		// TODO Auto-generated method stub
-		return new Button("ITEMS");
+		Button b = new Button();
+		b.setWidth("120px");
+		b.setHeight("100%");
+		b.addStyleName("thrash");
+		b.setHtmlContentAllowed(true);
 
+		b.setCaption("<span>" + e.getThrash().getTotalNum()
+				+ "</span></div><br/>pieces collected");
+
+		return b;
 	}
 
 	private Component getMap(Location location) {

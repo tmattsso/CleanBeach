@@ -81,9 +81,8 @@ public abstract class AbstractEventPanel<P extends IEventPresenter> extends
 	}
 
 	protected Component createCollectedComponent(fi.pss.cleanbeach.data.Event e) {
-		Label label = new Label(
-				"<div><span>101</span></div><br/>pieces collected",
-				ContentMode.HTML);
+		Label label = new Label("<div><span>" + e.getThrash().getTotalNum()
+				+ "</span></div><br/>pieces collected", ContentMode.HTML);
 		label.addStyleName("numpieces");
 		label.setWidth("100px");
 		return label;

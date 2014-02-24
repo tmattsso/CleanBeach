@@ -43,6 +43,9 @@ public class Event extends AbstractEntity {
 	@Transient
 	private Collection<User> joinedUsers = new HashSet<>();
 
+	@Transient
+	private ThrashDAO thrash;
+
 	public Collection<User> getJoinedUsers() {
 		return joinedUsers;
 	}
@@ -105,5 +108,13 @@ public class Event extends AbstractEntity {
 
 	public void setNumCommentsWithImage(int numCommentsWithImage) {
 		this.numCommentsWithImage = numCommentsWithImage;
+	}
+
+	public ThrashDAO getThrash() {
+		return thrash;
+	}
+
+	public void setThrash(ThrashDAO thrash) {
+		this.thrash = thrash;
 	}
 }

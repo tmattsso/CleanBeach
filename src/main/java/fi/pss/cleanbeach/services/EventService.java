@@ -1,7 +1,10 @@
 package fi.pss.cleanbeach.services;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
@@ -16,6 +19,8 @@ import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.Signup;
+import fi.pss.cleanbeach.data.Thrash;
+import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
@@ -82,8 +87,37 @@ public class EventService {
 
 		@SuppressWarnings("unchecked")
 		List<Event> l = query.getResultList();
+		fillWithThrashDetails(l);
 
 		return l;
+	}
+
+	private void fillWithThrashDetails(List<Event> l) {
+
+		// fetch trash numbers
+		String q = "SELECT t FROM Thrash t WHERE t.event IN (:events)";
+		Query query = em.createQuery(q);
+		query.setParameter("events", l);
+		@SuppressWarnings("unchecked")
+		List<Thrash> thrash = query.getResultList();
+
+		Map<Event, List<Thrash>> map = new HashMap<>();
+		for (Thrash t : thrash) {
+			List<Thrash> list = map.get(t.getEvent());
+			if (list == null) {
+				list = new ArrayList<>();
+				map.put(t.getEvent(), list);
+			}
+			list.add(t);
+		}
+
+		for (Event e : l) {
+			if (map.get(e) == null) {
+				e.setThrash(new ThrashDAO(new ArrayList<Thrash>()));
+			} else {
+				e.setThrash(new ThrashDAO(new ArrayList<Thrash>(map.get(e))));
+			}
+		}
 	}
 
 	/**
@@ -104,6 +138,7 @@ public class EventService {
 
 		@SuppressWarnings("unchecked")
 		List<Event> l = query.getResultList();
+		fillWithThrashDetails(l);
 
 		return l;
 	}
@@ -132,6 +167,8 @@ public class EventService {
 		log.info("Search with string '" + searchText + "' returned " + l.size()
 				+ " results");
 
+		fillWithThrashDetails(l);
+
 		return l;
 	}
 
@@ -151,6 +188,8 @@ public class EventService {
 		for (Signup s : l) {
 			e.getJoinedUsers().add(s.getUser());
 		}
+
+		e.setThrash(getCollectedThrash(e));
 
 		return e;
 	}
@@ -208,6 +247,17 @@ public class EventService {
 		return l;
 	}
 
+	public ThrashDAO getCollectedThrash(Event e) {
+
+		String q = "SELECT t FROM Thrash t WHERE t.event=:e";
+		Query query = em.createQuery(q);
+		query.setParameter("e", e);
+		@SuppressWarnings("unchecked")
+		List<Thrash> l = query.getResultList();
+
+		return new ThrashDAO(l);
+	}
+
 	public Event setUserJoined(Event e, User currentUser, boolean join) {
 		String q = "SELECT s FROM Signup s WHERE s.event=:event AND s.user=:user";
 		Query query = em.createQuery(q);
@@ -247,6 +297,9 @@ public class EventService {
 		TypedQuery<Event> query = em.createQuery(
 				"SELECT e from Event e WHERE e.organizer=:group", Event.class);
 		query.setParameter("group", group);
-		return query.getResultList();
+
+		List<Event> l = query.getResultList();
+		fillWithThrashDetails(l);
+		return l;
 	}
 }
