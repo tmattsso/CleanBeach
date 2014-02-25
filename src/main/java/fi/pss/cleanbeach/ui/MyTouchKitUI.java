@@ -39,11 +39,11 @@ public class MyTouchKitUI extends UI {
 
 		setErrorHandler(new PSSErrorHandler());
 
-		if (!getPage().getWebBrowser().isTouchDevice()) {
-			// TODO proper redirection; this obviously doesn't work :)
-			getPage().setLocation("/fallback");
-			return;
-		}
+		// if (!getPage().getWebBrowser().isTouchDevice()) {
+		// // TODO proper redirection; this obviously doesn't work :)
+		// getPage().setLocation("/fallback");
+		// return;
+		// }
 
 		// build login
 		setContent(login);

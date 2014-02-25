@@ -19,4 +19,6 @@ public interface IEvents extends IView {
 
 	void openThrashDetails(Event e);
 
+	void openAddComment(Event e, boolean addImage);
+
 }

@@ -108,12 +108,12 @@ public class EventDetailLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				presenter.openAddComment(false, e);
 			}
 		});
 		actions.addComponent(comment);
 
-		Button photo = new Button("Add a photo");
+		Button photo = new Button("Add photo");
 		TouchKitIcon.cameraRetro.addTo(photo);
 		photo.addClickListener(new ClickListener() {
 
@@ -121,12 +121,12 @@ public class EventDetailLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				presenter.openAddComment(true, e);
 			}
 		});
 		actions.addComponent(photo);
 
-		Button addThrash = new Button("Report scrap");
+		Button addThrash = new Button("Report");
 		TouchKitIcon.exclamationSign.addTo(addThrash);
 		addThrash.addClickListener(new ClickListener() {
 
@@ -139,7 +139,7 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(addThrash);
 
-		Button invite = new Button("Invite Group");
+		Button invite = new Button("Invite");
 		TouchKitIcon.user.addTo(invite);
 		invite.addClickListener(new ClickListener() {
 

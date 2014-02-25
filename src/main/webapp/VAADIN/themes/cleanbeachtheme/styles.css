@@ -105,6 +105,7 @@
 .eventdetail .comment .v-image {
 	padding: 5px;
 	padding-top: 0;
+	max-width: 100%;
 }
 
 .eventdetail .eventcaption span {

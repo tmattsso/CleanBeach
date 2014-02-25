@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.vaadin.cdi.UIScoped;
 
 import fi.pss.cleanbeach.data.Event;
+import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.EventService;
@@ -52,14 +53,14 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		view.populateSearchResults(l);
 	}
 
-	public void joinEvent(fi.pss.cleanbeach.data.Event e, User currentUser) {
+	public void joinEvent(Event e, User currentUser) {
 		e = service.setUserJoined(e, currentUser, true);
 		e = service.loadDetails(e);
 		view.updateEventDetails(e);
 
 	}
 
-	public void leaveEvent(fi.pss.cleanbeach.data.Event e, User currentUser) {
+	public void leaveEvent(Event e, User currentUser) {
 		e = service.setUserJoined(e, currentUser, false);
 		e = service.loadDetails(e);
 		view.updateEventDetails(e);
@@ -76,5 +77,15 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 
 	public void openAddThrash(Event e) {
 		view.openThrashDetails(e);
+	}
+
+	public void openAddComment(boolean addImage, Event e) {
+		view.openAddComment(e, addImage);
+	}
+
+	public void addComment(Event e, String value, Image img, User currentUser) {
+		service.addComment(e, value, img, currentUser);
+		e = service.loadDetails(e);
+		view.updateEventDetails(e);
 	}
 }

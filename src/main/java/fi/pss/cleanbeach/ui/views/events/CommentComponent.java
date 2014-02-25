@@ -35,8 +35,6 @@ public class CommentComponent extends CustomComponent {
 
 		if (c.getImage() != null) {
 			Image img = new Image();
-			// TODO make image max 100% wide (or keep smaller size as-is)
-
 			StreamSource ss = new StreamSource() {
 
 				private static final long serialVersionUID = -377231260894914070L;

@@ -40,7 +40,7 @@ public class EventService {
 	 * @param where
 	 * @param owner
 	 * @param description
-	 *            Maximum length is 248 characters.
+	 *            Maximum length is 2048 characters.
 	 * @return the persisted {@link Event} object.
 	 */
 	public Event createEvent(Date time, Location where, UsersGroup owner,
@@ -190,7 +190,9 @@ public class EventService {
 		@SuppressWarnings("unchecked")
 		List<Signup> l = query.getResultList();
 		for (Signup s : l) {
-			e.getJoinedUsers().add(s.getUser());
+			if (s.isAccepted()) {
+				e.getJoinedUsers().add(s.getUser());
+			}
 		}
 
 		e.setThrash(getCollectedThrash(e));
@@ -224,7 +226,7 @@ public class EventService {
 		// make sure the collection is loaded
 		e.getComments().size();
 
-		e.getComments().add(c);
+		e.getComments().add(0, c);
 
 		e.setNumComments(e.getNumComments() + 1);
 		if (img != null) {
@@ -287,7 +289,7 @@ public class EventService {
 		}
 
 		e = em.find(e.getClass(), e.getId());
-
+		e = loadDetails(e);
 		if (join) {
 			e.getJoinedUsers().add(currentUser);
 		} else {
