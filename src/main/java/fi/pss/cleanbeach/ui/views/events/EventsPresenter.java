@@ -86,6 +86,12 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 	public void addComment(Event e, String value, Image img, User currentUser) {
 		service.addComment(e, value, img, currentUser);
 		e = service.loadDetails(e);
+		view.navigateAndUpdate(e);
+	}
+
+	public void navigatedFromThrash(fi.pss.cleanbeach.data.Event e) {
+		// just update view
+		e = service.loadDetails(e);
 		view.updateEventDetails(e);
 	}
 }

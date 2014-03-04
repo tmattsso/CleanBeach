@@ -15,10 +15,12 @@ public interface IEvents extends IView {
 
 	void populateSearchResults(List<Event> l);
 
-	void updateEventDetails(Event e);
+	void navigateAndUpdate(Event e);
 
 	void openThrashDetails(Event e);
 
 	void openAddComment(Event e, boolean addImage);
+
+	void updateEventDetails(Event e);
 
 }

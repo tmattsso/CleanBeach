@@ -1,5 +1,7 @@
 package fi.pss.cleanbeach.ui.views.events;
 
+import com.vaadin.addon.touchkit.ui.NavigationManager.NavigationEvent;
+import com.vaadin.addon.touchkit.ui.NavigationManager.NavigationListener;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -17,8 +19,14 @@ public class ThrashInputLayout extends NavigationView {
 
 	private final GridLayout gl;
 
+	private final EventsPresenter presenter;
+	private final fi.pss.cleanbeach.data.Event event;
+
 	public ThrashInputLayout(fi.pss.cleanbeach.data.Event e,
-			EventsPresenter presenter) {
+			final EventsPresenter presenter) {
+
+		this.presenter = presenter;
+		event = e;
 
 		addStyleName("thrashinput");
 
@@ -35,19 +43,31 @@ public class ThrashInputLayout extends NavigationView {
 		gl.addComponent(caption, 0, 0, 1, 0);
 
 		for (ThrashType t : presenter.getThrashTypes()) {
-			addRow(t, e, presenter);
+			addRow(t);
 		}
+
 	}
 
-	private void addRow(final ThrashType t,
-			final fi.pss.cleanbeach.data.Event e,
-			final EventsPresenter presenter) {
+	@Override
+	public void attach() {
+		super.attach();
+		getNavigationManager().addNavigationListener(new NavigationListener() {
+
+			@Override
+			public void navigate(NavigationEvent event) {
+				// navigate back, update details view
+				presenter.navigatedFromThrash(ThrashInputLayout.this.event);
+			}
+		});
+	}
+
+	private void addRow(final ThrashType t) {
 		Label name = new Label(t.getName() + ":");
 		name.addStyleName("typename");
 		gl.addComponent(name);
 		gl.setComponentAlignment(name, Alignment.MIDDLE_LEFT);
 
-		final Stepper s = new Stepper(e.getThrash().getOfTypeForUser(t,
+		final Stepper s = new Stepper(event.getThrash().getOfTypeForUser(t,
 				MyTouchKitUI.getCurrentUser()));
 		gl.addComponent(s);
 		s.addValueChangeListener(new ValueChangeListener() {
@@ -56,9 +76,11 @@ public class ThrashInputLayout extends NavigationView {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				presenter.setNumThrash(s.getValue(), t, e,
+				presenter.setNumThrash(s.getValue(), t,
+						ThrashInputLayout.this.event,
 						MyTouchKitUI.getCurrentUser());
 			}
 		});
 	}
+
 }

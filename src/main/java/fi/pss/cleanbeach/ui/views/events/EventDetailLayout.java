@@ -28,6 +28,8 @@ public class EventDetailLayout extends NavigationView {
 	private final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 	private final EventsPresenter presenter;
 
+	private fi.pss.cleanbeach.data.Event selectedEvent;
+
 	private final Label caption;
 	private final Label desc;
 	private final Label members;
@@ -37,10 +39,13 @@ public class EventDetailLayout extends NavigationView {
 
 	private final VerticalLayout comments;
 
+	private Button itemsButton;
+
 	public EventDetailLayout(final fi.pss.cleanbeach.data.Event e,
 			final EventsPresenter presenter) {
 
 		this.presenter = presenter;
+		selectedEvent = e;
 
 		addStyleName("eventdetail");
 		setCaption("Event details");
@@ -108,7 +113,7 @@ public class EventDetailLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.openAddComment(false, e);
+				presenter.openAddComment(false, selectedEvent);
 			}
 		});
 		actions.addComponent(comment);
@@ -121,7 +126,7 @@ public class EventDetailLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.openAddComment(true, e);
+				presenter.openAddComment(true, selectedEvent);
 			}
 		});
 		actions.addComponent(photo);
@@ -134,7 +139,7 @@ public class EventDetailLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.openAddThrash(e);
+				presenter.openAddThrash(selectedEvent);
 			}
 		});
 		actions.addComponent(addThrash);
@@ -161,16 +166,19 @@ public class EventDetailLayout extends NavigationView {
 	}
 
 	private Component getItemsButton(fi.pss.cleanbeach.data.Event e) {
-		Button b = new Button();
-		b.setWidth("120px");
-		b.setHeight("100%");
-		b.addStyleName("thrash");
-		b.setHtmlContentAllowed(true);
+		itemsButton = new Button();
+		itemsButton.setWidth("120px");
+		itemsButton.setHeight("100%");
+		itemsButton.addStyleName("thrash");
+		itemsButton.setHtmlContentAllowed(true);
 
-		b.setCaption("<span>" + e.getThrash().getTotalNum()
+		updateItemsButton(e);
+		return itemsButton;
+	}
+
+	private void updateItemsButton(fi.pss.cleanbeach.data.Event e) {
+		itemsButton.setCaption("<span>" + e.getThrash().getTotalNum()
 				+ "</span></div><br/>pieces collected");
-
-		return b;
 	}
 
 	private Component getMap(Location location) {
@@ -178,6 +186,9 @@ public class EventDetailLayout extends NavigationView {
 	}
 
 	public void update(final fi.pss.cleanbeach.data.Event e) {
+
+		selectedEvent = e;
+
 		if (e.getJoinedUsers().contains(MyTouchKitUI.getCurrentUser())) {
 			Button leave = new Button("leave event");
 			getNavigationBar().setRightComponent(leave);
@@ -224,6 +235,8 @@ public class EventDetailLayout extends NavigationView {
 		} else {
 			members.setValue("No joined users yet");
 		}
+
+		updateItemsButton(e);
 
 		actions.setVisible(e.getJoinedUsers().contains(
 				MyTouchKitUI.getCurrentUser()));

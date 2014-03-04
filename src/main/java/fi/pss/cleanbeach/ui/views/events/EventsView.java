@@ -61,11 +61,11 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	}
 
 	@Override
-	public void updateEventDetails(fi.pss.cleanbeach.data.Event e) {
+	public void navigateAndUpdate(fi.pss.cleanbeach.data.Event e) {
 		while (getCurrentComponent() != details) {
 			navigateBack();
 		}
-		details.update(e);
+		updateEventDetails(e);
 	}
 
 	@Override
@@ -76,6 +76,11 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	@Override
 	public void openAddComment(fi.pss.cleanbeach.data.Event e, boolean addImage) {
 		navigateTo(new CommentInputLayout(e, addImage, presenter));
+	}
+
+	@Override
+	public void updateEventDetails(fi.pss.cleanbeach.data.Event e) {
+		details.update(e);
 	}
 
 }
