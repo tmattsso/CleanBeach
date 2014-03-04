@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -10,7 +11,9 @@ import com.vaadin.cdi.UIScoped;
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.Location.STATUS;
+import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.LocationService;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
@@ -20,6 +23,9 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 	@Inject
 	private LocationService locService;
 
+	@Inject
+	private EventService eService;
+
 	@Override
 	public void init(User currentUser) {
 
@@ -27,9 +33,6 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 
 	public void addLocation(double latitude, double longitude, String name) {
 		Location l = locService.createLocation(latitude, longitude, name);
-		log.info("Created loc: " + l.getId());
-		System.out.println(longitude);
-		System.out.println(latitude);
 
 		view.updateMarker(l);
 		view.selectMarker(l);
@@ -59,6 +62,19 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 		selected = locService.save(selected);
 
 		view.updateMarker(selected);
+	}
+
+	public void showTrash(Location selected, User user) {
+		view.showTrashInput(selected, locService.getThrash(selected, user));
+	}
+
+	public List<ThrashType> getThrashTypes() {
+		return eService.getThrashTypes();
+	}
+
+	public void setNumThrash(Integer value, ThrashType t, Location l,
+			User currentUser) {
+		locService.setNumThrash(value, t, l, currentUser);
 	}
 
 }

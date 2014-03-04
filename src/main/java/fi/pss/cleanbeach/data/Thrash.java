@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 @Entity
 public class Thrash extends AbstractEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User reporter;
 
 	@ManyToOne(fetch = FetchType.LAZY)

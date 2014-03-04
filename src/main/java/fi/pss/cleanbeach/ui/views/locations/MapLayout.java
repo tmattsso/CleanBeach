@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.vaadin.addon.leaflet.shared.Point;
 
+import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -12,6 +13,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 
 import fi.pss.cleanbeach.data.Location;
+import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmListener;
 
 public class MapLayout extends NavigationView implements
@@ -60,6 +62,7 @@ public class MapLayout extends NavigationView implements
 		});
 
 		Button createEvent = new Button("event");
+		TouchKitIcon.calendar.addTo(createEvent);
 		createEvent.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 682703780760294261L;
@@ -71,6 +74,7 @@ public class MapLayout extends NavigationView implements
 		});
 
 		Button markDirty = new Button("report");
+		TouchKitIcon.warningSign.addTo(markDirty);
 		markDirty.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 682703780760294261L;
@@ -81,18 +85,32 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		Button showTrends = new Button("trends");
-		showTrends.addClickListener(new ClickListener() {
+		Button markThrash = new Button("thrash");
+		TouchKitIcon.trash.addTo(markThrash);
+		markThrash.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -9055053032611311553L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.showTrends(selected);
+				presenter.showTrash(selected, MyTouchKitUI.getCurrentUser());
 			}
 		});
 
-		Button showEvents = new Button("events");
+		// Button showTrends = new Button("trends");
+		// TouchKitIcon.link.addTo(showTrends);
+		// showTrends.addClickListener(new ClickListener() {
+		//
+		// private static final long serialVersionUID = -9055053032611311553L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// presenter.showTrends(selected);
+		// }
+		// });
+
+		Button showEvents = new Button("history");
+		TouchKitIcon.exclamationSign.addTo(showEvents);
 		showEvents.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -7853451135198225867L;
@@ -104,7 +122,7 @@ public class MapLayout extends NavigationView implements
 		});
 
 		actionButtons = new HorizontalLayout(createEvent, markDirty,
-				showTrends, showEvents);
+				markThrash, showEvents);
 		actionButtons.setWidth("100%");
 		actionButtons.setSpacing(true);
 		actionButtons.setVisible(false);

@@ -9,6 +9,7 @@ import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.ComponentContainer;
 
 import fi.pss.cleanbeach.data.Location;
+import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 
 @UIScoped
@@ -65,6 +66,11 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 	public void showTrends(Location selected,
 			ArrayList<fi.pss.cleanbeach.data.Event> arrayList) {
 		navigateTo(new TrendsLayout());
+	}
+
+	@Override
+	public void showTrashInput(Location selected, ThrashDAO thrash) {
+		navigateTo(new ThrashLocationInput(selected, presenter, thrash));
 	}
 
 }
