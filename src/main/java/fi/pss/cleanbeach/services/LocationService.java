@@ -54,11 +54,6 @@ public class LocationService {
 		return l;
 	}
 
-	public Location save(Location selected) {
-		selected = em.merge(selected);
-		return selected;
-	}
-
 	public void setNumThrash(Integer value, ThrashType type, Location l,
 			User currentUser) {
 
@@ -104,5 +99,13 @@ public class LocationService {
 		List<Thrash> l = query.getResultList();
 
 		return new ThrashDAO(l);
+	}
+
+	public Location setDirty(Location selected, String desc) {
+		selected = em.find(selected.getClass(), selected.getId());
+		selected.setStatus(STATUS.DIRTY);
+		selected.setStatusMsg(desc);
+		selected = em.merge(selected);
+		return selected;
 	}
 }

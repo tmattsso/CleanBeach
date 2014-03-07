@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,6 +18,9 @@ public class Location extends AbstractEntity {
 
 	@Enumerated(EnumType.STRING)
 	private STATUS status = STATUS.NO_DATA;
+
+	@Column(length = 2048)
+	private String statusMsg;
 
 	public String getName() {
 		return name;
@@ -48,5 +52,13 @@ public class Location extends AbstractEntity {
 
 	public void setStatus(STATUS status) {
 		this.status = status;
+	}
+
+	public void setStatusMsg(String desc) {
+		statusMsg = desc;
+	}
+
+	public String getStatusMsg() {
+		return statusMsg;
 	}
 }

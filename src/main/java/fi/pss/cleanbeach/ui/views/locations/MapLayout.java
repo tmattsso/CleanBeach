@@ -14,7 +14,8 @@ import com.vaadin.ui.HorizontalLayout;
 
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
-import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmListener;
+import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmLocationListener;
+import fi.pss.cleanbeach.ui.views.locations.ReportDirtyPopover.ConfirmThrashListener;
 
 public class MapLayout extends NavigationView implements
 		MapPointSelectedListener {
@@ -35,7 +36,8 @@ public class MapLayout extends NavigationView implements
 		lMap = new LitterBaseMap(presenter, this);
 		lMap.setSizeFull();
 
-		Button addLocation = new Button("Add location");
+		final Button addLocation = new Button("Add location");
+		TouchKitIcon.plus.addTo(addLocation);
 		addLocation.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 5940636967467650018L;
@@ -47,7 +49,7 @@ public class MapLayout extends NavigationView implements
 
 				// ask name for new location
 				CreateLocationPopover pop = new CreateLocationPopover(
-						new ConfirmListener() {
+						new ConfirmLocationListener() {
 
 							@Override
 							public void confirm(String name) {
@@ -57,7 +59,7 @@ public class MapLayout extends NavigationView implements
 								lMap.clearTempMarker();
 							}
 						});
-				pop.showRelativeTo(actionButtons);
+				pop.showRelativeTo(addLocation);
 			}
 		});
 
@@ -81,7 +83,15 @@ public class MapLayout extends NavigationView implements
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.markBeachDirty(selected);
+				ReportDirtyPopover pop = new ReportDirtyPopover(
+						new ConfirmThrashListener() {
+
+							@Override
+							public void confirm(String desc) {
+								presenter.markBeachDirty(selected, desc);
+							}
+						});
+				pop.showRelativeTo(actionButtons);
 			}
 		});
 

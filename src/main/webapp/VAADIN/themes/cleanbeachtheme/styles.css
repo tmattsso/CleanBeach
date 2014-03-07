@@ -159,3 +159,10 @@
 .thrashinput .typename {
 	font-size: 16pt;
 }
+
+.createlocation .v-button .v-button-caption,
+.reportdirty .v-button .v-button-caption{
+	display: block;
+	line-height: 20px;
+	padding-bottom: 5px;
+}

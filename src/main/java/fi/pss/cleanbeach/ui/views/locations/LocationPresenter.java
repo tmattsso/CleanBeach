@@ -10,7 +10,6 @@ import com.vaadin.cdi.UIScoped;
 
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Location;
-import fi.pss.cleanbeach.data.Location.STATUS;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.EventService;
@@ -57,9 +56,8 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 		view.addLocations(locs);
 	}
 
-	public void markBeachDirty(Location selected) {
-		selected.setStatus(STATUS.DIRTY);
-		selected = locService.save(selected);
+	public void markBeachDirty(Location selected, String desc) {
+		selected = locService.setDirty(selected, desc);
 
 		view.updateMarker(selected);
 	}
