@@ -75,8 +75,8 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		Button markDirty = new Button("report");
-		TouchKitIcon.warningSign.addTo(markDirty);
+		Button markDirty = new Button("dirty");
+		TouchKitIcon.eyeOpen.addTo(markDirty);
 		markDirty.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 682703780760294261L;
@@ -95,8 +95,8 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		Button markThrash = new Button("thrash");
-		TouchKitIcon.trash.addTo(markThrash);
+		Button markThrash = new Button("report");
+		TouchKitIcon.exclamationSign.addTo(markThrash);
 		markThrash.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -9055053032611311553L;
@@ -120,7 +120,7 @@ public class MapLayout extends NavigationView implements
 		// });
 
 		Button showEvents = new Button("history");
-		TouchKitIcon.exclamationSign.addTo(showEvents);
+		TouchKitIcon.listAlt.addTo(showEvents);
 		showEvents.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -7853451135198225867L;

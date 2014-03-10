@@ -238,9 +238,10 @@ public class EventService {
 		return c;
 	}
 
-	public void addThrashType(String name) {
+	public void addThrashType(String name, boolean other) {
 		ThrashType t = new ThrashType();
 		t.setName(name);
+		t.setOther(other);
 		em.persist(t);
 	}
 

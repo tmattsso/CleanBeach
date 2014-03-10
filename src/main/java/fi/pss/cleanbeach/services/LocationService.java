@@ -108,4 +108,19 @@ public class LocationService {
 		selected = em.merge(selected);
 		return selected;
 	}
+
+	public void setDescription(ThrashType t, User currentUser, String value) {
+		String q = "SELECT t FROM Thrash t WHERE t.type=:t AND t.reporter=:user AND t.pickupTime=:time";
+		Query query = em.createQuery(q);
+		query.setParameter("t", t);
+		query.setParameter("user", currentUser);
+
+		// works because date is stored on day level. maybe.
+		query.setParameter("time", new Date());
+
+		Thrash thrash = (Thrash) query.getSingleResult();
+
+		thrash.setDescription(value);
+		em.merge(thrash);
+	}
 }

@@ -70,7 +70,7 @@ public class LocationView extends AbstractView<LocationPresenter> implements
 
 	@Override
 	public void showTrashInput(Location selected, ThrashDAO thrash) {
-		navigateTo(new ThrashLocationInput(selected, presenter, thrash));
+		navigateTo(new ThrashInputLocationLayout(selected, presenter, thrash));
 	}
 
 }

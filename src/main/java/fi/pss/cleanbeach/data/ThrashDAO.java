@@ -43,4 +43,13 @@ public class ThrashDAO {
 
 		return num;
 	}
+
+	public String getDesc(ThrashType otherType) {
+		for (Thrash t : list) {
+			if (t.getType().equals(otherType)) {
+				return t.getDescription();
+			}
+		}
+		return null;
+	}
 }

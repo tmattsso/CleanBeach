@@ -82,11 +82,15 @@ public class BootstrapService {
 
 		log.info("Added event " + e.getId());
 
-		eventService.addThrashType("Glass");
-		eventService.addThrashType("Paper");
-		eventService.addThrashType("Wood");
-		eventService.addThrashType("Metal");
-		eventService.addThrashType("Plastic");
+		eventService.addThrashType("Glass", false);
+		eventService.addThrashType("Paper", false);
+		eventService.addThrashType("Wood", false);
+		eventService.addThrashType("Metal", false);
+		eventService.addThrashType("Plastic", false);
+		eventService.addThrashType("Rubber", false);
+		eventService.addThrashType("Cloth", false);
+		eventService.addThrashType("Organic", false);
+		eventService.addThrashType("Other", true);
 
 		eventService
 				.addComment(

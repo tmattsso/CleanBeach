@@ -12,6 +12,7 @@ import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.EventService;
+import fi.pss.cleanbeach.services.LocationService;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
 @UIScoped
@@ -22,6 +23,9 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 
 	@Inject
 	private EventService service;
+
+	@Inject
+	private LocationService locService;
 
 	protected EventsPresenter() {
 	}
@@ -93,5 +97,9 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		// just update view
 		e = service.loadDetails(e);
 		view.updateEventDetails(e);
+	}
+
+	public void addOtherDesc(ThrashType t, User currentUser, String value) {
+		locService.setDescription(t, currentUser, value);
 	}
 }

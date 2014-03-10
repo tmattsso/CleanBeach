@@ -2,6 +2,7 @@ package fi.pss.cleanbeach.data;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -27,6 +28,12 @@ public class Thrash extends AbstractEntity {
 	private Date pickupTime;
 
 	private int num;
+
+	/**
+	 * Used for 'other' category
+	 */
+	@Column(length = 256)
+	private String description;
 
 	public int getNum() {
 		return num;
@@ -74,5 +81,13 @@ public class Thrash extends AbstractEntity {
 
 	public void setPickupTime(Date pickupTime) {
 		this.pickupTime = pickupTime;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

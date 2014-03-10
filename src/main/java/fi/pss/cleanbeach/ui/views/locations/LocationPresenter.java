@@ -75,4 +75,8 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 		locService.setNumThrash(value, t, l, currentUser);
 	}
 
+	public void addOtherDesc(ThrashType t, User currentUser, String value) {
+		locService.setDescription(t, currentUser, value);
+	}
+
 }
