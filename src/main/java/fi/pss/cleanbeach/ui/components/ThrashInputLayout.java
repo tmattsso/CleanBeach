@@ -2,6 +2,9 @@ package fi.pss.cleanbeach.ui.components;
 
 import java.util.List;
 
+import com.vaadin.addon.touchkit.ui.NavigationButton;
+import com.vaadin.addon.touchkit.ui.NavigationButton.NavigationButtonClickEvent;
+import com.vaadin.addon.touchkit.ui.NavigationButton.NavigationButtonClickListener;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -16,12 +19,26 @@ public abstract class ThrashInputLayout extends NavigationView {
 
 	private static final long serialVersionUID = -8058030751028066774L;
 
-	private final GridLayout gl;
+	private GridLayout gl;
 	private TextArea otherDescField;
 
 	public ThrashInputLayout() {
 
 		addStyleName("thrashinput");
+
+		((NavigationButton) getLeftComponent())
+				.addClickListener(new NavigationButtonClickListener() {
+
+					private static final long serialVersionUID = -7901488627243106710L;
+
+					@Override
+					public void buttonClick(NavigationButtonClickEvent event) {
+						navigateAway();
+					}
+				});
+	}
+
+	protected void build() {
 
 		gl = new GridLayout(2, 1);
 		gl.setSpacing(true);
@@ -55,6 +72,8 @@ public abstract class ThrashInputLayout extends NavigationView {
 			otherDescField = new TextArea();
 			otherDescField.setWidth("100%");
 			otherDescField.setRows(3);
+			otherDescField.setImmediate(true);
+			otherDescField.setNullRepresentation("");
 			otherDescField.setInputPrompt("what did you find?");
 			gl.addComponent(otherDescField, 0, gl.getRows() - 1, 1,
 					gl.getRows() - 1);
@@ -73,6 +92,14 @@ public abstract class ThrashInputLayout extends NavigationView {
 			});
 		}
 	}
+
+	@Override
+	public void attach() {
+		super.attach();
+		build();
+	}
+
+	protected abstract void navigateAway();
 
 	protected abstract String getCurrentDesc(ThrashType t);
 

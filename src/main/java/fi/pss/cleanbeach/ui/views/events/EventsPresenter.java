@@ -99,7 +99,8 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		view.updateEventDetails(e);
 	}
 
-	public void addOtherDesc(ThrashType t, User currentUser, String value) {
-		locService.setDescription(t, currentUser, value);
+	public void addOtherDesc(ThrashType t, User currentUser, String value,
+			Event event) {
+		locService.setDescription(t, currentUser, value, event, null);
 	}
 }

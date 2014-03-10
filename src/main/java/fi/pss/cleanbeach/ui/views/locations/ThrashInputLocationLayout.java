@@ -31,7 +31,7 @@ public class ThrashInputLocationLayout extends ThrashInputLayout {
 
 	@Override
 	protected void setDesc(ThrashType type, String value) {
-		presenter.addOtherDesc(type, MyTouchKitUI.getCurrentUser(), value);
+		presenter.addOtherDesc(type, MyTouchKitUI.getCurrentUser(), value, loc);
 	}
 
 	@Override
@@ -47,6 +47,12 @@ public class ThrashInputLocationLayout extends ThrashInputLayout {
 	@Override
 	protected int getValue(ThrashType type) {
 		return thrash.getOfType(type);
+	}
+
+	@Override
+	protected void navigateAway() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

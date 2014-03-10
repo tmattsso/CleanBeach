@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.Location.STATUS;
 import fi.pss.cleanbeach.data.Thrash;
@@ -91,7 +92,7 @@ public class LocationService {
 
 	public ThrashDAO getThrash(Location selected, User user) {
 
-		String q = "SELECT t FROM Thrash t WHERE t.location=:loc AND t.reporter=:user";
+		String q = "SELECT t FROM Thrash t WHERE t.location=:loc AND t.reporter=:user AND t.pickupTime=CURRENT_DATE";
 		Query query = em.createQuery(q);
 		query.setParameter("loc", selected);
 		query.setParameter("user", user);
@@ -109,17 +110,26 @@ public class LocationService {
 		return selected;
 	}
 
-	public void setDescription(ThrashType t, User currentUser, String value) {
-		String q = "SELECT t FROM Thrash t WHERE t.type=:t AND t.reporter=:user AND t.pickupTime=:time";
+	public void setDescription(ThrashType t, User currentUser, String value,
+			Event event, Location l) {
+		String q = "SELECT t FROM Thrash t WHERE t.type=:t AND t.reporter=:user AND t.pickupTime=CURRENT_DATE";
 		Query query = em.createQuery(q);
 		query.setParameter("t", t);
 		query.setParameter("user", currentUser);
 
-		// works because date is stored on day level. maybe.
-		query.setParameter("time", new Date());
-
-		Thrash thrash = (Thrash) query.getSingleResult();
-
+		Thrash thrash = null;
+		try {
+			thrash = (Thrash) query.getSingleResult();
+		} catch (NoResultException e) {
+			// create
+			thrash = new Thrash();
+			thrash.setReporter(currentUser);
+			thrash.setPickupTime(new Date());
+			thrash.setType(t);
+			thrash.setEvent(event);
+			thrash.setLocation(l);
+			em.persist(thrash);
+		}
 		thrash.setDescription(value);
 		em.merge(thrash);
 	}
