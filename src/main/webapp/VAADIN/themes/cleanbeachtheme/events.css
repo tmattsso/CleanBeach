@@ -36,8 +36,15 @@
 	max-width: 100%;
 }
 
+.eventdetail .eventcaption {
+	text-align: right;
+	line-height: 22px;
+}
 .eventdetail .eventcaption span {
-	float: right;
+	text-align: left;
+	float: left;
+	font-weight: bold;
+	font-size: 16pt;
 }
 
 .eventdetail .simplemap .leaflet-control-container {

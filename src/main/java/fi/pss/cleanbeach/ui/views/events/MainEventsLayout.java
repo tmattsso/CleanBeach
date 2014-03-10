@@ -58,7 +58,7 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 		TouchKitIcon.star.addTo(joinedEvents);
 		tabs.addComponent(joinedEvents);
 
-		search = new Button("Search for events");
+		search = new Button("Search events");
 		search.addClickListener(this);
 		search.setData(searchLayout = new EventSearchLayout(presenter));
 		TouchKitIcon.search.addTo(search);

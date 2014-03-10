@@ -215,8 +215,8 @@ public class EventDetailLayout extends NavigationView {
 			});
 		}
 
-		caption.setValue(e.getLocation().getName() + "<span>"
-				+ df.format(e.getStart()) + "</span>");
+		caption.setValue("<span>" + e.getLocation().getName() + "</span>"
+				+ df.format(e.getStart()));
 
 		desc.setValue(e.getDescription());
 

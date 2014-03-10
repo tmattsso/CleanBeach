@@ -9,6 +9,10 @@
 	color: #00a3e8;
 }
 
+.v-touchkit-toolbar {
+	height: 60px;
+}
+
 .login .desc span {
 	display: block;
 	font-size: 24pt;

@@ -29,3 +29,8 @@
 .groups .groupview-details-invitations .invitations-link .v-button-wrap {
 	display: inline;
 }
+
+.groups .group-details-name {
+	font-size: 16pt;
+	font-weight: bold;
+}

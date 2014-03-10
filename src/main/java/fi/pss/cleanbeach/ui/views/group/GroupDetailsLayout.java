@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.vaadin.dialogs.ConfirmDialog;
 
+import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -13,6 +14,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
 import fi.pss.cleanbeach.data.Image;
@@ -24,230 +26,238 @@ import fi.pss.cleanbeach.data.UsersGroup;
  */
 class GroupDetailsLayout extends NavigationView {
 
-    private final GroupPresenter presenter;
+	private static final long serialVersionUID = -4152802888155514945L;
 
-    private UsersGroup group;
+	private final GroupPresenter presenter;
 
-    private Component adminComponent;
+	private UsersGroup group;
 
-    GroupDetailsLayout(final GroupPresenter presenter, final UsersGroup group) {
-        this.presenter = presenter;
-        this.group = group;
+	private Component adminComponent;
 
-        setCaption(getMessage("Group.details.caption"));
+	GroupDetailsLayout(final GroupPresenter presenter, final UsersGroup group) {
+		this.presenter = presenter;
+		this.group = group;
 
-        setRightButton(presenter, group);
+		setCaption(getMessage("Group.details.caption"));
 
-        CssLayout mainLayout = new CssLayout();
-        mainLayout.addStyleName("groupview-details");
-        mainLayout.addComponent(createGroupInfoComponent());
-        mainLayout.addComponent(createInvitationsInfo());
-        if (presenter.canManage(group)) {
-            adminComponent = createButtonsComponent();
-            mainLayout.addComponent(adminComponent);
-        }
-        mainLayout.addComponent(createEventsComponent());
+		setRightButton(presenter, group);
 
-        setContent(mainLayout);
-    }
+		VerticalLayout mainLayout = new VerticalLayout();
+		mainLayout.setMargin(true);
+		mainLayout.setSpacing(true);
+		mainLayout.addStyleName("groupview-details");
+		mainLayout.addComponent(createGroupInfoComponent());
+		mainLayout.addComponent(createInvitationsInfo());
+		if (presenter.canManage(group)) {
+			adminComponent = createButtonsComponent();
+			mainLayout.addComponent(adminComponent);
+		}
+		mainLayout.addComponent(createEventsComponent());
 
-    @Override
-    public CssLayout getContent() {
-        return (CssLayout) super.getContent();
-    }
+		setContent(mainLayout);
+	}
 
-    public void showLeaveConfirmation() {
-        ConfirmDialog.show(UI.getCurrent(),
-                getMessage("Group.details.leave.message", group.getName()),
-                new ConfirmDialog.Listener() {
+	@Override
+	public CssLayout getContent() {
+		return (CssLayout) super.getContent();
+	}
 
-                    @Override
-                    public void onClose(ConfirmDialog dialog) {
-                        if (dialog.isConfirmed()) {
-                            presenter.leaveGroup(group);
-                        }
-                    }
-                });
-    }
+	public void showLeaveConfirmation() {
+		ConfirmDialog.show(UI.getCurrent(),
+				getMessage("Group.details.leave.message", group.getName()),
+				new ConfirmDialog.Listener() {
 
-    public void showJoinConfirmation() {
-        ConfirmDialog.show(UI.getCurrent(),
-                getMessage("Group.details.join.message", group.getName()),
-                new ConfirmDialog.Listener() {
+					@Override
+					public void onClose(ConfirmDialog dialog) {
+						if (dialog.isConfirmed()) {
+							presenter.leaveGroup(group);
+						}
+					}
+				});
+	}
 
-                    @Override
-                    public void onClose(ConfirmDialog dialog) {
-                        if (dialog.isConfirmed()) {
-                            presenter.joinGroup(group);
-                        }
-                    }
-                });
-    }
+	public void showJoinConfirmation() {
+		ConfirmDialog.show(UI.getCurrent(),
+				getMessage("Group.details.join.message", group.getName()),
+				new ConfirmDialog.Listener() {
 
-    public void updateMembershipState(UsersGroup group) {
-        this.group = group;
-        if (!presenter.canManage(group) && adminComponent != null) {
-            getContent().removeComponent(adminComponent);
-        }
-        setRightButton(presenter, group);
-    }
+					@Override
+					public void onClose(ConfirmDialog dialog) {
+						if (dialog.isConfirmed()) {
+							presenter.joinGroup(group);
+						}
+					}
+				});
+	}
 
-    private Component createInvitationsInfo() {
-        CssLayout layout = new CssLayout();
-        layout.addStyleName("groupview-details-invitations");
+	public void updateMembershipState(UsersGroup group) {
+		this.group = group;
+		if (!presenter.canManage(group) && adminComponent != null) {
+			getContent().removeComponent(adminComponent);
+		}
+		setRightButton(presenter, group);
+	}
 
-        Label prefix = new Label(getMessage("Group.details.invitations.prefix"));
-        prefix.setSizeUndefined();
-        prefix.addStyleName("invitations-prefix");
-        layout.addComponent(prefix);
+	private Component createInvitationsInfo() {
+		CssLayout layout = new CssLayout();
+		layout.addStyleName("groupview-details-invitations");
 
-        String link = presenter.getPendingEventInvitations(group);
-        Button invitations = new Button(link);
-        invitations.setStyleName(BaseTheme.BUTTON_LINK);
-        invitations.addStyleName("invitations-link");
-        layout.addComponent(invitations);
+		Label prefix = new Label(getMessage("Group.details.invitations.prefix"));
+		prefix.setSizeUndefined();
+		prefix.addStyleName("invitations-prefix");
+		layout.addComponent(prefix);
 
-        return layout;
-    }
+		String link = presenter.getPendingEventInvitations(group);
+		Button invitations = new Button(link);
+		invitations.setStyleName(BaseTheme.BUTTON_LINK);
+		invitations.addStyleName("invitations-link");
+		layout.addComponent(invitations);
 
-    private Component createEventsComponent() {
-        CssLayout layout = new CssLayout();
-        layout.addStyleName("groupview-details-events");
+		return layout;
+	}
 
-        Label header = new Label(getMessage("Group.details.events.caption"));
-        header.addStyleName("groupview-details-events-caption");
-        layout.addComponent(header);
+	private Component createEventsComponent() {
+		CssLayout layout = new CssLayout();
+		layout.addStyleName("groupview-details-events");
 
-        List<fi.pss.cleanbeach.data.Event> events = presenter.getEvents(group);
-        for (fi.pss.cleanbeach.data.Event event : events) {
-            layout.addComponent(createEventComponent(event));
-        }
+		Label header = new Label(getMessage("Group.details.events.caption"));
+		header.addStyleName("groupview-details-events-caption");
+		layout.addComponent(header);
 
-        return layout;
-    }
+		List<fi.pss.cleanbeach.data.Event> events = presenter.getEvents(group);
+		for (fi.pss.cleanbeach.data.Event event : events) {
+			layout.addComponent(createEventComponent(event));
+		}
 
-    private Component createEventComponent(fi.pss.cleanbeach.data.Event event) {
-        return new EventComponent(event, presenter);
-    }
+		return layout;
+	}
 
-    private Component createButtonsComponent() {
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.setWidth(100, Unit.PERCENTAGE);
-        layout.addStyleName("groupview-details-admin-buttons");
+	private Component createEventComponent(fi.pss.cleanbeach.data.Event event) {
+		return new EventComponent(event, presenter);
+	}
 
-        Button createButton = new Button(
-                getMessage("Group.details.create.event"));
-        createButton.addStyleName("group-details-create-event");
-        createButton.addClickListener(new ClickListener() {
+	private Component createButtonsComponent() {
+		HorizontalLayout layout = new HorizontalLayout();
+		layout.setWidth(100, Unit.PERCENTAGE);
+		layout.setSpacing(true);
+		layout.addStyleName("groupview-details-admin-buttons");
+		layout.addStyleName("actionbuttons");
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                presenter.createEvent();
-            }
-        });
-        layout.addComponent(createButton);
+		Button createButton = new Button(
+				getMessage("Group.details.create.event"));
+		TouchKitIcon.plus.addTo(createButton);
+		createButton.addStyleName("group-details-create-event");
+		createButton.addClickListener(new ClickListener() {
 
-        Button manage = new Button(getMessage("Group.details.manage.admin"));
-        manage.addStyleName("group-details-manage-admins");
-        manage.addClickListener(new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.createEvent();
+			}
+		});
+		layout.addComponent(createButton);
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                presenter.showManageAdmins();
-            }
-        });
-        layout.addComponent(manage);
-        return layout;
-    }
+		Button manage = new Button(getMessage("Group.details.manage.admin"));
+		TouchKitIcon.user.addTo(manage);
+		manage.addStyleName("group-details-manage-admins");
+		manage.addClickListener(new ClickListener() {
 
-    private void setRightButton(final GroupPresenter presenter,
-            final UsersGroup group) {
-        if (presenter.canJoin(group)) {
-            getNavigationBar().setRightComponent(
-                    createJoinButton(presenter, group));
-        } else if (presenter.canLeave(group)) {
-            getNavigationBar().setRightComponent(
-                    createLeaveButton(presenter, group));
-        } else {
-            getNavigationBar().setRightComponent(null);
-        }
-    }
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.showManageAdmins();
+			}
+		});
+		layout.addComponent(manage);
+		return layout;
+	}
 
-    private Component createGroupInfoComponent() {
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.setWidth(100, Unit.PERCENTAGE);
-        layout.addStyleName("group-details-info");
-        CssLayout details = new CssLayout();
-        details.addStyleName("group-details-text-info");
-        layout.addComponent(details);
-        layout.setExpandRatio(details, 1);
+	private void setRightButton(final GroupPresenter presenter,
+			final UsersGroup group) {
+		if (presenter.canJoin(group)) {
+			getNavigationBar().setRightComponent(
+					createJoinButton(presenter, group));
+		} else if (presenter.canLeave(group)) {
+			getNavigationBar().setRightComponent(
+					createLeaveButton(presenter, group));
+		} else {
+			getNavigationBar().setRightComponent(null);
+		}
+	}
 
-        Label name = new Label(group.getName());
-        name.addStyleName("group-details-name");
-        details.addComponent(name);
+	private Component createGroupInfoComponent() {
+		HorizontalLayout layout = new HorizontalLayout();
+		layout.setWidth(100, Unit.PERCENTAGE);
+		layout.addStyleName("group-details-info");
+		CssLayout details = new CssLayout();
+		details.addStyleName("group-details-text-info");
+		layout.addComponent(details);
+		layout.setExpandRatio(details, 1);
 
-        Label description = new Label(group.getDescription());
-        description.addStyleName("group-details-description");
-        details.addComponent(description);
+		Label name = new Label(group.getName());
+		name.addStyleName("group-details-name");
+		details.addComponent(name);
 
-        CssLayout rightLayout = new CssLayout();
-        rightLayout.addStyleName("group-details-right-panel");
-        layout.addComponent(rightLayout);
-        Image logo = group.getLogo();
-        if (logo != null && logo.getContent() != null
-                && logo.getContent().length > 0) {
-            rightLayout.addComponent(GroupsLayout.createLogoComponent(logo
-                    .getContent()));
-        }
+		Label description = new Label(group.getDescription());
+		description.addStyleName("group-details-description");
+		details.addComponent(description);
 
-        String members = presenter.getMembers(group);
-        Button membersButton = new Button(members);
-        membersButton.setStyleName(BaseTheme.BUTTON_LINK);
-        membersButton.addStyleName("group-details-members");
-        membersButton.addClickListener(new ClickListener() {
+		CssLayout rightLayout = new CssLayout();
+		rightLayout.addStyleName("group-details-right-panel");
+		layout.addComponent(rightLayout);
+		Image logo = group.getLogo();
+		if (logo != null && logo.getContent() != null
+				&& logo.getContent().length > 0) {
+			rightLayout.addComponent(GroupsLayout.createLogoComponent(logo
+					.getContent()));
+		}
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                presenter.showMembers(group);
-            }
-        });
-        rightLayout.addComponent(membersButton);
+		String members = presenter.getMembers(group);
+		Button membersButton = new Button(members);
+		membersButton.setStyleName(BaseTheme.BUTTON_LINK);
+		membersButton.addStyleName("group-details-members");
+		membersButton.addClickListener(new ClickListener() {
 
-        return layout;
-    }
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.showMembers(group);
+			}
+		});
+		rightLayout.addComponent(membersButton);
 
-    private Button createLeaveButton(final GroupPresenter presenter,
-            final UsersGroup group) {
-        Button button = new Button(getMessage("Group.details.leave.group"));
-        button.setStyleName(BaseTheme.BUTTON_LINK);
-        button.addStyleName("groupview-details-leave");
-        button.addClickListener(new ClickListener() {
+		return layout;
+	}
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                presenter.requestLeaveGroup(group);
-            }
-        });
-        return button;
-    }
+	private Button createLeaveButton(final GroupPresenter presenter,
+			final UsersGroup group) {
+		Button button = new Button(getMessage("Group.details.leave.group"));
+		button.setStyleName(BaseTheme.BUTTON_LINK);
+		button.addStyleName("groupview-details-leave");
+		button.addClickListener(new ClickListener() {
 
-    private Component createJoinButton(final GroupPresenter presenter,
-            final UsersGroup group) {
-        Button button = new Button(getMessage("Group.details.join.group"));
-        button.setStyleName(BaseTheme.BUTTON_LINK);
-        button.addStyleName("groupview-details-join");
-        button.addClickListener(new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.requestLeaveGroup(group);
+			}
+		});
+		return button;
+	}
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                presenter.requestJoinGroup(group);
-            }
-        });
-        return button;
-    }
+	private Component createJoinButton(final GroupPresenter presenter,
+			final UsersGroup group) {
+		Button button = new Button(getMessage("Group.details.join.group"));
+		button.setStyleName(BaseTheme.BUTTON_LINK);
+		button.addStyleName("groupview-details-join");
+		button.addClickListener(new ClickListener() {
 
-    private String getMessage(String key, Object... params) {
-        return presenter.getMessage(key, params);
-    }
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.requestJoinGroup(group);
+			}
+		});
+		return button;
+	}
+
+	private String getMessage(String key, Object... params) {
+		return presenter.getMessage(key, params);
+	}
 
 }
