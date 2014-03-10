@@ -1,6 +1,8 @@
 package fi.pss.cleanbeach.ui.views.events;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -11,6 +13,8 @@ public class WallLayout extends VerticalLayout {
 
 	private final EventsPresenter presenter;
 
+	private final Map<fi.pss.cleanbeach.data.Event, EventPanel> eventToPanel = new HashMap<>();
+
 	public WallLayout(EventsPresenter presenter) {
 		this.presenter = presenter;
 		setMargin(false);
@@ -19,6 +23,7 @@ public class WallLayout extends VerticalLayout {
 	public void update(List<fi.pss.cleanbeach.data.Event> events) {
 
 		removeAllComponents();
+		eventToPanel.clear();
 
 		if (events.isEmpty()) {
 
@@ -32,7 +37,14 @@ public class WallLayout extends VerticalLayout {
 		for (fi.pss.cleanbeach.data.Event e : events) {
 			EventPanel p = new EventPanel(e, presenter);
 			addComponent(p);
+			eventToPanel.put(e, p);
 		}
 
+	}
+
+	public void update(fi.pss.cleanbeach.data.Event e) {
+		if (eventToPanel.containsKey(e)) {
+			eventToPanel.get(e).update(e);
+		}
 	}
 }

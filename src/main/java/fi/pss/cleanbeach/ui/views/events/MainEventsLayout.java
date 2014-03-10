@@ -111,4 +111,10 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 	public void populateSearchResults(List<fi.pss.cleanbeach.data.Event> l) {
 		searchLayout.populate(l);
 	}
+
+	public void update(fi.pss.cleanbeach.data.Event e) {
+		joinedEventsLayout.update(e);
+		allEventsLayout.update(e);
+		searchLayout.update(e);
+	}
 }

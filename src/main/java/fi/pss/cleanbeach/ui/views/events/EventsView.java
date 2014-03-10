@@ -81,6 +81,7 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	@Override
 	public void updateEventDetails(fi.pss.cleanbeach.data.Event e) {
 		details.update(e);
+		events.update(e);
 	}
 
 }

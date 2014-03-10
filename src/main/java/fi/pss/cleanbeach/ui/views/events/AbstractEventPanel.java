@@ -27,6 +27,10 @@ public abstract class AbstractEventPanel<P extends IEventPresenter> extends
 		setWidth("100%");
 		addStyleName("eventbox");
 
+		update(e);
+	}
+
+	public void update(final fi.pss.cleanbeach.data.Event e) {
 		GridLayout root = new GridLayout(3, 3);
 		root.setSpacing(true);
 		root.setMargin(true);

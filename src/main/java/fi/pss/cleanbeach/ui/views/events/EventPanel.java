@@ -26,4 +26,5 @@ public class EventPanel extends AbstractEventPanel<EventsPresenter> {
 		result.add(createCollectedComponent(e));
 		return result;
 	}
+
 }

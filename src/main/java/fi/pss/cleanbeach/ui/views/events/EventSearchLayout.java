@@ -1,6 +1,8 @@
 package fi.pss.cleanbeach.ui.views.events;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Button;
@@ -17,6 +19,7 @@ public class EventSearchLayout extends VerticalLayout {
 	private static final long serialVersionUID = -7941395172864864360L;
 
 	private final VerticalLayout resultContainer;
+	private final Map<fi.pss.cleanbeach.data.Event, EventPanel> eventToPanel = new HashMap<>();
 
 	private final EventsPresenter presenter;
 
@@ -64,7 +67,15 @@ public class EventSearchLayout extends VerticalLayout {
 		}
 
 		for (fi.pss.cleanbeach.data.Event e : l) {
-			resultContainer.addComponent(new EventPanel(e, presenter));
+			EventPanel panel = new EventPanel(e, presenter);
+			resultContainer.addComponent(panel);
+			eventToPanel.put(e, panel);
+		}
+	}
+
+	public void update(fi.pss.cleanbeach.data.Event e) {
+		if (eventToPanel.containsKey(e)) {
+			eventToPanel.get(e).update(e);
 		}
 	}
 
