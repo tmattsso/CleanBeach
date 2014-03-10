@@ -41,6 +41,7 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 
 		HorizontalLayout tabs = new HorizontalLayout();
 		tabs.addStyleName("eventtabs");
+		tabs.addStyleName("actionbuttons");
 		tabs.setSpacing(true);
 		tabs.setWidth("100%");
 

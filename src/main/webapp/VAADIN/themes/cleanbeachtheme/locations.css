@@ -1,0 +1,10 @@
+
+.maplayout .actionbuttons {
+	position: absolute;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+	width: 100%;
+	padding-left: 10px;
+	padding-right: 10px;
+}

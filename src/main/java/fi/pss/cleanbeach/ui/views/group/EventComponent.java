@@ -1,6 +1,3 @@
-/**
- *
- */
 package fi.pss.cleanbeach.ui.views.group;
 
 import java.util.Collection;
@@ -16,15 +13,17 @@ import fi.pss.cleanbeach.ui.views.events.AbstractEventPanel;
  */
 public class EventComponent extends AbstractEventPanel<GroupPresenter> {
 
-    public EventComponent(fi.pss.cleanbeach.data.Event e,
-            GroupPresenter presenter) {
-        super(e, presenter);
-    }
+	private static final long serialVersionUID = 3102817158497578804L;
 
-    @Override
-    protected Collection<? extends Component> createContent(
-            fi.pss.cleanbeach.data.Event e) {
-        return Collections.singleton(createCollectedComponent(e));
-    }
+	public EventComponent(fi.pss.cleanbeach.data.Event e,
+			GroupPresenter presenter) {
+		super(e, presenter);
+	}
+
+	@Override
+	protected Collection<? extends Component> createContent(
+			fi.pss.cleanbeach.data.Event e) {
+		return Collections.singleton(createCollectedComponent(e));
+	}
 
 }

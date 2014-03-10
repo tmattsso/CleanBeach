@@ -1,9 +1,13 @@
-/* No need to import anything; touchkit imports it's theme with GWT */
+/* No need to import anything from Vaadin; touchkit imports it's theme with GWT */
+
+
+@IMPORT url("events.css");
+@IMPORT url("locations.css");
+@IMPORT url("groups.css");
 
 .v-caption {
 	color: #00a3e8;
 }
-
 
 .login .desc span {
 	display: block;
@@ -14,141 +18,13 @@
 	
 }
 
-.maplayout .actionbuttons {
-	position: absolute;
-	bottom: 10px;
-	left: 0;
-	right: 0;
-	width: 100%;
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-.eventbox {
-	background-color: #FFF;
-	border-radius: 5px;
-	border: 1px solid gray;
-}
-
-.eventbox .people,
-.eventbox .numpieces,
-.eventbox .date {
-	font-size: 10pt
-}
-
-.eventbox .numpieces div {
-	text-align: center;
-}
-.eventbox .numpieces span {
-	font-size: 24pt;
-}
-
-.user-group-logo, .user-group-event-invitations {
-	float:right;
-}
-
-.user-group .v-label {
-	display: block;
-}
-
-.v-csslayout.user-group {
-	position: relative;
-	overflow:hidden;
-	padding: 10px;
-	margin:10px;
-	background-color: white;
-	border-radius: 5px;
-	border: 1px solid gray;
-}
-
-.user-group-members-count.align-bottom {
-	position: absolute;
-	bottom: 0;
-}
-
-.admin-title {
-	margin-top: 10px;
-	margin-left: 10px;
-}
-
-.member-title {
-	margin-left: 10px;
-}
-
 .actionbuttons .v-button-caption {
 	display: block;
 	font-size: 10pt;
 	line-height: 1.5;
 }
-
-.v-button.search-button, .v-button.create-button {
-	margin: 10px;
-}
-
-.groupview-details-invitations .invitations-prefix, .groupview-details-invitations .invitations-link,
-.groupview-details-invitations .invitations-link .v-button-wrap {
-	display: inline;
-}
-
-.eventdetail .v-customcomponent-comment {
-	padding: 10px;
-	background-color: white;
-	border-radius: 5px;
-	border: 1px solid gray;
-}
-
-.eventdetail .comment .author {
-	font-size: 10pt;
-	padding-bottom: 5px;
-}
-
-.eventdetail .comment .v-image {
-	padding: 5px;
-	padding-top: 0;
-	max-width: 100%;
-}
-
-.eventdetail .eventcaption span {
-	float: right;
-}
-
-.eventdetail .simplemap .leaflet-control-container {
-	display: none;
-}
-
-.eventdetail .eventcreator,
-.eventdetail .eventmembers {
-	font-size: 10pt;
-}
-
-.eventtabs .v-button-caption {
-	display: block;
-	font-size: 10pt;
-	line-height: 1.5;
-}
-.eventtabs .v-button .v-button-wrap:before {
+.actionbuttons .v-button .v-button-wrap:before {
 	line-height: 35px;
-}
-
-.events .noevents {
-	line-height: 50px;
-	text-align: center;
-}
-
-
-.eventdetail .thrash .v-button-wrap {
-	text-overflow: clip;
-	line-height: 10pt;
-	padding-top: 5px;
-}
-
-.eventdetail .thrash .v-button-caption {
-	line-height: 1.5;
-	font-size: 10pt;
-	font-weight: normal;
-}
-.eventdetail .thrash .v-button-caption span {
-	font-size: 24pt;
 }
 
 .stepper .v-label {
@@ -160,9 +36,3 @@
 	font-size: 16pt;
 }
 
-.createlocation .v-button .v-button-caption,
-.reportdirty .v-button .v-button-caption{
-	display: block;
-	line-height: 20px;
-	padding-bottom: 5px;
-}
