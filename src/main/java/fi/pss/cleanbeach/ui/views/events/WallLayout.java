@@ -7,6 +7,8 @@ import java.util.Map;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.pss.cleanbeach.ui.util.Lang;
+
 public class WallLayout extends VerticalLayout {
 
 	private static final long serialVersionUID = -6558108321816615836L;
@@ -27,7 +29,7 @@ public class WallLayout extends VerticalLayout {
 
 		if (events.isEmpty()) {
 
-			Label empty = new Label("No events found.");
+			Label empty = new Label(Lang.get("events.wall.nonefound"));
 			empty.addStyleName("noevents");
 			addComponent(empty);
 

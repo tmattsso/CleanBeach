@@ -20,6 +20,7 @@ import fi.pss.cleanbeach.data.Comment;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 public class EventDetailLayout extends NavigationView {
 
@@ -48,7 +49,7 @@ public class EventDetailLayout extends NavigationView {
 		selectedEvent = e;
 
 		addStyleName("eventdetail");
-		setCaption("Event details");
+		setCaption(Lang.get("events.details.caption"));
 
 		VerticalLayout content = new VerticalLayout();
 		content.setMargin(true);
@@ -105,7 +106,7 @@ public class EventDetailLayout extends NavigationView {
 		actions.setSpacing(true);
 		content.addComponent(actions);
 
-		Button comment = new Button("Comment");
+		Button comment = new Button(Lang.get("events.details.comment"));
 		TouchKitIcon.comment.addTo(comment);
 		comment.addClickListener(new ClickListener() {
 
@@ -118,7 +119,7 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(comment);
 
-		Button photo = new Button("Add photo");
+		Button photo = new Button(Lang.get("events.details.photo"));
 		TouchKitIcon.cameraRetro.addTo(photo);
 		photo.addClickListener(new ClickListener() {
 
@@ -131,7 +132,7 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(photo);
 
-		Button addThrash = new Button("Report");
+		Button addThrash = new Button(Lang.get("events.details.thrash"));
 		TouchKitIcon.exclamationSign.addTo(addThrash);
 		addThrash.addClickListener(new ClickListener() {
 
@@ -144,8 +145,10 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(addThrash);
 
-		Button invite = new Button("Invite");
+		Button invite = new Button(Lang.get("events.details.invite"));
 		TouchKitIcon.user.addTo(invite);
+		invite.setEnabled(false);
+		// TODO enable when group invites work
 		invite.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 3852409971806848078L;
@@ -158,7 +161,7 @@ public class EventDetailLayout extends NavigationView {
 		actions.addComponent(invite);
 
 		comments = new VerticalLayout();
-		comments.setCaption("Comments:");
+		comments.setCaption(Lang.get("events.details.comments"));
 		comments.setSpacing(true);
 		content.addComponent(comments);
 
@@ -178,7 +181,8 @@ public class EventDetailLayout extends NavigationView {
 
 	private void updateItemsButton(fi.pss.cleanbeach.data.Event e) {
 		itemsButton.setCaption("<span>" + e.getThrash().getTotalNum()
-				+ "</span></div><br/>pieces collected");
+				+ "</span></div><br/>"
+				+ Lang.get("events.eventpanel.numpieces"));
 	}
 
 	private Component getMap(Location location) {
@@ -190,7 +194,7 @@ public class EventDetailLayout extends NavigationView {
 		selectedEvent = e;
 
 		if (e.getJoinedUsers().contains(MyTouchKitUI.getCurrentUser())) {
-			Button leave = new Button("leave event");
+			Button leave = new Button(Lang.get("events.details.leave"));
 			getNavigationBar().setRightComponent(leave);
 			leave.addClickListener(new ClickListener() {
 
@@ -202,7 +206,7 @@ public class EventDetailLayout extends NavigationView {
 				}
 			});
 		} else {
-			Button join = new Button("join event");
+			Button join = new Button(Lang.get("events.details.join"));
 			getNavigationBar().setRightComponent(join);
 			join.addClickListener(new ClickListener() {
 
@@ -220,20 +224,23 @@ public class EventDetailLayout extends NavigationView {
 
 		desc.setValue(e.getDescription());
 
-		creator.setValue("Organized by " + e.getOrganizer().getName());
+		creator.setValue(Lang.get("events.details.organizedby") + " "
+				+ e.getOrganizer().getName());
 
 		Iterator<User> users = e.getJoinedUsers().iterator();
 		if (e.getJoinedUsers().size() > 2) {
 			members.setValue(users.next().getName() + ", "
-					+ users.next().getName() + ", and "
-					+ (e.getJoinedUsers().size() - 2) + " more");
+					+ users.next().getName() + ", "
+					+ Lang.get("events.details.joined.andseparator") + " "
+					+ (e.getJoinedUsers().size() - 2) + " "
+					+ Lang.get("events.details.joined.more"));
 		} else if (e.getJoinedUsers().size() == 2) {
 			members.setValue(users.next().getName() + ", "
 					+ users.next().getName());
 		} else if (e.getJoinedUsers().size() == 1) {
 			members.setValue(users.next().getName());
 		} else {
-			members.setValue("No joined users yet");
+			members.setValue(Lang.get("events.details.joined.none"));
 		}
 
 		updateItemsButton(e);

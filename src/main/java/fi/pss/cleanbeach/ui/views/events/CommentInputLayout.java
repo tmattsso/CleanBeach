@@ -21,6 +21,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 public class CommentInputLayout extends NavigationView {
 
@@ -40,9 +41,9 @@ public class CommentInputLayout extends NavigationView {
 
 		setContent(root);
 		if (addImageImmediately) {
-			setCaption("Add image");
+			setCaption(Lang.get("events.comment.addimage"));
 		} else {
-			setCaption("Add comment");
+			setCaption(Lang.get("events.comment.addcomment"));
 		}
 
 		final TextArea comment = new TextArea();
@@ -51,7 +52,7 @@ public class CommentInputLayout extends NavigationView {
 		root.setExpandRatio(comment, 1);
 
 		addImage = new Upload();
-		addImage.setButtonCaption("Add Image to comment");
+		addImage.setButtonCaption(Lang.get("events.comment.addimagebutton"));
 		addImage.setImmediate(true);
 		addImage.setWidth("100%");
 		ImageUploader ul = new ImageUploader(addImage);
@@ -60,7 +61,7 @@ public class CommentInputLayout extends NavigationView {
 		TouchKitIcon.cameraRetro.addTo(addImage);
 		root.addComponent(addImage);
 
-		Button saveComment = new Button("Add comment");
+		Button saveComment = new Button(Lang.get("events.comment.addcomment"));
 		TouchKitIcon.comment.addTo(saveComment);
 		saveComment.addClickListener(new ClickListener() {
 
@@ -108,7 +109,7 @@ public class CommentInputLayout extends NavigationView {
 		@Override
 		public void updateProgress(long readBytes, long contentLength) {
 			if (readBytes > maxLength) {
-				Notification.show("Too big content");
+				Notification.show(Lang.get("events.comment.toolong"));
 				upload.interruptUpload();
 			}
 		}

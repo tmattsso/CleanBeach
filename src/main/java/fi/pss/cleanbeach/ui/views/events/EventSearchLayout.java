@@ -13,6 +13,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 public class EventSearchLayout extends VerticalLayout {
 
@@ -32,10 +33,10 @@ public class EventSearchLayout extends VerticalLayout {
 
 		final TextField tf = new TextField();
 		tf.setWidth("100%");
-		tf.setInputPrompt("search here");
+		tf.setInputPrompt(Lang.get("events.search.searchprompt"));
 		addComponent(tf);
 
-		Button search = new Button("Search");
+		Button search = new Button(Lang.get("events.search.searchbutton"));
 		search.setClickShortcut(KeyCode.ENTER);
 		search.addClickListener(new ClickListener() {
 
@@ -59,7 +60,7 @@ public class EventSearchLayout extends VerticalLayout {
 
 		if (l.isEmpty()) {
 
-			Label empty = new Label("No events found.");
+			Label empty = new Label(Lang.get("events.search.nothingfound"));
 			empty.addStyleName("noevents");
 			resultContainer.addComponent(empty);
 

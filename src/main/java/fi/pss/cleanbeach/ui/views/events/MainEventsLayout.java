@@ -13,6 +13,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 public class MainEventsLayout extends NavigationView implements ClickListener {
 
@@ -33,7 +34,7 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 
 		this.presenter = presenter;
 
-		setCaption("Events");
+		setCaption(Lang.get("events.caption"));
 
 		VerticalLayout vl = new VerticalLayout();
 		vl.setSpacing(true);
@@ -45,20 +46,20 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 		tabs.setSpacing(true);
 		tabs.setWidth("100%");
 
-		allEvents = new Button("All events");
+		allEvents = new Button(Lang.get("events.main.allevents"));
 		allEvents.addClickListener(this);
 		allEvents.setData(allEventsLayout = new WallLayout(presenter));
 		allEvents.addStyleName("selected");
 		TouchKitIcon.group.addTo(allEvents);
 		tabs.addComponent(allEvents);
 
-		joinedEvents = new Button("Joined events");
+		joinedEvents = new Button(Lang.get("events.main.joinedevents"));
 		joinedEvents.addClickListener(this);
 		joinedEvents.setData(joinedEventsLayout = new WallLayout(presenter));
 		TouchKitIcon.star.addTo(joinedEvents);
 		tabs.addComponent(joinedEvents);
 
-		search = new Button("Search events");
+		search = new Button(Lang.get("events.main.search"));
 		search.addClickListener(this);
 		search.setData(searchLayout = new EventSearchLayout(presenter));
 		TouchKitIcon.search.addTo(search);

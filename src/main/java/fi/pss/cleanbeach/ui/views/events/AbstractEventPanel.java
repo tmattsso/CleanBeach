@@ -12,6 +12,8 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 
+import fi.pss.cleanbeach.ui.util.Lang;
+
 public abstract class AbstractEventPanel<P extends IEventPresenter> extends
 		CustomComponent {
 
@@ -54,14 +56,17 @@ public abstract class AbstractEventPanel<P extends IEventPresenter> extends
 			root.addComponent(component);
 		}
 
-		l = new Label(e.getNumComments() + " Comments<br/>"
-				+ e.getNumCommentsWithImage() + " Pictures", ContentMode.HTML);
+		l = new Label(e.getNumComments() + " "
+				+ Lang.get("events.eventpanel.numcomments") + "<br/>"
+				+ e.getNumCommentsWithImage() + " "
+				+ Lang.get("events.eventpanel.numpics"), ContentMode.HTML);
 		l.setSizeUndefined();
 		l.addStyleName("comments");
 		root.addComponent(l);
 		root.setComponentAlignment(l, Alignment.MIDDLE_CENTER);
 
-		l = new Label("Joined people", ContentMode.HTML);
+		// TODO joined people
+		l = new Label("*Joined people", ContentMode.HTML);
 		l.setSizeUndefined();
 		l.addStyleName("people");
 		root.addComponent(l, 0, 2, 2, 2);
@@ -86,7 +91,8 @@ public abstract class AbstractEventPanel<P extends IEventPresenter> extends
 
 	protected Component createCollectedComponent(fi.pss.cleanbeach.data.Event e) {
 		Label label = new Label("<div><span>" + e.getThrash().getTotalNum()
-				+ "</span></div><br/>pieces collected", ContentMode.HTML);
+				+ "</span></div><br/>"
+				+ Lang.get("events.eventpanel.numpieces"), ContentMode.HTML);
 		label.addStyleName("numpieces");
 		label.setWidth("100px");
 		return label;

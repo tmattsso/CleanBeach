@@ -9,6 +9,7 @@ import com.vaadin.ui.ComponentContainer;
 
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 @UIScoped
 public class EventsView extends AbstractView<EventsPresenter> implements
@@ -20,13 +21,13 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	private EventDetailLayout details;
 
 	public EventsView() {
-		setCaption("Events");
 		addStyleName("events");
 	}
 
 	@Override
 	protected ComponentContainer getMainContent() {
 
+		setCaption(Lang.get("events.caption"));
 		events = new MainEventsLayout(presenter);
 
 		presenter.loadAllEvents(MyTouchKitUI.getCurrentUser());
