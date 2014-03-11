@@ -3,6 +3,7 @@ package fi.pss.cleanbeach.ui.views.login;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
+import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -117,13 +118,18 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		vl.addComponent(forgotPass);
 		vl.setComponentAlignment(forgotPass, Alignment.MIDDLE_CENTER);
 
-		Button fbLogin = new Button("Facebook");
+		Button fbLogin = new Button("Login with Facebook");
+		TouchKitIcon.facebook.addTo(fbLogin);
 		fbLogin.setWidth("100%");
-		Button twitterLogin = new Button("Twitter");
+
+		Button twitterLogin = new Button("Login with Twitter");
+		TouchKitIcon.twitter.addTo(twitterLogin);
 		twitterLogin.setWidth("100%");
 
 		hl = new HorizontalLayout(fbLogin, twitterLogin);
 		hl.addStyleName("socialbuttons");
+		hl.addStyleName("actionbuttons");
+		hl.setWidth("100%");
 		hl.setSpacing(true);
 		vl.addComponent(hl);
 
