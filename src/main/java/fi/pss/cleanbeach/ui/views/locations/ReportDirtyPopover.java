@@ -10,6 +10,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.pss.cleanbeach.ui.util.Lang;
+
 public class ReportDirtyPopover extends Popover {
 
 	private static final long serialVersionUID = -1805148322449517833L;
@@ -23,15 +25,17 @@ public class ReportDirtyPopover extends Popover {
 		addStyleName("reportdirty");
 		setHeight(null);
 
-		Label description = new Label("Please describe what you found:");
+		Label description = new Label(Lang.get("locations.report.desc"));
 		final TextArea tf = new TextArea();
 		tf.setRows(5);
 		tf.setWidth("100%");
 		tf.focus();
-		Button create = new Button("Create");
+		Button create = new Button(Lang.get("locations.report.submit"));
+		create.addStyleName("submit");
 		TouchKitIcon.plus.addTo(create);
 		create.setClickShortcut(KeyCode.ENTER);
 		VerticalLayout vl = new VerticalLayout(description, tf, create);
+		vl.addStyleName("actionbuttons");
 		vl.setMargin(true);
 		vl.setSpacing(true);
 		setContent(vl);

@@ -10,6 +10,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.pss.cleanbeach.ui.util.Lang;
+
 public class CreateLocationPopover extends Popover {
 
 	private static final long serialVersionUID = -1805148322449517833L;
@@ -22,15 +24,17 @@ public class CreateLocationPopover extends Popover {
 
 		addStyleName("createlocation");
 		setHeight(null);
+		setModal(true);
 
-		Label description = new Label("Give a name:");
+		Label description = new Label(Lang.get("locations.addloc.name"));
 		final TextField tf = new TextField();
 		tf.setWidth("100%");
 		tf.focus();
-		Button create = new Button("Create");
+		Button create = new Button(Lang.get("locations.addloc.create"));
 		TouchKitIcon.plus.addTo(create);
 		create.setClickShortcut(KeyCode.ENTER);
 		VerticalLayout vl = new VerticalLayout(description, tf, create);
+		vl.addStyleName("actionbuttons");
 		vl.setMargin(true);
 		vl.setSpacing(true);
 		setContent(vl);

@@ -25,6 +25,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
 import fi.pss.cleanbeach.data.Location;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 /**
  * 
@@ -143,7 +144,7 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 
 	@Override
 	public void onFailure(int errorCode) {
-		Notification.show("Could not get device position!",
+		Notification.show(Lang.get("locations.map.noposition"),
 				Type.WARNING_MESSAGE);
 	}
 

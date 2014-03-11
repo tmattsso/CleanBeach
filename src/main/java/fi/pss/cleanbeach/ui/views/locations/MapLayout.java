@@ -14,6 +14,7 @@ import com.vaadin.ui.HorizontalLayout;
 
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmLocationListener;
 import fi.pss.cleanbeach.ui.views.locations.ReportDirtyPopover.ConfirmThrashListener;
 
@@ -30,13 +31,13 @@ public class MapLayout extends NavigationView implements
 
 	public MapLayout(final LocationPresenter presenter) {
 
-		setCaption("Reported locations");
+		setCaption(Lang.get("locations.map.caption"));
 		addStyleName("maplayout");
 
 		lMap = new LitterBaseMap(presenter, this);
 		lMap.setSizeFull();
 
-		final Button addLocation = new Button("Add location");
+		final Button addLocation = new Button(Lang.get("locations.map.addloc"));
 		TouchKitIcon.plus.addTo(addLocation);
 		addLocation.addClickListener(new ClickListener() {
 
@@ -63,7 +64,7 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		Button createEvent = new Button("event");
+		Button createEvent = new Button(Lang.get("locations.map.createevent"));
 		TouchKitIcon.calendar.addTo(createEvent);
 		createEvent.addClickListener(new ClickListener() {
 
@@ -75,7 +76,7 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		Button markDirty = new Button("dirty");
+		Button markDirty = new Button(Lang.get("locations.map.marklocdirty"));
 		TouchKitIcon.eyeOpen.addTo(markDirty);
 		markDirty.addClickListener(new ClickListener() {
 
@@ -95,7 +96,7 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		Button markThrash = new Button("report");
+		Button markThrash = new Button(Lang.get("locations.map.reportthrash"));
 		TouchKitIcon.exclamationSign.addTo(markThrash);
 		markThrash.addClickListener(new ClickListener() {
 
@@ -119,7 +120,7 @@ public class MapLayout extends NavigationView implements
 		// }
 		// });
 
-		Button showEvents = new Button("history");
+		Button showEvents = new Button(Lang.get("locations.map.showhistory"));
 		TouchKitIcon.listAlt.addTo(showEvents);
 		showEvents.addClickListener(new ClickListener() {
 

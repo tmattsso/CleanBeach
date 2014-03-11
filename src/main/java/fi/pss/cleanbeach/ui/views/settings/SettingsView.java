@@ -19,6 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 @UIScoped
 public class SettingsView extends AbstractView<SettingsPresenter> implements
@@ -37,7 +38,7 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 	protected ComponentContainer getMainContent() {
 
 		NavigationView vl = new NavigationView();
-		vl.setCaption("Settings");
+		vl.setCaption(Lang.get("settings.caption"));
 		vl.setWidth("100%");
 
 		VerticalLayout root = new VerticalLayout();
@@ -46,10 +47,10 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 		root.setWidth("100%");
 		vl.setContent(root);
 
-		pf = new PasswordField("Change Password:");
+		pf = new PasswordField(Lang.get("settings.changepass.caption"));
 		pf.setWidth("100%");
 
-		Button doChange = new Button("Change");
+		Button doChange = new Button(Lang.get("settings.changepass.button"));
 		doChange.addClickListener(new PasswordChanger());
 		doChange.setClickShortcut(KeyCode.ENTER);
 
@@ -80,11 +81,10 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 			gl.setSpacing(true);
 			pop.setContent(gl);
 
-			Label desc = new Label(
-					"Are you sure you want to change your password?");
+			Label desc = new Label(Lang.get("settings.changepass.confirm"));
 			gl.addComponent(desc, 0, 0, 1, 0);
 
-			Button ok = new Button("yes");
+			Button ok = new Button(Lang.get("global.yes"));
 			ok.addClickListener(new ClickListener() {
 
 				private static final long serialVersionUID = 7082960292870880295L;
@@ -99,7 +99,7 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 			gl.addComponent(ok);
 			gl.setComponentAlignment(ok, Alignment.MIDDLE_RIGHT);
 
-			Button cancel = new Button("no");
+			Button cancel = new Button(Lang.get("global.cancel"));
 			cancel.addClickListener(new ClickListener() {
 
 				private static final long serialVersionUID = 6353147704433465730L;
