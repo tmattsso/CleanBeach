@@ -14,6 +14,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
 
 import fi.pss.cleanbeach.data.ThrashType;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 public abstract class ThrashInputLayout extends NavigationView {
 
@@ -47,7 +48,7 @@ public abstract class ThrashInputLayout extends NavigationView {
 		gl.setWidth("100%");
 		setContent(gl);
 
-		Label caption = new Label("Mark your collected thrash here:");
+		Label caption = new Label(Lang.get("components.thrashinput.caption"));
 		caption.addStyleName("caption");
 		caption.setHeight("30px");
 		gl.addComponent(caption, 0, 0, 1, 0);
@@ -74,7 +75,8 @@ public abstract class ThrashInputLayout extends NavigationView {
 			otherDescField.setRows(3);
 			otherDescField.setImmediate(true);
 			otherDescField.setNullRepresentation("");
-			otherDescField.setInputPrompt("what did you find?");
+			otherDescField.setInputPrompt(Lang
+					.get("components.thrashinput.otherdesc"));
 			gl.addComponent(otherDescField, 0, gl.getRows() - 1, 1,
 					gl.getRows() - 1);
 
@@ -108,7 +110,7 @@ public abstract class ThrashInputLayout extends NavigationView {
 	protected abstract List<ThrashType> getThrashTypes();
 
 	private void addRow(final ThrashType t) {
-		Label name = new Label(t.getName() + ":");
+		Label name = new Label(Lang.get(t) + ":");
 		name.addStyleName("typename");
 		gl.addComponent(name);
 		gl.setComponentAlignment(name, Alignment.MIDDLE_LEFT);

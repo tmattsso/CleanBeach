@@ -2,6 +2,11 @@ package fi.pss.cleanbeach.data;
 
 import javax.persistence.Entity;
 
+/**
+ * Not an enum because customer wants to add these dynamically.
+ * 
+ * @author thomas
+ */
 @Entity
 public class ThrashType extends AbstractEntity {
 

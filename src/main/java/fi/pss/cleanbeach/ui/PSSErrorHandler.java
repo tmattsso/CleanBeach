@@ -12,6 +12,8 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
+import fi.pss.cleanbeach.ui.util.Lang;
+
 @SessionScoped
 public class PSSErrorHandler implements ErrorHandler, Serializable {
 
@@ -27,9 +29,10 @@ public class PSSErrorHandler implements ErrorHandler, Serializable {
 		Throwable root = getRootCause(event.getThrowable());
 		// log.error("Root cause:", root);
 
-		Notification n = new Notification("Exception caught", "<br/>"
-				+ root.getClass().getSimpleName() + ": " + root.getMessage(),
-				Type.ERROR_MESSAGE, true);
+		Notification n = new Notification(
+				Lang.get("main.errornotification.caption"), "<br/>"
+						+ root.getClass().getSimpleName() + ": "
+						+ root.getMessage(), Type.ERROR_MESSAGE, true);
 		n.setHtmlContentAllowed(true);
 		n.setDescription("<br/>" + root.getClass().getSimpleName() + ": "
 				+ root.getMessage());

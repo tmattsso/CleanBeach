@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 
 import com.vaadin.ui.UI;
 
+import fi.pss.cleanbeach.data.ThrashType;
+
 public class Lang {
 
 	private static final Locale DEFAULTLANG = new Locale("en");
@@ -121,6 +123,10 @@ public class Lang {
 				+ locale + "'");
 
 		return true;
+	}
+
+	public static String get(ThrashType type) {
+		return get("thrashtype." + type.getName());
 	}
 
 }
