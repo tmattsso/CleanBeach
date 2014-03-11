@@ -25,6 +25,7 @@ import com.vaadin.ui.themes.BaseTheme;
 
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 @UIScoped
 public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
@@ -34,7 +35,6 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 	private Label errorLabel;
 
 	public LoginView() {
-		setCaption("Login");
 	}
 
 	@Override
@@ -44,10 +44,8 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		vl.setMargin(true);
 		vl.addStyleName("login");
 
-		Label desc = new Label(
-				"<span>Siisti Biitsi 2014</span>"
-						+ "Siisti Biitsi is a volunteer project organized by Pidä Saaristo Siistinä ry. The purpose is to clean all beaches in Finland. The app helps you and your friends to organize your efforts, as well as provide the organization with invaluable data.",
-				ContentMode.HTML);
+		Label desc = new Label("<span>" + Lang.get("login.caption.big")
+				+ "</span>" + Lang.get("login.caption.small"), ContentMode.HTML);
 		desc.addStyleName("desc");
 
 		Image logo = new Image();
@@ -64,13 +62,14 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		hl.addStyleName("logolayout");
 		vl.addComponent(hl);
 
-		final TextField username = new TextField("Username");
+		final TextField username = new TextField(Lang.get("login.username"));
 		username.setWidth("100%");
 		username.setImmediate(true);
 		username.addStyleName("username");
 		vl.addComponent(username);
 
-		final PasswordField password = new PasswordField("Password");
+		final PasswordField password = new PasswordField(
+				Lang.get("login.password"));
 		password.setWidth("100%");
 		password.setImmediate(true);
 		password.addStyleName("password");
@@ -92,7 +91,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		errorLabel.addStyleName("error");
 		vl.addComponent(errorLabel);
 
-		Button login = new Button("Login", new ClickListener() {
+		Button login = new Button(Lang.get("login.login"), new ClickListener() {
 
 			private static final long serialVersionUID = 9111006710984400388L;
 
@@ -112,17 +111,17 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 			password.focus();
 		}
 
-		Button forgotPass = new Button("Forgot your password?");
+		Button forgotPass = new Button(Lang.get("login.forgotpass"));
 		forgotPass.addStyleName(BaseTheme.BUTTON_LINK);
 		forgotPass.addStyleName("forgotpass");
 		vl.addComponent(forgotPass);
 		vl.setComponentAlignment(forgotPass, Alignment.MIDDLE_CENTER);
 
-		Button fbLogin = new Button("Login with Facebook");
+		Button fbLogin = new Button(Lang.get("login.fb"));
 		TouchKitIcon.facebook.addTo(fbLogin);
 		fbLogin.setWidth("100%");
 
-		Button twitterLogin = new Button("Login with Twitter");
+		Button twitterLogin = new Button(Lang.get("login.twitter"));
 		TouchKitIcon.twitter.addTo(twitterLogin);
 		twitterLogin.setWidth("100%");
 
@@ -144,7 +143,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 
 	@Override
 	public void showError() {
-		errorLabel.setValue("Invalid credentials");
+		errorLabel.setValue(Lang.get("login.invalid"));
 	}
 
 }
