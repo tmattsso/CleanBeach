@@ -14,7 +14,7 @@ public class SettingsPresenter extends AbstractPresenter<ISettings> {
 
 	}
 
-	public void changePass(String value, User currentUser) {
+	public void changePass(String value) {
 		// TODO Auto-generated method stub
 
 	}

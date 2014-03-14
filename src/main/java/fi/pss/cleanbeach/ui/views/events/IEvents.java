@@ -5,6 +5,7 @@ import java.util.List;
 
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Invite;
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.mvp.IView;
 
 public interface IEvents extends IView {
@@ -25,6 +26,6 @@ public interface IEvents extends IView {
 
 	void updateEventDetails(Event e);
 
-	void openInviteGroups(Collection<Invite> coll, Event e);
+	void openInviteGroups(Collection<Invite> coll, Event e, User u);
 
 }

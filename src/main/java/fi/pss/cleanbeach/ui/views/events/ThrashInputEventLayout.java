@@ -3,7 +3,6 @@ package fi.pss.cleanbeach.ui.views.events;
 import java.util.List;
 
 import fi.pss.cleanbeach.data.ThrashType;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.components.ThrashInputLayout;
 
 public class ThrashInputEventLayout extends ThrashInputLayout {
@@ -27,8 +26,7 @@ public class ThrashInputEventLayout extends ThrashInputLayout {
 
 	@Override
 	protected void setDesc(ThrashType type, String value) {
-		presenter.addOtherDesc(type, MyTouchKitUI.getCurrentUser(), value,
-				event);
+		presenter.addOtherDesc(type, value, event);
 	}
 
 	@Override
@@ -38,8 +36,7 @@ public class ThrashInputEventLayout extends ThrashInputLayout {
 
 	@Override
 	protected void storeValue(ThrashType type, Integer value) {
-		presenter.setNumThrash(value, type, event,
-				MyTouchKitUI.getCurrentUser());
+		presenter.setNumThrash(value, type, event);
 	}
 
 	@Override

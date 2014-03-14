@@ -200,7 +200,7 @@ public class EventDetailLayout extends NavigationView {
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-					presenter.leaveEvent(e, MyTouchKitUI.getCurrentUser());
+					presenter.leaveEvent(e);
 				}
 			});
 		} else {
@@ -212,7 +212,7 @@ public class EventDetailLayout extends NavigationView {
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-					presenter.joinEvent(e, MyTouchKitUI.getCurrentUser());
+					presenter.joinEvent(e);
 				}
 			});
 		}

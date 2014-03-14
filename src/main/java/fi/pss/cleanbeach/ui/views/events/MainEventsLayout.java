@@ -12,7 +12,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 public class MainEventsLayout extends NavigationView implements ClickListener {
@@ -86,10 +85,10 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 		event.getButton().addStyleName("selected");
 
 		if (event.getButton() == allEvents) {
-			presenter.loadAllEvents(MyTouchKitUI.getCurrentUser());
+			presenter.loadAllEvents();
 		}
 		if (event.getButton() == joinedEvents) {
-			presenter.loadJoinedEvents(MyTouchKitUI.getCurrentUser());
+			presenter.loadJoinedEvents();
 		}
 
 	}

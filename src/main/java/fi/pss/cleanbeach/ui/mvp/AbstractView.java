@@ -8,6 +8,7 @@ import com.vaadin.addon.touchkit.ui.NavigationManager;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.ComponentContainer;
 
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 
 /**
@@ -40,7 +41,12 @@ public abstract class AbstractView<P extends AbstractPresenter> extends
 	@Override
 	public void attach() {
 		super.attach();
-		presenter.init(MyTouchKitUI.getCurrentUser());
+		presenter.init(getUser());
 		navigateTo(getMainContent());
+	}
+
+	@Override
+	public User getUser() {
+		return MyTouchKitUI.getCurrentUser();
 	}
 }

@@ -14,6 +14,7 @@ import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.InviteService;
 import fi.pss.cleanbeach.services.LocationService;
@@ -34,6 +35,9 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 	@Inject
 	private InviteService inviteService;
 
+	@Inject
+	private AuthenticationService authService;
+
 	protected EventsPresenter() {
 	}
 
@@ -42,14 +46,14 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 
 	}
 
-	public void loadJoinedEvents(User currentUser) {
-		List<Event> l = service.getJoinedEventsForUser(currentUser);
+	public void loadJoinedEvents() {
+		List<Event> l = service.getJoinedEventsForUser(view.getUser());
 		view.showJoinedEvents(l);
 
 	}
 
-	public void loadAllEvents(User currentUser) {
-		List<Event> l = service.getEventsForUser(currentUser, null, null);
+	public void loadAllEvents() {
+		List<Event> l = service.getEventsForUser(view.getUser(), null, null);
 		view.showAllEvents(l);
 	}
 
@@ -59,20 +63,20 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		view.showDetails(event);
 	}
 
-	public void searchForEvents(String value, User currentUser) {
-		List<Event> l = service.searchForEvents(currentUser, value);
+	public void searchForEvents(String value) {
+		List<Event> l = service.searchForEvents(view.getUser(), value);
 		view.populateSearchResults(l);
 	}
 
-	public void joinEvent(Event e, User currentUser) {
-		e = service.setUserJoined(e, currentUser, true);
+	public void joinEvent(Event e) {
+		e = service.setUserJoined(e, view.getUser(), true);
 		e = service.loadDetails(e);
 		view.updateEventDetails(e);
 
 	}
 
-	public void leaveEvent(Event e, User currentUser) {
-		e = service.setUserJoined(e, currentUser, false);
+	public void leaveEvent(Event e) {
+		e = service.setUserJoined(e, view.getUser(), false);
 		e = service.loadDetails(e);
 		view.updateEventDetails(e);
 	}
@@ -81,9 +85,8 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		return service.getThrashTypes();
 	}
 
-	public void setNumThrash(Integer value, ThrashType t, Event e,
-			User currentUser) {
-		service.setThrash(value, t, e, currentUser);
+	public void setNumThrash(Integer value, ThrashType t, Event e) {
+		service.setThrash(value, t, e, view.getUser());
 	}
 
 	public void openAddThrash(Event e) {
@@ -94,8 +97,8 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		view.openAddComment(e, addImage);
 	}
 
-	public void addComment(Event e, String value, Image img, User currentUser) {
-		service.addComment(e, value, img, currentUser);
+	public void addComment(Event e, String value, Image img) {
+		service.addComment(e, value, img, view.getUser());
 		e = service.loadDetails(e);
 		view.navigateAndUpdate(e);
 	}
@@ -106,19 +109,19 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 		view.updateEventDetails(e);
 	}
 
-	public void addOtherDesc(ThrashType t, User currentUser, String value,
-			Event event) {
-		locService.setDescription(t, currentUser, value, event, null);
+	public void addOtherDesc(ThrashType t, String value, Event event) {
+		locService.setDescription(t, view.getUser(), value, event, null);
 	}
 
 	public void openInviteGroups(Event e) {
 		// get existing invites, we don't want duplicates
 		Collection<Invite> coll = inviteService.getPendingInvitations(e);
+		User u = authService.refresh(view.getUser());
 
-		view.openInviteGroups(coll, e);
+		view.openInviteGroups(coll, e, u);
 	}
 
-	public void invite(UsersGroup g, User currentUser, Event event) {
-		inviteService.invite(currentUser, g, event);
+	public void invite(UsersGroup g, Event event) {
+		inviteService.invite(view.getUser(), g, event);
 	}
 }

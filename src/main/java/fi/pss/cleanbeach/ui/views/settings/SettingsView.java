@@ -17,7 +17,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.VerticalLayout;
 
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 import fi.pss.cleanbeach.ui.util.Lang;
 
@@ -91,8 +90,7 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-					presenter.changePass(pf.getValue(),
-							MyTouchKitUI.getCurrentUser());
+					presenter.changePass(pf.getValue());
 					pop.close();
 				}
 			});

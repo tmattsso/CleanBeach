@@ -5,7 +5,6 @@ import java.util.List;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.data.ThrashType;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.components.ThrashInputLayout;
 
 public class ThrashInputLocationLayout extends ThrashInputLayout {
@@ -31,7 +30,7 @@ public class ThrashInputLocationLayout extends ThrashInputLayout {
 
 	@Override
 	protected void setDesc(ThrashType type, String value) {
-		presenter.addOtherDesc(type, MyTouchKitUI.getCurrentUser(), value, loc);
+		presenter.addOtherDesc(type, value, loc);
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class ThrashInputLocationLayout extends ThrashInputLayout {
 
 	@Override
 	protected void storeValue(ThrashType type, Integer value) {
-		presenter.setNumThrash(value, type, loc, MyTouchKitUI.getCurrentUser());
+		presenter.setNumThrash(value, type, loc);
 	}
 
 	@Override

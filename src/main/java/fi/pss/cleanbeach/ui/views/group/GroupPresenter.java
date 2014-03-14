@@ -14,7 +14,6 @@ import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.GroupService;
 import fi.pss.cleanbeach.services.InviteService;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.events.IEventPresenter;
@@ -42,7 +41,7 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public void loadGroups() {
-		User user = MyTouchKitUI.getCurrentUser();
+		User user = view.getUser();
 		if (user != null) {
 			view.showAdminGroups(groupService.getAdminGroups(user));
 			view.showMemberGroups(groupService.getMemberGroups(user));
@@ -98,14 +97,12 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public void leaveGroup(UsersGroup group) {
-		UsersGroup userGroup = groupService.removeMember(group,
-				MyTouchKitUI.getCurrentUser());
+		UsersGroup userGroup = groupService.removeMember(group, view.getUser());
 		view.updateMembershipState(userGroup);
 	}
 
 	public void joinGroup(UsersGroup group) {
-		UsersGroup userGroup = groupService.addMember(group,
-				MyTouchKitUI.getCurrentUser());
+		UsersGroup userGroup = groupService.addMember(group, view.getUser());
 		view.updateMembershipState(userGroup);
 	}
 
@@ -128,12 +125,12 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public boolean canJoin(UsersGroup group) {
-		return !group.getMembers().contains(MyTouchKitUI.getCurrentUser());
+		return !group.getMembers().contains(view.getUser());
 	}
 
 	public boolean canLeave(UsersGroup group) {
-		if (group.getMembers().contains(MyTouchKitUI.getCurrentUser())) {
-			if (group.getAdmins().contains(MyTouchKitUI.getCurrentUser())) {
+		if (group.getMembers().contains(view.getUser())) {
+			if (group.getAdmins().contains(view.getUser())) {
 				return group.getAdmins().size() != 1;
 			}
 			return true;
@@ -142,7 +139,7 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public boolean canManage(UsersGroup group) {
-		return group.getAdmins().contains(MyTouchKitUI.getCurrentUser());
+		return group.getAdmins().contains(view.getUser());
 	}
 
 	@Override

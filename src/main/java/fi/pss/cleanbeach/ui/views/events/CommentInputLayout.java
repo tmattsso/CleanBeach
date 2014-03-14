@@ -20,7 +20,6 @@ import com.vaadin.ui.Upload.SucceededListener;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Image;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 public class CommentInputLayout extends NavigationView {
@@ -69,8 +68,7 @@ public class CommentInputLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.addComment(e, comment.getValue(), uploadedImage,
-						MyTouchKitUI.getCurrentUser());
+				presenter.addComment(e, comment.getValue(), uploadedImage);
 			}
 		});
 		root.addComponent(saveComment);

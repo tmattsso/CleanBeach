@@ -97,4 +97,8 @@ public class AuthenticationService {
 		em.persist(u);
 		return u;
 	}
+
+	public User refresh(User u) {
+		return em.find(u.getClass(), u.getId());
+	}
 }

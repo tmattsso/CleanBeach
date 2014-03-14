@@ -12,15 +12,15 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 
 import fi.pss.cleanbeach.data.Invite;
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 
 public class InviteGroupsLayout extends NavigationView {
 
 	private static final long serialVersionUID = 3525640364491650445L;
 
 	public InviteGroupsLayout(Collection<Invite> coll,
-			final fi.pss.cleanbeach.data.Event e,
+			final fi.pss.cleanbeach.data.Event e, User u,
 			final EventsPresenter presenter) {
 
 		setCaption("Invite other groups");
@@ -32,12 +32,18 @@ public class InviteGroupsLayout extends NavigationView {
 		gl.setWidth("100%");
 		gl.setColumnExpandRatio(0, 1);
 
+		if (u.getMemberIn().isEmpty()) {
+			Label nein = new Label("You need to join some groups first!");
+			gl.addComponent(nein, 0, 0, 1, 0);
+			return;
+		}
+
 		Map<UsersGroup, Boolean> groupToAcceptance = new HashMap<UsersGroup, Boolean>();
 		for (Invite i : coll) {
 			groupToAcceptance.put(i.getInvitee(), i.isAccepted());
 		}
 
-		for (final UsersGroup g : MyTouchKitUI.getCurrentUser().getMemberIn()) {
+		for (final UsersGroup g : u.getMemberIn()) {
 			Label l = new Label(g.getName());
 			gl.addComponent(l);
 
@@ -58,7 +64,7 @@ public class InviteGroupsLayout extends NavigationView {
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						presenter.invite(g, MyTouchKitUI.getCurrentUser(), e);
+						presenter.invite(g, e);
 						b.setCaption("Invitation sent");
 						b.setEnabled(false);
 					}

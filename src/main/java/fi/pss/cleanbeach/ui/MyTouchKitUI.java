@@ -85,6 +85,9 @@ public class MyTouchKitUI extends UI {
 		VaadinService.getCurrentResponse().addCookie(newCookie);
 	}
 
+	/**
+	 * Returns the currently logged in user.
+	 */
 	public static User getCurrentUser() {
 		return ((MyTouchKitUI) getCurrent()).currentUser;
 	}

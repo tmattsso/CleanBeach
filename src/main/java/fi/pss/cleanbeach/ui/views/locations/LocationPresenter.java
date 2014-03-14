@@ -62,22 +62,21 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 		view.updateMarker(selected);
 	}
 
-	public void showTrash(Location selected, User user) {
-		view.showTrashInput(selected, locService.getThrash(selected, user));
+	public void showTrash(Location selected) {
+		view.showTrashInput(selected,
+				locService.getThrash(selected, view.getUser()));
 	}
 
 	public List<ThrashType> getThrashTypes() {
 		return eService.getThrashTypes();
 	}
 
-	public void setNumThrash(Integer value, ThrashType t, Location l,
-			User currentUser) {
-		locService.setNumThrash(value, t, l, currentUser);
+	public void setNumThrash(Integer value, ThrashType t, Location l) {
+		locService.setNumThrash(value, t, l, view.getUser());
 	}
 
-	public void addOtherDesc(ThrashType t, User currentUser, String value,
-			Location loc) {
-		locService.setDescription(t, currentUser, value, null, loc);
+	public void addOtherDesc(ThrashType t, String value, Location loc) {
+		locService.setDescription(t, view.getUser(), value, null, loc);
 	}
 
 }

@@ -9,7 +9,7 @@ import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.ComponentContainer;
 
 import fi.pss.cleanbeach.data.Invite;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 import fi.pss.cleanbeach.ui.util.Lang;
 
@@ -32,7 +32,7 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 		setCaption(Lang.get("events.caption"));
 		events = new MainEventsLayout(presenter);
 
-		presenter.loadAllEvents(MyTouchKitUI.getCurrentUser());
+		presenter.loadAllEvents();
 
 		return events;
 	}
@@ -89,8 +89,8 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 
 	@Override
 	public void openInviteGroups(Collection<Invite> coll,
-			fi.pss.cleanbeach.data.Event e) {
-		navigateTo(new InviteGroupsLayout(coll, e, presenter));
+			fi.pss.cleanbeach.data.Event e, User u) {
+		navigateTo(new InviteGroupsLayout(coll, e, u, presenter));
 	}
 
 }

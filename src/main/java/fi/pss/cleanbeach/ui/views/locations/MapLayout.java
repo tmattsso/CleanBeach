@@ -13,7 +13,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 
 import fi.pss.cleanbeach.data.Location;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmLocationListener;
 import fi.pss.cleanbeach.ui.views.locations.ReportDirtyPopover.ConfirmThrashListener;
@@ -104,7 +103,7 @@ public class MapLayout extends NavigationView implements
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.showTrash(selected, MyTouchKitUI.getCurrentUser());
+				presenter.showTrash(selected);
 			}
 		});
 

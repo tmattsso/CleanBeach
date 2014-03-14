@@ -12,7 +12,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 public class EventSearchLayout extends VerticalLayout {
@@ -44,8 +43,7 @@ public class EventSearchLayout extends VerticalLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.searchForEvents(tf.getValue(),
-						MyTouchKitUI.getCurrentUser());
+				presenter.searchForEvents(tf.getValue());
 			}
 		});
 		addComponent(search);
