@@ -62,6 +62,7 @@ public class EventService {
 	 * - any groups the user is part of<br/>
 	 * - any other events the user has registered for<br/>
 	 * - any events that are near the user<br/>
+	 * - any events that a user group has endorsed<br/>
 	 * - that are max. 1 month old<br/>
 	 * TODO: positioning, time
 	 * 
@@ -75,13 +76,19 @@ public class EventService {
 
 		String q = "SELECT e FROM Event e WHERE ";
 		if (!u.getMemberIn().isEmpty()) {
+			// users' group is organizing
 			q += "e.organizer IN (:orgs) OR ";
+			// users group has endorsed
+			q += "e IN (SELECT i.event FROM Invite i WHERE i.accepted=:accepted AND i.invitee IN (:usergroups)) OR ";
 		}
+		// the user has signed up for
 		q += "e IN (SELECT s.event FROM Signup s WHERE s.user=:user)";
 
 		Query query = em.createQuery(q);
 		if (!u.getMemberIn().isEmpty()) {
 			query.setParameter("orgs", u.getMemberIn());
+			query.setParameter("accepted", true);
+			query.setParameter("usergroups", u.getMemberIn());
 		}
 		query.setParameter("user", u);
 
@@ -133,9 +140,7 @@ public class EventService {
 	public List<Event> getJoinedEventsForUser(User u) {
 		u = em.merge(u);
 
-		String q = "SELECT e FROM Event e WHERE e IN ("
-				+ "Select s FROM Signup s WHERE s.user=:user AND s.accepted=true"
-				+ ")";
+		String q = "SELECT s.event FROM Signup s WHERE s.user=:user AND s.accepted=true";
 
 		Query query = em.createQuery(q);
 		query.setParameter("user", u);
@@ -156,6 +161,27 @@ public class EventService {
 	 * @return
 	 */
 	public List<Event> searchForEvents(User u, String searchText) {
+
+		if (searchText == null || searchText.isEmpty()) {
+			// special case: return all events in users groups instead
+
+			if (u.getMemberIn().isEmpty()) {
+				// no groups, we can't even make query
+				return new ArrayList<>();
+			}
+
+			String q = "SELECT e FROM Event e "
+					+ "WHERE e.organizer IN (:usergroups)";
+
+			Query query = em.createQuery(q);
+			query.setParameter("usergroups", u.getMemberIn());
+
+			@SuppressWarnings("unchecked")
+			List<Event> l = query.getResultList();
+			fillWithThrashDetails(l);
+
+			return l;
+		}
 
 		String q = "SELECT e FROM Event e "
 				+ "WHERE e.description LIKE :param "

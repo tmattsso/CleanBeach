@@ -13,6 +13,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
@@ -58,8 +59,8 @@ class GroupDetailsLayout extends NavigationView {
 	}
 
 	@Override
-	public CssLayout getContent() {
-		return (CssLayout) super.getContent();
+	public Layout getContent() {
+		return (Layout) super.getContent();
 	}
 
 	public void showLeaveConfirmation() {
