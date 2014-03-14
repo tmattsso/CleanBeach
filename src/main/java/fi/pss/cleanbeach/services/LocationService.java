@@ -23,6 +23,12 @@ import fi.pss.cleanbeach.data.User;
 @Stateless
 public class LocationService {
 
+	/**
+	 * Coordinates closer than this to an existing location are not allowed.
+	 * Should be roughly 100 meter radius.
+	 */
+	private final static double LOCATION_CREATE_COORDINATE_THRESHOLD = 0.0009;
+
 	@PersistenceContext(unitName = "cleanbeach")
 	private EntityManager em;
 
@@ -31,6 +37,7 @@ public class LocationService {
 				+ "(latitude<:latMax AND latitude>:latMin) "
 				+ "AND (longitude<:longMax AND longitude>:longMin)");
 
+		// TODO base threshold on zoom level
 		q.setParameter("latMax", latitude + 1);
 		q.setParameter("latMin", latitude - 1);
 		q.setParameter("longMax", longitude + 1);
@@ -43,8 +50,37 @@ public class LocationService {
 				list);
 	}
 
+	/**
+	 * Creates location if no location can be found right beside it.
+	 * 
+	 * @param latitude
+	 * @param longitude
+	 * @param name
+	 * @return
+	 */
 	public Location createLocation(double latitude, double longitude,
 			String name) {
+
+		// check for existing
+		String qs = "SELECT l FROM Location l WHERE "
+				+ "(latitude<:latMax AND latitude>:latMin) "
+				+ "AND (longitude<:longMax AND longitude>:longMin)";
+
+		Query q = em.createQuery(qs);
+
+		q.setParameter("latMax", latitude
+				+ LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("latMin", latitude
+				- LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("longMax", longitude
+				+ LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("longMin", longitude
+				- LOCATION_CREATE_COORDINATE_THRESHOLD);
+
+		List<?> existing = q.getResultList();
+		if (!existing.isEmpty()) {
+			return null;
+		}
 
 		Location l = new Location();
 		l.setLongitude(longitude);

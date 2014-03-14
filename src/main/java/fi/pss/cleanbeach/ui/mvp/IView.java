@@ -5,4 +5,6 @@ import fi.pss.cleanbeach.data.User;
 public interface IView {
 
 	public User getUser();
+
+	void showErrorNotification(String string);
 }

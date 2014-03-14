@@ -33,8 +33,12 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 	public void addLocation(double latitude, double longitude, String name) {
 		Location l = locService.createLocation(latitude, longitude, name);
 
-		view.updateMarker(l);
-		view.selectMarker(l);
+		if (l != null) {
+			view.updateMarker(l);
+			view.selectMarker(l);
+		} else {
+			view.showErrorNotification("* Could not create location; it might be too close to an existing one.");
+		}
 	}
 
 	public void showEvents(Location selected) {
