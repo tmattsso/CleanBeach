@@ -94,15 +94,10 @@ public class LocationService {
 	public void setNumThrash(Integer value, ThrashType type, Location l,
 			User currentUser) {
 
-		// TODO should this have additional date filtering? if not, we'll
-		// combine all thrash ever picked up by this user...
-
-		// e.g. pickupTime > a day ago (or preferably this day)
-
 		TypedQuery<Thrash> query = em
 				.createQuery(
 						"SELECT t from Thrash t WHERE "
-								+ "t.type=:type AND t.reporter=:user AND t.location=:loc",
+								+ "t.type=:type AND t.reporter=:user AND t.location=:loc AND t.pickupTime=CURRENT_DATE",
 						Thrash.class);
 		query.setParameter("type", type);
 		query.setParameter("user", currentUser);
