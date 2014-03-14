@@ -2,6 +2,7 @@ package fi.pss.cleanbeach.ui.views.events;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Iterator;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
@@ -12,6 +13,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 public abstract class AbstractEventPanel<P extends IEventPresenter> extends
@@ -65,11 +67,26 @@ public abstract class AbstractEventPanel<P extends IEventPresenter> extends
 		root.addComponent(l);
 		root.setComponentAlignment(l, Alignment.MIDDLE_CENTER);
 
-		// TODO joined people
-		l = new Label("*Joined people", ContentMode.HTML);
-		l.setSizeUndefined();
-		l.addStyleName("people");
-		root.addComponent(l, 0, 2, 2, 2);
+		Label members = new Label();
+		members.setSizeUndefined();
+		members.addStyleName("people");
+		root.addComponent(members, 0, 2, 2, 2);
+
+		Iterator<User> users = e.getJoinedUsers().iterator();
+		if (e.getJoinedUsers().size() > 2) {
+			members.setValue(users.next().getName() + ", "
+					+ users.next().getName() + ", "
+					+ Lang.get("events.details.joined.andseparator") + " "
+					+ (e.getJoinedUsers().size() - 2) + " "
+					+ Lang.get("events.details.joined.more"));
+		} else if (e.getJoinedUsers().size() == 2) {
+			members.setValue(users.next().getName() + ", "
+					+ users.next().getName());
+		} else if (e.getJoinedUsers().size() == 1) {
+			members.setValue(users.next().getName());
+		} else {
+			members.setValue(Lang.get("events.details.joined.none"));
+		}
 
 		root.addLayoutClickListener(new LayoutClickListener() {
 

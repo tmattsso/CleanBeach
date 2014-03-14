@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,8 @@ import fi.pss.cleanbeach.data.UsersGroup;
 public class EventService {
 
 	private final Logger log = Logger.getLogger(getClass().getSimpleName());
+
+	private final static double EVENT_SEARCH_COORDINATE_THRESHOLD = 0.009;
 
 	@PersistenceContext(unitName = "cleanbeach")
 	private EntityManager em;
@@ -64,7 +67,7 @@ public class EventService {
 	 * - any events that are near the user<br/>
 	 * - any events that a user group has endorsed<br/>
 	 * - that are max. 1 month old<br/>
-	 * TODO: positioning, time
+	 * TODO: positioning
 	 * 
 	 * @param u
 	 * @return
@@ -74,7 +77,7 @@ public class EventService {
 
 		u = em.merge(u);
 
-		String q = "SELECT e FROM Event e WHERE ";
+		String q = "SELECT e FROM Event e WHERE (";
 		if (!u.getMemberIn().isEmpty()) {
 			// users' group is organizing
 			q += "e.organizer IN (:orgs) OR ";
@@ -83,6 +86,7 @@ public class EventService {
 		}
 		// the user has signed up for
 		q += "e IN (SELECT s.event FROM Signup s WHERE s.user=:user)";
+		q += ") AND e.start > :date";
 
 		Query query = em.createQuery(q);
 		if (!u.getMemberIn().isEmpty()) {
@@ -91,10 +95,12 @@ public class EventService {
 			query.setParameter("usergroups", u.getMemberIn());
 		}
 		query.setParameter("user", u);
+		query.setParameter("date", getMinStartTime());
 
 		@SuppressWarnings("unchecked")
 		List<Event> l = query.getResultList();
 		fillWithThrashDetails(l);
+		fillWithUserDetails(l);
 
 		return l;
 	}
@@ -140,21 +146,33 @@ public class EventService {
 	public List<Event> getJoinedEventsForUser(User u) {
 		u = em.merge(u);
 
-		String q = "SELECT s.event FROM Signup s WHERE s.user=:user AND s.accepted=true";
+		String q = "SELECT s.event FROM Signup s WHERE s.user=:user AND s.accepted=true AND s.start > :date";
 
 		Query query = em.createQuery(q);
 		query.setParameter("user", u);
+		query.setParameter("date", getMinStartTime());
 
 		@SuppressWarnings("unchecked")
 		List<Event> l = query.getResultList();
 		fillWithThrashDetails(l);
+		fillWithUserDetails(l);
 
 		return l;
+	}
+
+	private Date getMinStartTime() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -1);
+		return cal.getTime();
 	}
 
 	/**
 	 * Returns all events that match the query string. TODO: Check organizer
 	 * name, desc, location name
+	 * 
+	 * <p>
+	 * TODO should we restrict time here as well? what if user wants to search
+	 * for old events?
 	 * 
 	 * @param u
 	 * @param searchText
@@ -179,6 +197,7 @@ public class EventService {
 			@SuppressWarnings("unchecked")
 			List<Event> l = query.getResultList();
 			fillWithThrashDetails(l);
+			fillWithUserDetails(l);
 
 			return l;
 		}
@@ -198,6 +217,7 @@ public class EventService {
 				+ " results");
 
 		fillWithThrashDetails(l);
+		fillWithUserDetails(l);
 
 		return l;
 	}
@@ -326,6 +346,12 @@ public class EventService {
 		return e;
 	}
 
+	/**
+	 * TODO restrict time?
+	 * 
+	 * @param group
+	 * @return
+	 */
 	public List<Event> getEvents(UsersGroup group) {
 		TypedQuery<Event> query = em.createQuery(
 				"SELECT e from Event e WHERE e.organizer=:group", Event.class);
@@ -333,7 +359,30 @@ public class EventService {
 
 		List<Event> l = query.getResultList();
 		fillWithThrashDetails(l);
+		fillWithUserDetails(l);
 		return l;
+	}
+
+	private void fillWithUserDetails(List<Event> l) {
+		if (l == null || l.isEmpty()) {
+			return;
+		}
+
+		String q = "SELECT s FROM Signup s WHERE s.accepted=:acepted AND s.event IN (:events)";
+		Query query = em.createQuery(q);
+		query.setParameter("acepted", true);
+		query.setParameter("events", l);
+
+		@SuppressWarnings("unchecked")
+		List<Signup> list = query.getResultList();
+
+		for (Event e : l) {
+			for (Signup s : list) {
+				if (s.getEvent().equals(e)) {
+					e.getJoinedUsers().add(s.getUser());
+				}
+			}
+		}
 	}
 
 	public void setThrash(int value, ThrashType type, Event event,

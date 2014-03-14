@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,9 +83,11 @@ public class BootstrapService {
 
 		log.info("Added location " + loc.getId());
 
+		Calendar now = Calendar.getInstance();
+		// now.add(Calendar.MONTH, -2);
 		Event e = eventService
 				.createEvent(
-						new Date(),
+						now.getTime(),
 						loc,
 						group,
 						"Ullamco fatback pork, strip steak anim do irure meatloaf shoulder frankfurter non fugiat tri-tip. Cow kevin cupidatat venison chuck biltong in laborum. Mollit pastrami pork belly, ex ad est id ullamco do exercitation landjaeger dolor shoulder qui. Anim jowl ea proident non, prosciutto nulla. Ut voluptate proident, shoulder sed magna ex. Chuck filet mignon eu jowl veniam deserunt. Capicola jowl do excepteur meatloaf quis, jerky pork belly dolore labore voluptate porchetta.");
