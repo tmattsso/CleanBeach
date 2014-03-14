@@ -147,15 +147,13 @@ public class EventDetailLayout extends NavigationView {
 
 		Button invite = new Button(Lang.get("events.details.invite"));
 		TouchKitIcon.user.addTo(invite);
-		invite.setEnabled(false);
-		// TODO enable when group invites work
 		invite.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 3852409971806848078L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				presenter.openInviteGroups(e);
 			}
 		});
 		actions.addComponent(invite);

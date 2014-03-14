@@ -1,8 +1,10 @@
 package fi.pss.cleanbeach.ui.views.events;
 
+import java.util.Collection;
 import java.util.List;
 
 import fi.pss.cleanbeach.data.Event;
+import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.ui.mvp.IView;
 
 public interface IEvents extends IView {
@@ -22,5 +24,7 @@ public interface IEvents extends IView {
 	void openAddComment(Event e, boolean addImage);
 
 	void updateEventDetails(Event e);
+
+	void openInviteGroups(Collection<Invite> coll, Event e);
 
 }

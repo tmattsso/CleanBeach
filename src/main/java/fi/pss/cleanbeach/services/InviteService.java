@@ -4,7 +4,9 @@ import java.util.Collection;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import fi.pss.cleanbeach.data.Event;
@@ -35,6 +37,26 @@ public class InviteService {
 	 * @return Invitation
 	 */
 	public Invite invite(User inviter, UsersGroup group, Event event) {
+
+		// check for existing invite
+		String q = "SELECT i FROM Invite i WHERE i.invitee=:group AND i.inviter=:user AND i.event=:event";
+		Query query = entityManager.createQuery(q);
+		query.setParameter("group", group);
+		query.setParameter("user", inviter);
+		query.setParameter("event", event);
+
+		Invite i = null;
+		try {
+			i = (Invite) query.getSingleResult();
+		} catch (NoResultException e) {
+			// fine
+		}
+
+		if (i != null) {
+			// there already is an invitefrom this user; ignore this
+			return null;
+		}
+
 		Invite invite = new Invite();
 		invite.setInviter(inviter);
 		invite.setInvitee(group);
@@ -66,10 +88,15 @@ public class InviteService {
 	 */
 	public Collection<Invite> getPendingInvitations(UsersGroup group) {
 		TypedQuery<Invite> query = entityManager.createQuery(
-				"SELECT i from Invite i WHERE i.invitee=:group "
-						+ "AND i.accepted=:accepted", Invite.class);
+				"SELECT i from Invite i WHERE i.invitee=:group", Invite.class);
 		query.setParameter("group", group);
-		query.setParameter("accepted", false);
+		return query.getResultList();
+	}
+
+	public Collection<Invite> getPendingInvitations(Event e) {
+		TypedQuery<Invite> query = entityManager.createQuery(
+				"SELECT i from Invite i WHERE i.event=:event", Invite.class);
+		query.setParameter("event", e);
 		return query.getResultList();
 	}
 }

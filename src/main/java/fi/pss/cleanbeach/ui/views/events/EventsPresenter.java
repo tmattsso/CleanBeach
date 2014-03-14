@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.views.events;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,9 +10,12 @@ import com.vaadin.cdi.UIScoped;
 
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Image;
+import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.EventService;
+import fi.pss.cleanbeach.services.InviteService;
 import fi.pss.cleanbeach.services.LocationService;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
@@ -26,6 +30,9 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 
 	@Inject
 	private LocationService locService;
+
+	@Inject
+	private InviteService inviteService;
 
 	protected EventsPresenter() {
 	}
@@ -102,5 +109,16 @@ public class EventsPresenter extends AbstractPresenter<IEvents> implements
 	public void addOtherDesc(ThrashType t, User currentUser, String value,
 			Event event) {
 		locService.setDescription(t, currentUser, value, event, null);
+	}
+
+	public void openInviteGroups(Event e) {
+		// get existing invites, we don't want duplicates
+		Collection<Invite> coll = inviteService.getPendingInvitations(e);
+
+		view.openInviteGroups(coll, e);
+	}
+
+	public void invite(UsersGroup g, User currentUser, Event event) {
+		inviteService.invite(currentUser, g, event);
 	}
 }

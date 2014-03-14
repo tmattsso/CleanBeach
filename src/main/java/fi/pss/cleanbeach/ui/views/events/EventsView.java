@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.ui.views.events;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -7,6 +8,7 @@ import javax.inject.Inject;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.ComponentContainer;
 
+import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 import fi.pss.cleanbeach.ui.util.Lang;
@@ -83,6 +85,12 @@ public class EventsView extends AbstractView<EventsPresenter> implements
 	public void updateEventDetails(fi.pss.cleanbeach.data.Event e) {
 		details.update(e);
 		events.update(e);
+	}
+
+	@Override
+	public void openInviteGroups(Collection<Invite> coll,
+			fi.pss.cleanbeach.data.Event e) {
+		navigateTo(new InviteGroupsLayout(coll, e, presenter));
 	}
 
 }
