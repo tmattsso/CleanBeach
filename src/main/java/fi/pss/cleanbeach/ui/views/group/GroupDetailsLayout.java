@@ -161,9 +161,11 @@ class GroupDetailsLayout extends NavigationView {
 		manage.addStyleName("group-details-manage-admins");
 		manage.addClickListener(new ClickListener() {
 
+			private static final long serialVersionUID = 2574122824910031111L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.showManageAdmins();
+				presenter.showManageAdmins(group);
 			}
 		});
 		layout.addComponent(manage);

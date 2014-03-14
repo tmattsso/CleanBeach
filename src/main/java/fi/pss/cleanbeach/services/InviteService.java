@@ -53,7 +53,7 @@ public class InviteService {
 		}
 
 		if (i != null) {
-			// there already is an invitefrom this user; ignore this
+			// there already is an invite from this user; ignore this
 			return null;
 		}
 

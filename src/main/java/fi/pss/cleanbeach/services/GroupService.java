@@ -50,16 +50,6 @@ public class GroupService {
 		return userGroup;
 	}
 
-	public UsersGroup addAdmin(UsersGroup group, User user) {
-		UsersGroup userGroup = doAddMember(group, user);
-		userGroup.getAdmins().add(user);
-
-		userGroup = entityManager.merge(userGroup);
-		entityManager.merge(user);
-
-		return userGroup;
-	}
-
 	public UsersGroup removeMember(UsersGroup group, User user) {
 		UsersGroup userGroup = entityManager.find(UsersGroup.class,
 				group.getId());
@@ -95,5 +85,12 @@ public class GroupService {
 		userGroup.getMembers().add(user);
 		user.getMemberIn().add(group);
 		return userGroup;
+	}
+
+	public void setAdminStatus(UsersGroup group, User u, Boolean value) {
+		group = entityManager.find(group.getClass(), group.getId());
+		group.getAdmins().add(u);
+
+		entityManager.merge(group);
 	}
 }

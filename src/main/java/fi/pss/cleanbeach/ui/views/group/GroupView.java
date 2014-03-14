@@ -75,4 +75,9 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
 		detailsComponent.updateMembershipState(group);
 	}
 
+	@Override
+	public void showManageAdmins(UsersGroup group) {
+		navigateTo(new ManageAdminsLayout(group, presenter));
+	}
+
 }

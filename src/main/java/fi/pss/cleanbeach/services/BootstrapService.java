@@ -66,12 +66,14 @@ public class BootstrapService {
 						user,
 						"PSS ry",
 						"Ullamco fatback pork, strip steak anim do irure meatloaf shoulder frankfurter non fugiat tri-tip. Cow kevin cupidatat venison chuck biltong in laborum. Mollit pastrami pork belly, ex ad est id ullamco");
-		groupService.addAdmin(group, user2);
-		groupService.addAdmin(group, user);
+		groupService.addMember(group, user);
+		groupService.addMember(group, user2);
+		groupService.setAdminStatus(group, user, true);
+		groupService.setAdminStatus(group, user2, true);
 
 		group = groupService.createGroup(user, "Vaadin Ltd", "descr");
-		groupService.addAdmin(group, user2);
-		groupService.addAdmin(group, user);
+		groupService.addMember(group, user);
+		groupService.setAdminStatus(group, user, true);
 
 		log.info("Added group " + group.getId());
 

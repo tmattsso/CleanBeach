@@ -26,4 +26,6 @@ public interface IGroup extends IView {
 
 	void updateMembershipState(UsersGroup userGroup);
 
+	void showManageAdmins(UsersGroup group);
+
 }

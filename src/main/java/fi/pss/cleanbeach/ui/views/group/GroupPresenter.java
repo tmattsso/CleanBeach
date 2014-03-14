@@ -118,9 +118,8 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
 	}
 
-	public void showManageAdmins() {
-		// TODO Auto-generated method stub
-
+	public void showManageAdmins(UsersGroup group) {
+		view.showManageAdmins(group);
 	}
 
 	public void showMembers(UsersGroup group) {
@@ -154,6 +153,10 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
 	public List<fi.pss.cleanbeach.data.Event> getEvents(UsersGroup group) {
 		return eventService.getEvents(group);
+	}
+
+	public void setAdmin(UsersGroup group, User u, Boolean value) {
+		groupService.setAdminStatus(group, u, value);
 	}
 
 }
