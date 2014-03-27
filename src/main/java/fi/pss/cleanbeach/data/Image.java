@@ -2,6 +2,7 @@ package fi.pss.cleanbeach.data;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -10,6 +11,8 @@ import javax.persistence.TemporalType;
 public class Image extends AbstractEntity {
 
 	private String mimetype;
+	// TODO makes this a proper limit, this is for testing
+	@Column(length = 512000)
 	private byte[] content;
 
 	@Temporal(TemporalType.TIMESTAMP)
