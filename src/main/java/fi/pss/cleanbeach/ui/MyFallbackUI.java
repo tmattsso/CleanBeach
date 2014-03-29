@@ -12,7 +12,7 @@ import com.vaadin.ui.UI;
  * 
  */
 @SuppressWarnings("serial")
-@CDIUI("/fallback")
+@CDIUI("fallback")
 public class MyFallbackUI extends UI {
 
 	@Override

@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 public class Image extends AbstractEntity {
 
 	private String mimetype;
-	// TODO makes this a proper limit, this is for testing
+	// TODO make this a proper limit, this is for testing
 	@Column(length = 512000)
 	private byte[] content;
 
