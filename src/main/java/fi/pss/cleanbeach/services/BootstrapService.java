@@ -20,6 +20,7 @@ import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException;
 
 @Singleton
 @Startup
@@ -50,15 +51,25 @@ public class BootstrapService {
 
 		User user = new User();
 		user.setName("Thomas");
-		user.setEmail("thomas");
-		auth.createUser(user, "vaadin");
+		user.setEmail("thomas@t.com");
+		try {
+			auth.createUser(user, "vaadin");
+		} catch (RegistrationException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
 		log.info("Added user " + user.getId());
 
 		User user2 = new User();
 		user2.setName("Demo");
-		user2.setEmail("demo");
-		auth.createUser(user2, "demo");
+		user2.setEmail("demo@demo.com");
+		try {
+			auth.createUser(user2, "vaadin");
+		} catch (RegistrationException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
 		log.info("Added user " + user2.getId());
 

@@ -12,6 +12,7 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.ui.UI;
 
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.ui.views.login.LoginEvent;
 import fi.pss.cleanbeach.ui.views.login.LoginView;
 
@@ -26,6 +27,10 @@ public class MyTouchKitUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
 
+	private static String AUTOLOGIN = null;
+	// private static String AUTOLOGIN = "thomas@t.com";
+	// private static String AUTOLOGIN = "demo@demo.com";
+
 	private User currentUser;
 
 	@Inject
@@ -33,6 +38,9 @@ public class MyTouchKitUI extends UI {
 
 	@Inject
 	private LoginView login;
+
+	@Inject
+	private AuthenticationService authService;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -45,8 +53,13 @@ public class MyTouchKitUI extends UI {
 		// return;
 		// }
 
-		// build login
-		setContent(login);
+		if (AUTOLOGIN != null) {
+			User u = authService.login("thomas@t.com", "vaadin");
+			login(new LoginEvent(u));
+		} else {
+			// build login
+			setContent(login);
+		}
 	}
 
 	public void login(@Observes LoginEvent e) {

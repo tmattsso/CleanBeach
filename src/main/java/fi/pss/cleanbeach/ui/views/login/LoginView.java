@@ -18,11 +18,13 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 import fi.pss.cleanbeach.ui.util.Lang;
@@ -34,15 +36,28 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 
 	private Label errorLabel;
 
+	private RegisterLayout register;
+
+	private VerticalLayout main;
+
+	private VerticalLayout root;
+
+	private Button registerButton;
+
 	public LoginView() {
 	}
 
 	@Override
 	protected ComponentContainer getMainContent() {
-		VerticalLayout vl = new VerticalLayout();
-		vl.setSpacing(true);
-		vl.setMargin(true);
-		vl.addStyleName("login");
+		root = new VerticalLayout();
+		root.setSpacing(true);
+		root.setMargin(true);
+		root.setSizeFull();
+		root.addStyleName("login");
+
+		main = new VerticalLayout();
+		main.setSpacing(true);
+		register = new RegisterLayout(presenter);
 
 		Label desc = new Label("<span>" + Lang.get("login.caption.big")
 				+ "</span>" + Lang.get("login.caption.small"), ContentMode.HTML);
@@ -60,20 +75,20 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		hl.setWidth("100%");
 		hl.setExpandRatio(desc, 1);
 		hl.addStyleName("logolayout");
-		vl.addComponent(hl);
+		main.addComponent(hl);
 
 		final TextField username = new TextField(Lang.get("login.username"));
 		username.setWidth("100%");
 		username.setImmediate(true);
 		username.addStyleName("username");
-		vl.addComponent(username);
+		main.addComponent(username);
 
 		final PasswordField password = new PasswordField(
 				Lang.get("login.password"));
 		password.setWidth("100%");
 		password.setImmediate(true);
 		password.addStyleName("password");
-		vl.addComponent(password);
+		main.addComponent(password);
 
 		ValueChangeListener vlc = new ValueChangeListener() {
 
@@ -89,7 +104,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 
 		errorLabel = new Label();
 		errorLabel.addStyleName("error");
-		vl.addComponent(errorLabel);
+		main.addComponent(errorLabel);
 
 		Button login = new Button(Lang.get("login.login"), new ClickListener() {
 
@@ -102,7 +117,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		});
 		login.setClickShortcut(KeyCode.ENTER);
 		login.addStyleName("login");
-		vl.addComponent(login);
+		main.addComponent(login);
 
 		// auto-fill username
 		Cookie c = MyTouchKitUI.getUsernameCookie();
@@ -114,8 +129,28 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		Button forgotPass = new Button(Lang.get("login.forgotpass"));
 		forgotPass.addStyleName(BaseTheme.BUTTON_LINK);
 		forgotPass.addStyleName("forgotpass");
-		vl.addComponent(forgotPass);
-		vl.setComponentAlignment(forgotPass, Alignment.MIDDLE_CENTER);
+		main.addComponent(forgotPass);
+		main.setComponentAlignment(forgotPass, Alignment.MIDDLE_CENTER);
+
+		root.addComponent(main);
+		root.setExpandRatio(main, 1);
+
+		registerButton = new Button("[register");
+		root.addComponent(registerButton);
+		registerButton.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = -5189522876236967527L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+
+				if (!register.isAttached()) {
+					showRegister();
+				} else {
+					showMain();
+				}
+			}
+		});
 
 		Button fbLogin = new Button(Lang.get("login.fb"));
 		TouchKitIcon.facebook.addTo(fbLogin);
@@ -130,9 +165,21 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		hl.addStyleName("actionbuttons");
 		hl.setWidth("100%");
 		hl.setSpacing(true);
-		vl.addComponent(hl);
+		root.addComponent(hl);
 
-		return vl;
+		return root;
+	}
+
+	protected void showRegister() {
+		root.replaceComponent(main, register);
+		root.setExpandRatio(register, 1);
+		registerButton.setCaption("[back");
+	}
+
+	protected void showMain() {
+		root.replaceComponent(register, main);
+		root.setExpandRatio(main, 1);
+		registerButton.setCaption("[register");
 	}
 
 	@Override
@@ -142,8 +189,18 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 	}
 
 	@Override
-	public void showError() {
+	public void showLoginError() {
 		errorLabel.setValue(Lang.get("login.invalid"));
+	}
+
+	@Override
+	public void showRegisterSuccess(User u) {
+		Notification.show("[Welcome, " + u.getName());
+	}
+
+	@Override
+	public void showRegistrationError(String message) {
+		register.showError(message);
 	}
 
 }

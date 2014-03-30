@@ -4,6 +4,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,14 +17,20 @@ import javax.persistence.Query;
 import org.apache.commons.lang.ArrayUtils;
 
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException.CAUSE;
 
 @Stateless
 public class AuthenticationService {
 
+	private static final int MIN_PASS_LENTGH = 6;
 	private static final int HASH_ITERATIONS = 1000;
+	private final Pattern emailpattern = Pattern
+			.compile("^([a-zA-Z0-9_\\.\\-+])+@(([a-zA-Z0-9-])+\\.)+([a-zA-Z0-9]{2,4})+$");
 
 	@PersistenceContext(unitName = "cleanbeach")
 	private EntityManager em;
+
+	private final Logger log = Logger.getLogger(getClass().getSimpleName());
 
 	public User login(String email, String password) {
 		Query q = em.createQuery("SELECT u FROM User u WHERE email=:email");
@@ -83,22 +92,76 @@ public class AuthenticationService {
 		return u;
 	}
 
-	public User createUser(User u, String password) {
-		if (password != null) {
-			byte[] salt = new byte[User.SALT_LENGTH_BYTES];
-			try {
-				SecureRandom.getInstance("SHA1PRNG").nextBytes(salt);
-			} catch (NoSuchAlgorithmException e) {
-				throw new RuntimeException(e);
-			}
-			byte[] both = ArrayUtils.addAll(salt, hash(salt, password));
-			u.setHashedPass(both);
+	public User createUser(User u, String password)
+			throws RegistrationException {
+		checkValid(u, password);
+
+		byte[] salt = new byte[User.SALT_LENGTH_BYTES];
+		try {
+			SecureRandom.getInstance("SHA1PRNG").nextBytes(salt);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
 		}
-		em.persist(u);
+		byte[] both = ArrayUtils.addAll(salt, hash(salt, password));
+		u.setHashedPass(both);
+
+		try {
+			em.persist(u);
+		} catch (RuntimeException e) {
+			log.log(Level.WARNING, "exception when persisting new user", e);
+			throw new RegistrationException(CAUSE.EMAILALREADYINUSE);
+		}
 		return u;
+	}
+
+	private void checkValid(User u, String password)
+			throws RegistrationException {
+		if (password == null || password.isEmpty()) {
+			log.info("No password provided");
+			throw new RegistrationException(CAUSE.NOPASS);
+		}
+		if (password.length() < MIN_PASS_LENTGH) {
+			log.info("Pass not long enough");
+			throw new RegistrationException(CAUSE.PASSTOOSHORT);
+		}
+
+		if (u.getName() == null || u.getName().isEmpty()) {
+			log.info("Username not provided");
+			throw new RegistrationException(CAUSE.NONAME);
+		}
+
+		if (u.getEmail() == null || u.getEmail().isEmpty()) {
+			log.info("Username not provided");
+			throw new RegistrationException(CAUSE.NOEMAIL);
+		}
+
+		if (!emailpattern.matcher(u.getEmail()).matches()) {
+			log.info("Email not valid");
+			throw new RegistrationException(CAUSE.EMAILNOTVALID);
+		}
+
 	}
 
 	public User refresh(User u) {
 		return em.find(u.getClass(), u.getId());
+	}
+
+	public static class RegistrationException extends Exception {
+
+		private static final long serialVersionUID = 2151988988556345659L;
+
+		public enum CAUSE {
+			NOPASS, NONAME, NOEMAIL, PASSTOOSHORT, EMAILALREADYINUSE, EMAILNOTVALID
+		}
+
+		private final CAUSE cause;
+
+		public RegistrationException(CAUSE cause) {
+			this.cause = cause;
+		}
+
+		public CAUSE getFault() {
+			return cause;
+		}
 	}
 }
