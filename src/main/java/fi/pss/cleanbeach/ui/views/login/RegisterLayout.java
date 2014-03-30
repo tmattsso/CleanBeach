@@ -9,6 +9,8 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.pss.cleanbeach.ui.util.Lang;
+
 public class RegisterLayout extends VerticalLayout {
 
 	private static final long serialVersionUID = 3652366577918313188L;
@@ -20,25 +22,26 @@ public class RegisterLayout extends VerticalLayout {
 		addStyleName("register");
 		setSpacing(true);
 
-		Label caption = new Label("[Register");
+		Label caption = new Label(Lang.get("register.caption"));
 		caption.addStyleName("caption");
 		addComponent(caption);
 
-		Label desc = new Label("[Register for all the benefits!");
+		Label desc = new Label(Lang.get("register.desc"));
 		desc.addStyleName("desc");
 		addComponent(desc);
 
-		final TextField name = new TextField("[name");
+		final TextField name = new TextField(Lang.get("register.name"));
 		name.setWidth("100%");
 		name.setRequired(true);
 		addComponent(name);
 
-		final TextField email = new TextField("[email");
+		final TextField email = new TextField(Lang.get("register.email"));
 		email.setWidth("100%");
 		email.setRequired(true);
 		addComponent(email);
 
-		final PasswordField password = new PasswordField("[password");
+		final PasswordField password = new PasswordField(
+				Lang.get("register.pass"));
 		password.setWidth("100%");
 		password.setRequired(true);
 		addComponent(password);
@@ -46,16 +49,17 @@ public class RegisterLayout extends VerticalLayout {
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addStyleName("actionbuttons");
 
-		Button register = new Button("[register", new ClickListener() {
+		Button register = new Button(Lang.get("register.register"),
+				new ClickListener() {
 
-			private static final long serialVersionUID = 96154108214861206L;
+					private static final long serialVersionUID = 96154108214861206L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				presenter.register(name.getValue(), email.getValue(),
-						password.getValue());
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						presenter.register(name.getValue(), email.getValue(),
+								password.getValue());
+					}
+				});
 		addComponent(register);
 
 		error = new Label();
@@ -63,8 +67,7 @@ public class RegisterLayout extends VerticalLayout {
 		error.addStyleName("error");
 		addComponent(error);
 
-		Label assurance = new Label(
-				"[We will never give your email adress to third parties or send you spam. We are also very strict with storing passwords; rest assured, your data is safe with us.");
+		Label assurance = new Label(Lang.get("register.assurance"));
 		addComponent(assurance);
 	}
 

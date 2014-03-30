@@ -80,7 +80,7 @@ public class Lang {
 
 	public static String get(Enum<?> e) {
 
-		String key = e.getClass().getName() + "." + e.getClass();
+		String key = e.getClass().getSimpleName().toLowerCase() + "." + e.name().toLowerCase();
 		return get(key);
 	}
 

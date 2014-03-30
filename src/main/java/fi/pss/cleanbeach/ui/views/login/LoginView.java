@@ -135,7 +135,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		root.addComponent(main);
 		root.setExpandRatio(main, 1);
 
-		registerButton = new Button("[register");
+		registerButton = new Button(Lang.get("login.register"));
 		root.addComponent(registerButton);
 		registerButton.addClickListener(new ClickListener() {
 
@@ -173,13 +173,13 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 	protected void showRegister() {
 		root.replaceComponent(main, register);
 		root.setExpandRatio(register, 1);
-		registerButton.setCaption("[back");
+		registerButton.setCaption(Lang.get("login.backfromregister"));
 	}
 
 	protected void showMain() {
 		root.replaceComponent(register, main);
 		root.setExpandRatio(main, 1);
-		registerButton.setCaption("[register");
+		registerButton.setCaption(Lang.get("login.register"));
 	}
 
 	@Override
@@ -195,7 +195,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 
 	@Override
 	public void showRegisterSuccess(User u) {
-		Notification.show("[Welcome, " + u.getName());
+		Notification.show(Lang.get("login.welcome", u.getName()));
 	}
 
 	@Override

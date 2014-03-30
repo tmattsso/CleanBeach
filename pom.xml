@@ -66,10 +66,10 @@
 			<version>${vaadin.version}</version>
 		</dependency>
 		<dependency>
-			<!-- Desktop fallback uses default widgetset -->
 			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-client-compiled</artifactId>
+			<artifactId>vaadin-client-compiler</artifactId>
 			<version>${vaadin.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.vaadin.addon</groupId>
@@ -105,11 +105,11 @@
 
 
 		<!-- used under development -->
-		<dependency>
+		<!--dependency>
 			<groupId>hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>1.8.0.10</version>
-		</dependency>
+		</dependency-->
 
 		<dependency>
 			<groupId>org.vaadin.addon</groupId>

@@ -17,7 +17,7 @@ import javax.persistence.Query;
 import org.apache.commons.lang.ArrayUtils;
 
 import fi.pss.cleanbeach.data.User;
-import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException.CAUSE;
+import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException.REGISTRATION_CAUSE;
 
 @Stateless
 public class AuthenticationService {
@@ -109,35 +109,36 @@ public class AuthenticationService {
 			em.persist(u);
 		} catch (RuntimeException e) {
 			log.log(Level.WARNING, "exception when persisting new user", e);
-			throw new RegistrationException(CAUSE.EMAILALREADYINUSE);
+			throw new RegistrationException(
+					REGISTRATION_CAUSE.EMAILALREADYINUSE);
 		}
 		return u;
 	}
 
 	private void checkValid(User u, String password)
 			throws RegistrationException {
-		if (password == null || password.isEmpty()) {
-			log.info("No password provided");
-			throw new RegistrationException(CAUSE.NOPASS);
-		}
-		if (password.length() < MIN_PASS_LENTGH) {
-			log.info("Pass not long enough");
-			throw new RegistrationException(CAUSE.PASSTOOSHORT);
-		}
 
 		if (u.getName() == null || u.getName().isEmpty()) {
 			log.info("Username not provided");
-			throw new RegistrationException(CAUSE.NONAME);
+			throw new RegistrationException(REGISTRATION_CAUSE.NONAME);
 		}
 
 		if (u.getEmail() == null || u.getEmail().isEmpty()) {
 			log.info("Username not provided");
-			throw new RegistrationException(CAUSE.NOEMAIL);
+			throw new RegistrationException(REGISTRATION_CAUSE.NOEMAIL);
 		}
-
 		if (!emailpattern.matcher(u.getEmail()).matches()) {
 			log.info("Email not valid");
-			throw new RegistrationException(CAUSE.EMAILNOTVALID);
+			throw new RegistrationException(REGISTRATION_CAUSE.EMAILNOTVALID);
+		}
+
+		if (password == null || password.isEmpty()) {
+			log.info("No password provided");
+			throw new RegistrationException(REGISTRATION_CAUSE.NOPASS);
+		}
+		if (password.length() < MIN_PASS_LENTGH) {
+			log.info("Pass not long enough");
+			throw new RegistrationException(REGISTRATION_CAUSE.PASSTOOSHORT);
 		}
 
 	}
@@ -150,17 +151,17 @@ public class AuthenticationService {
 
 		private static final long serialVersionUID = 2151988988556345659L;
 
-		public enum CAUSE {
+		public enum REGISTRATION_CAUSE {
 			NOPASS, NONAME, NOEMAIL, PASSTOOSHORT, EMAILALREADYINUSE, EMAILNOTVALID
 		}
 
-		private final CAUSE cause;
+		private final REGISTRATION_CAUSE cause;
 
-		public RegistrationException(CAUSE cause) {
+		public RegistrationException(REGISTRATION_CAUSE cause) {
 			this.cause = cause;
 		}
 
-		public CAUSE getFault() {
+		public REGISTRATION_CAUSE getFault() {
 			return cause;
 		}
 	}

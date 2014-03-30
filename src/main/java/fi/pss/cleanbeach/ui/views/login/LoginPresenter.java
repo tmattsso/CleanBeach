@@ -11,6 +11,7 @@ import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 @UIScoped
 public class LoginPresenter extends AbstractPresenter<ILogin> implements
@@ -54,28 +55,7 @@ public class LoginPresenter extends AbstractPresenter<ILogin> implements
 			view.showRegisterSuccess(u);
 			login.fire(new LoginEvent(u));
 		} catch (RegistrationException e) {
-			String msg = null;
-			switch (e.getFault()) {
-			case EMAILALREADYINUSE:
-				msg = "[";
-				break;
-			case PASSTOOSHORT:
-				msg = "[";
-				break;
-			case NOEMAIL:
-				msg = "[";
-				break;
-			case NONAME:
-				msg = "[";
-				break;
-			case NOPASS:
-				msg = "[";
-				break;
-			case EMAILNOTVALID:
-				msg = "[";
-				break;
-			}
-			view.showRegistrationError(msg);
+			view.showRegistrationError(Lang.get(e.getFault()));
 		}
 	}
 
