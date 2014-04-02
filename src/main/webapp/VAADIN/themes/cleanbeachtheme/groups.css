@@ -34,3 +34,13 @@
 	font-size: 16pt;
 	font-weight: bold;
 }
+
+.groupmembers .caption {
+	font-weight: bold;
+	font-size: 14pt;
+	padding-bottom: 10px;
+}
+
+.groupmembers .user span {
+	font-weight: bold;
+}

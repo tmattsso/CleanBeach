@@ -102,6 +102,8 @@ class GroupsLayout extends NavigationView {
 		component.addStyleName("user-group");
 		component.addLayoutClickListener(new LayoutClickListener() {
 
+			private static final long serialVersionUID = -1380510126070557343L;
+
 			@Override
 			public void layoutClick(LayoutClickEvent event) {
 				presenter.showGroup(group);
@@ -148,6 +150,8 @@ class GroupsLayout extends NavigationView {
 		TouchKitIcon.search.addTo(button);
 		button.addClickListener(new ClickListener() {
 
+			private static final long serialVersionUID = 841184184854521982L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				presenter.searchGroups();
@@ -161,6 +165,8 @@ class GroupsLayout extends NavigationView {
 		button.addStyleName("create-button");
 		TouchKitIcon.plus.addTo(button);
 		button.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = -6331201462849263479L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -179,6 +185,8 @@ class GroupsLayout extends NavigationView {
 		com.vaadin.ui.Image image = new com.vaadin.ui.Image();
 		image.addStyleName("user-group-logo");
 		StreamSource source = new StreamSource() {
+
+			private static final long serialVersionUID = 158820412989991373L;
 
 			@Override
 			public InputStream getStream() {

@@ -12,11 +12,16 @@ import fi.pss.cleanbeach.ui.util.Lang;
 
 public class ConfirmPopover extends Popover {
 
+	private static final long serialVersionUID = -3363629662075879130L;
+
 	public interface ConfirmListener {
 		public void confirmed();
 	}
 
 	public ConfirmPopover(final ConfirmListener l, String caption) {
+
+		addStyleName("confirm");
+
 		setWidth("80%");
 		center();
 		setModal(true);

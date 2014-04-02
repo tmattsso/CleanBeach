@@ -116,8 +116,7 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public void showMembers(UsersGroup group) {
-		// TODO Auto-generated method stub
-
+		view.showMembersInGroup(group);
 	}
 
 	public boolean canJoin(UsersGroup group) {

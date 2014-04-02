@@ -147,6 +147,8 @@ class GroupDetailsLayout extends NavigationView {
 		createButton.addStyleName("group-details-create-event");
 		createButton.addClickListener(new ClickListener() {
 
+			private static final long serialVersionUID = 6094928833388740281L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				presenter.createEvent();
@@ -216,6 +218,8 @@ class GroupDetailsLayout extends NavigationView {
 		membersButton.addStyleName("group-details-members");
 		membersButton.addClickListener(new ClickListener() {
 
+			private static final long serialVersionUID = -2525777814596352093L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				presenter.showMembers(group);
@@ -233,6 +237,8 @@ class GroupDetailsLayout extends NavigationView {
 		button.addStyleName("groupview-details-leave");
 		button.addClickListener(new ClickListener() {
 
+			private static final long serialVersionUID = 4414454544724918833L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				presenter.requestLeaveGroup(group);
@@ -247,6 +253,8 @@ class GroupDetailsLayout extends NavigationView {
 		button.setStyleName(BaseTheme.BUTTON_LINK);
 		button.addStyleName("groupview-details-join");
 		button.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 2636577754413406778L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {

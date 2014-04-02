@@ -28,4 +28,6 @@ public interface IGroup extends IView {
 
 	void showManageAdmins(UsersGroup group);
 
+	void showMembersInGroup(UsersGroup group);
+
 }
