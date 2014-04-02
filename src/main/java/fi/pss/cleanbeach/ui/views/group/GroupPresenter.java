@@ -25,6 +25,8 @@ import fi.pss.cleanbeach.ui.views.events.IEventPresenter;
 public class GroupPresenter extends AbstractPresenter<IGroup> implements
 		Serializable, IEventPresenter {
 
+	private static final long serialVersionUID = 8624452511940560036L;
+
 	@Inject
 	private GroupService groupService;
 
@@ -36,7 +38,6 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
 	@Override
 	public void init(User currentUser) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -51,27 +52,26 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	public String getEventInvitations(UsersGroup group) {
 		int size = inviteService.getPendingInvitations(group).size();
 		if (size == 1) {
-			return getMessage("Groups.view.events.amount.singular", size);
+			return Lang.get("Groups.view.events.amount.singular", size);
 		}
-		return getMessage("Groups.view.events.amount.plural", size);
+		return Lang.get("Groups.view.events.amount.plural", size);
 	}
 
 	public String getPendingEventInvitations(UsersGroup group) {
 		int size = inviteService.getPendingInvitations(group).size();
 		if (size == 1) {
-			return getMessage("Groups.view.pending.events.amount.singular",
-					size);
+			return Lang.get("Groups.view.pending.events.amount.singular", size);
 		}
-		return getMessage("Groups.view.pending.events.amount.plural", size);
+		return Lang.get("Groups.view.pending.events.amount.plural", size);
 	}
 
 	public String getMembers(UsersGroup group) {
 		if (group.getMembers().size() == 1) {
-			return getMessage("Groups.view.members.amount.singular", group
+			return Lang.get("Groups.view.members.amount.singular", group
 					.getMembers().size());
 		}
-		return getMessage("Groups.view.members.amount.plural", group
-				.getMembers().size());
+		return Lang.get("Groups.view.members.amount.plural", group.getMembers()
+				.size());
 	}
 
 	public void showGroup(UsersGroup group) {
@@ -104,10 +104,6 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	public void joinGroup(UsersGroup group) {
 		UsersGroup userGroup = groupService.addMember(group, view.getUser());
 		view.updateMembershipState(userGroup);
-	}
-
-	public String getMessage(String key, Object... params) {
-		return Lang.get(key, params);
 	}
 
 	public void createEvent() {

@@ -108,11 +108,6 @@
 		<!--dependency> <groupId>hsqldb</groupId> <artifactId>hsqldb</artifactId> 
 			<version>1.8.0.10</version> </dependency -->
 
-		<dependency>
-			<groupId>org.vaadin.addon</groupId>
-			<artifactId>confirmdialog</artifactId>
-			<version>2.0.5</version>
-		</dependency>
 	</dependencies>
 
 	<build>

@@ -146,7 +146,7 @@ public class EventService {
 	public List<Event> getJoinedEventsForUser(User u) {
 		u = em.merge(u);
 
-		String q = "SELECT s.event FROM Signup s WHERE s.user=:user AND s.accepted=true AND s.start > :date";
+		String q = "SELECT s.event FROM Signup s WHERE s.user=:user AND s.accepted=true AND s.event.start > :date";
 
 		Query query = em.createQuery(q);
 		query.setParameter("user", u);

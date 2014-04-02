@@ -25,6 +25,8 @@ import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 /**
  * @author denis
@@ -39,7 +41,7 @@ class GroupsLayout extends NavigationView {
 	GroupsLayout(GroupPresenter presenter) {
 		this.presenter = presenter;
 
-		setCaption(getMessage("Groups.view.caption"));
+		setCaption(Lang.get("Groups.view.caption"));
 
 		VerticalLayout mainLayout = new VerticalLayout();
 		mainLayout.setWidth(100, Unit.PERCENTAGE);
@@ -47,7 +49,7 @@ class GroupsLayout extends NavigationView {
 		mainLayout.setMargin(true);
 		mainLayout.addStyleName("groups");
 
-		Label title = new Label(getMessage("Groups.view.title"));
+		Label title = new Label(Lang.get("Groups.view.title"));
 		mainLayout.addComponent(title);
 		title.addStyleName("groups-title");
 
@@ -71,7 +73,7 @@ class GroupsLayout extends NavigationView {
 
 	public void showAdminGroups(Set<UsersGroup> groups) {
 		if (!groups.isEmpty()) {
-			Label adminTitle = new Label(getMessage("Groups.view.admin.label"));
+			Label adminTitle = new Label(Lang.get("Groups.view.admin.label"));
 			adminTitle.addStyleName("admin-title");
 			getContent().addComponent(adminTitle);
 			for (UsersGroup group : groups) {
@@ -82,12 +84,14 @@ class GroupsLayout extends NavigationView {
 
 	public void showMemberGroups(Set<UsersGroup> groups) {
 		if (!groups.isEmpty()) {
-			Label memberTitle = new Label(
-					getMessage("Groups.view.member.label"));
+			Label memberTitle = new Label(Lang.get("Groups.view.member.label"));
 			memberTitle.addStyleName("member-title");
 			getContent().addComponent(memberTitle);
 			for (UsersGroup group : groups) {
-				getContent().addComponent(createGroupComponent(group, false));
+				if (!group.getAdmins().contains(MyTouchKitUI.getCurrentUser())) {
+					getContent().addComponent(
+							createGroupComponent(group, false));
+				}
 			}
 		}
 	}
@@ -139,7 +143,7 @@ class GroupsLayout extends NavigationView {
 	}
 
 	private Button createSearchButton() {
-		Button button = new Button(getMessage("Groups.view.search.button"));
+		Button button = new Button(Lang.get("Groups.view.search.button"));
 		button.addStyleName("search-button");
 		TouchKitIcon.search.addTo(button);
 		button.addClickListener(new ClickListener() {
@@ -153,7 +157,7 @@ class GroupsLayout extends NavigationView {
 	}
 
 	private Button createGroupButton() {
-		Button button = new Button(getMessage("Groups.view.create.button"));
+		Button button = new Button(Lang.get("Groups.view.create.button"));
 		button.addStyleName("create-button");
 		TouchKitIcon.plus.addTo(button);
 		button.addClickListener(new ClickListener() {
@@ -171,10 +175,6 @@ class GroupsLayout extends NavigationView {
 		return members;
 	}
 
-	private String getMessage(String key) {
-		return presenter.getMessage(key);
-	}
-
 	static com.vaadin.ui.Image createLogoComponent(final byte[] content) {
 		com.vaadin.ui.Image image = new com.vaadin.ui.Image();
 		image.addStyleName("user-group-logo");
@@ -189,4 +189,5 @@ class GroupsLayout extends NavigationView {
 		image.setSource(resource);
 		return image;
 	}
+
 }

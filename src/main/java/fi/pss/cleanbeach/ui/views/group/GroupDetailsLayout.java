@@ -2,8 +2,6 @@ package fi.pss.cleanbeach.ui.views.group;
 
 import java.util.List;
 
-import org.vaadin.dialogs.ConfirmDialog;
-
 import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.ui.Button;
@@ -14,12 +12,14 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.ui.components.ConfirmPopover;
+import fi.pss.cleanbeach.ui.components.ConfirmPopover.ConfirmListener;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 /**
  * @author denis
@@ -39,7 +39,7 @@ class GroupDetailsLayout extends NavigationView {
 		this.presenter = presenter;
 		this.group = group;
 
-		setCaption(getMessage("Group.details.caption"));
+		setCaption(Lang.get("Group.details.caption"));
 
 		setRightButton(presenter, group);
 
@@ -64,31 +64,29 @@ class GroupDetailsLayout extends NavigationView {
 	}
 
 	public void showLeaveConfirmation() {
-		ConfirmDialog.show(UI.getCurrent(),
-				getMessage("Group.details.leave.message", group.getName()),
-				new ConfirmDialog.Listener() {
 
-					@Override
-					public void onClose(ConfirmDialog dialog) {
-						if (dialog.isConfirmed()) {
-							presenter.leaveGroup(group);
-						}
-					}
-				});
+		ConfirmPopover pop = new ConfirmPopover(new ConfirmListener() {
+
+			@Override
+			public void confirmed() {
+				presenter.leaveGroup(group);
+			}
+		}, Lang.get("Group.details.leave.message", group.getName()));
+
+		pop.showRelativeTo(GroupDetailsLayout.this);
 	}
 
 	public void showJoinConfirmation() {
-		ConfirmDialog.show(UI.getCurrent(),
-				getMessage("Group.details.join.message", group.getName()),
-				new ConfirmDialog.Listener() {
 
-					@Override
-					public void onClose(ConfirmDialog dialog) {
-						if (dialog.isConfirmed()) {
-							presenter.joinGroup(group);
-						}
-					}
-				});
+		ConfirmPopover pop = new ConfirmPopover(new ConfirmListener() {
+
+			@Override
+			public void confirmed() {
+				presenter.joinGroup(group);
+			}
+		}, Lang.get("Group.details.join.message", group.getName()));
+
+		pop.showRelativeTo(GroupDetailsLayout.this);
 	}
 
 	public void updateMembershipState(UsersGroup group) {
@@ -103,7 +101,7 @@ class GroupDetailsLayout extends NavigationView {
 		CssLayout layout = new CssLayout();
 		layout.addStyleName("groupview-details-invitations");
 
-		Label prefix = new Label(getMessage("Group.details.invitations.prefix"));
+		Label prefix = new Label(Lang.get("Group.details.invitations.prefix"));
 		prefix.setSizeUndefined();
 		prefix.addStyleName("invitations-prefix");
 		layout.addComponent(prefix);
@@ -121,7 +119,7 @@ class GroupDetailsLayout extends NavigationView {
 		CssLayout layout = new CssLayout();
 		layout.addStyleName("groupview-details-events");
 
-		Label header = new Label(getMessage("Group.details.events.caption"));
+		Label header = new Label(Lang.get("Group.details.events.caption"));
 		header.addStyleName("groupview-details-events-caption");
 		layout.addComponent(header);
 
@@ -144,8 +142,7 @@ class GroupDetailsLayout extends NavigationView {
 		layout.addStyleName("groupview-details-admin-buttons");
 		layout.addStyleName("actionbuttons");
 
-		Button createButton = new Button(
-				getMessage("Group.details.create.event"));
+		Button createButton = new Button(Lang.get("Group.details.create.event"));
 		TouchKitIcon.plus.addTo(createButton);
 		createButton.addStyleName("group-details-create-event");
 		createButton.addClickListener(new ClickListener() {
@@ -157,7 +154,7 @@ class GroupDetailsLayout extends NavigationView {
 		});
 		layout.addComponent(createButton);
 
-		Button manage = new Button(getMessage("Group.details.manage.admin"));
+		Button manage = new Button(Lang.get("Group.details.manage.admin"));
 		TouchKitIcon.user.addTo(manage);
 		manage.addStyleName("group-details-manage-admins");
 		manage.addClickListener(new ClickListener() {
@@ -231,7 +228,7 @@ class GroupDetailsLayout extends NavigationView {
 
 	private Button createLeaveButton(final GroupPresenter presenter,
 			final UsersGroup group) {
-		Button button = new Button(getMessage("Group.details.leave.group"));
+		Button button = new Button(Lang.get("Group.details.leave.group"));
 		button.setStyleName(BaseTheme.BUTTON_LINK);
 		button.addStyleName("groupview-details-leave");
 		button.addClickListener(new ClickListener() {
@@ -246,7 +243,7 @@ class GroupDetailsLayout extends NavigationView {
 
 	private Component createJoinButton(final GroupPresenter presenter,
 			final UsersGroup group) {
-		Button button = new Button(getMessage("Group.details.join.group"));
+		Button button = new Button(Lang.get("Group.details.join.group"));
 		button.setStyleName(BaseTheme.BUTTON_LINK);
 		button.addStyleName("groupview-details-join");
 		button.addClickListener(new ClickListener() {
@@ -257,10 +254,6 @@ class GroupDetailsLayout extends NavigationView {
 			}
 		});
 		return button;
-	}
-
-	private String getMessage(String key, Object... params) {
-		return presenter.getMessage(key, params);
 	}
 
 }
