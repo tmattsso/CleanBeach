@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.services;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -86,10 +87,24 @@ public class InviteService {
 	 *            Users group
 	 * @return list of invitations
 	 */
-	public Collection<Invite> getPendingInvitations(UsersGroup group) {
-		TypedQuery<Invite> query = entityManager.createQuery(
-				"SELECT i from Invite i WHERE i.invitee=:group", Invite.class);
+	@SuppressWarnings("deprecation")
+	public Collection<Invite> getPendingInvitations(UsersGroup group,
+			boolean onlyPending) {
+
+		String q = "SELECT i from Invite i WHERE i.invitee=:group AND i.event.start > :date";
+		if (onlyPending) {
+			q += " AND i.accepted=:accepted";
+		}
+		TypedQuery<Invite> query = entityManager.createQuery(q, Invite.class);
 		query.setParameter("group", group);
+		Date d = new Date();
+		d.setHours(0);
+		d.setMinutes(0);
+		d.setSeconds(0);
+		query.setParameter("date", d);
+		if (onlyPending) {
+			query.setParameter("accepted", false);
+		}
 		return query.getResultList();
 	}
 
@@ -98,5 +113,11 @@ public class InviteService {
 				"SELECT i from Invite i WHERE i.event=:event", Invite.class);
 		query.setParameter("event", e);
 		return query.getResultList();
+	}
+
+	public void update(Invite i) {
+		Invite old = entityManager.find(Invite.class, i.getId());
+		old.setAccepted(i.isAccepted());
+		entityManager.merge(old);
 	}
 }

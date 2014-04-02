@@ -41,6 +41,10 @@ class GroupDetailsLayout extends NavigationView {
 
 		setCaption(Lang.get("Group.details.caption"));
 
+		build();
+	}
+
+	public void build() {
 		setRightButton(presenter, group);
 
 		VerticalLayout mainLayout = new VerticalLayout();
@@ -111,6 +115,16 @@ class GroupDetailsLayout extends NavigationView {
 		invitations.setStyleName(BaseTheme.BUTTON_LINK);
 		invitations.addStyleName("invitations-link");
 		layout.addComponent(invitations);
+
+		invitations.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 6094928833388740281L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.showInvitations(group);
+			}
+		});
 
 		return layout;
 	}
@@ -208,7 +222,7 @@ class GroupDetailsLayout extends NavigationView {
 		Image logo = group.getLogo();
 		if (logo != null && logo.getContent() != null
 				&& logo.getContent().length > 0) {
-			rightLayout.addComponent(GroupsLayout.createLogoComponent(logo
+			rightLayout.addComponent(GroupComponent.createLogoComponent(logo
 					.getContent()));
 		}
 

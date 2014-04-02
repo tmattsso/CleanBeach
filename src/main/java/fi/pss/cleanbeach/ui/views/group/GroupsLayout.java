@@ -3,27 +3,20 @@
  */
 package fi.pss.cleanbeach.ui.views.group;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
-import com.vaadin.event.LayoutEvents.LayoutClickEvent;
-import com.vaadin.event.LayoutEvents.LayoutClickListener;
-import com.vaadin.server.StreamResource;
-import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.VerticalLayout;
 
-import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.util.Lang;
@@ -37,6 +30,8 @@ class GroupsLayout extends NavigationView {
 	private static final long serialVersionUID = -7525394606644662421L;
 
 	private final GroupPresenter presenter;
+
+	private final Map<UsersGroup, GroupComponent> groupToComponent = new HashMap<>();
 
 	GroupsLayout(GroupPresenter presenter) {
 		this.presenter = presenter;
@@ -96,51 +91,10 @@ class GroupsLayout extends NavigationView {
 		}
 	}
 
-	private Component createGroupComponent(final UsersGroup group,
+	private GroupComponent createGroupComponent(final UsersGroup group,
 			boolean isAdmin) {
-		CssLayout component = new CssLayout();
-		component.addStyleName("user-group");
-		component.addLayoutClickListener(new LayoutClickListener() {
-
-			private static final long serialVersionUID = -1380510126070557343L;
-
-			@Override
-			public void layoutClick(LayoutClickEvent event) {
-				presenter.showGroup(group);
-			}
-		});
-
-		Image logo = group.getLogo();
-		boolean hasLogo = false;
-		if (logo != null) {
-			final byte[] content = logo.getContent();
-			hasLogo = content != null && content.length > 0;
-			component.addComponent(createLogoComponent(content));
-		}
-
-		if (isAdmin) {
-			String eventInvitations = presenter.getEventInvitations(group);
-			if (eventInvitations != null) {
-				Label invitations = new Label(eventInvitations);
-				invitations.setSizeUndefined();
-				invitations.addStyleName("user-group-event-invitations");
-				component.addComponent(invitations);
-			}
-		}
-
-		Label name = new Label(group.getName());
-		name.setSizeUndefined();
-		name.addStyleName("user-group-name");
-		component.addComponent(name);
-
-		Label members = createMembersCount(group);
-		members.setSizeUndefined();
-		members.addStyleName("user-group-members-count");
-		if (hasLogo) {
-			members.addStyleName("align-bottom");
-		}
-		component.addComponent(members);
-
+		GroupComponent component = new GroupComponent(group, presenter, isAdmin);
+		groupToComponent.put(group, component);
 		return component;
 	}
 
@@ -176,26 +130,9 @@ class GroupsLayout extends NavigationView {
 		return button;
 	}
 
-	private Label createMembersCount(UsersGroup group) {
-		Label members = new Label(presenter.getMembers(group));
-		return members;
-	}
-
-	static com.vaadin.ui.Image createLogoComponent(final byte[] content) {
-		com.vaadin.ui.Image image = new com.vaadin.ui.Image();
-		image.addStyleName("user-group-logo");
-		StreamSource source = new StreamSource() {
-
-			private static final long serialVersionUID = 158820412989991373L;
-
-			@Override
-			public InputStream getStream() {
-				return new ByteArrayInputStream(content);
-			}
-		};
-		StreamResource resource = new StreamResource(source, null);
-		image.setSource(resource);
-		return image;
+	public void update(UsersGroup group) {
+		groupToComponent.get(group).build(group, presenter,
+				group.getAdmins().contains(MyTouchKitUI.getCurrentUser()));
 	}
 
 }

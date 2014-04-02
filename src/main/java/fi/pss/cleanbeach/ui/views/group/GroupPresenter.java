@@ -4,11 +4,13 @@
 package fi.pss.cleanbeach.ui.views.group;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import fi.pss.cleanbeach.data.Event;
+import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.EventService;
@@ -50,7 +52,7 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public String getEventInvitations(UsersGroup group) {
-		int size = inviteService.getPendingInvitations(group).size();
+		int size = inviteService.getPendingInvitations(group, true).size();
 		if (size == 1) {
 			return Lang.get("Groups.view.events.amount.singular", size);
 		}
@@ -58,7 +60,7 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public String getPendingEventInvitations(UsersGroup group) {
-		int size = inviteService.getPendingInvitations(group).size();
+		int size = inviteService.getPendingInvitations(group, true).size();
 		if (size == 1) {
 			return Lang.get("Groups.view.pending.events.amount.singular", size);
 		}
@@ -149,6 +151,18 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
 	public void setAdmin(UsersGroup group, User u, Boolean value) {
 		groupService.setAdminStatus(group, u, value);
+	}
+
+	public void showInvitations(UsersGroup group) {
+		Collection<Invite> pendingInvitations = inviteService
+				.getPendingInvitations(group, false);
+		view.showInvitations(group, pendingInvitations);
+	}
+
+	public void changeInvite(Invite i, Boolean value) {
+		i.setAccepted(value);
+		inviteService.update(i);
+		view.updateGroupDetails(i.getInvitee());
 	}
 
 }
