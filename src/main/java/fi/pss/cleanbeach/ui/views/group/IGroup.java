@@ -36,4 +36,10 @@ public interface IGroup extends IView {
 
 	void updateGroupDetails(UsersGroup usersGroup);
 
+	void showEditGroup(UsersGroup usersGroup);
+
+	void showGroupSaveConfirmation(UsersGroup group);
+
+	void backToMainAndReset();
+
 }

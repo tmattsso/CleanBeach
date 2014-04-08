@@ -1,15 +1,31 @@
-
-.groups .member-title,
-.groups .admin-title {
+.groups .member-title,.groups .admin-title {
 	color: #00a3e8;
 }
 
-.groups .user-group-logo, .user-group-event-invitations {
-	float:right;
+.groups .user-group {
+	position: relative;
 }
 
 .groups .user-group .v-label {
 	display: block;
+}
+
+.groups .user-group .user-group-name {
+	font-size: 15pt;
+	font-weight: bold;
+}
+
+.groups .user-group-logo {
+	max-height: 150px;
+	max-width: 150px;
+	position: absolute;
+	right: 15px;
+}
+
+.groups .user-group .user-group-event-invitations {
+	display: block;
+	position: absolute;
+	bottom: 15px;
 }
 
 .groups .user-group {
@@ -19,14 +35,8 @@
 	border: 1px solid gray;
 }
 
-.groups .user-group-members-count.align-bottom {
-	position: absolute;
-	bottom: 0;
-}
-
-.groups .groupview-details-invitations .invitations-prefix, 
-.groups .groupview-details-invitations .invitations-link,
-.groups .groupview-details-invitations .invitations-link .v-button-wrap {
+.groups .groupview-details-invitations .invitations-prefix,.groups .groupview-details-invitations .invitations-link,.groups .groupview-details-invitations .invitations-link .v-button-wrap
+	{
 	display: inline;
 }
 
@@ -35,8 +45,7 @@
 	font-weight: bold;
 }
 
-.groupinvitations .caption,
-.groupmembers .caption {
+.groupinvitations .caption,.groupmembers .caption {
 	font-weight: bold;
 	font-size: 14pt;
 	padding-bottom: 10px;

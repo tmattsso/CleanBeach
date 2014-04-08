@@ -33,12 +33,17 @@ class GroupsLayout extends NavigationView {
 
 	private final Map<UsersGroup, GroupComponent> groupToComponent = new HashMap<>();
 
+	private VerticalLayout mainLayout;
+
 	GroupsLayout(GroupPresenter presenter) {
 		this.presenter = presenter;
 
 		setCaption(Lang.get("Groups.view.caption"));
+		build();
+	}
 
-		VerticalLayout mainLayout = new VerticalLayout();
+	public void build() {
+		mainLayout = new VerticalLayout();
 		mainLayout.setWidth(100, Unit.PERCENTAGE);
 		mainLayout.setSpacing(true);
 		mainLayout.setMargin(true);

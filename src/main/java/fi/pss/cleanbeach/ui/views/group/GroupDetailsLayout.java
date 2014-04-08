@@ -222,8 +222,8 @@ class GroupDetailsLayout extends NavigationView {
 		Image logo = group.getLogo();
 		if (logo != null && logo.getContent() != null
 				&& logo.getContent().length > 0) {
-			rightLayout.addComponent(GroupComponent.createLogoComponent(logo
-					.getContent()));
+			rightLayout.addComponent(GroupComponent.createLogoComponent(
+					group.getName(), logo.getContent(), logo.getMimetype()));
 		}
 
 		String members = presenter.getMembers(group);

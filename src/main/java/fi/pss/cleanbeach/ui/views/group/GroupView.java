@@ -22,6 +22,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Invite;
@@ -176,6 +177,8 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
 			s.setImmediate(true);
 			s.addValueChangeListener(new ValueChangeListener() {
 
+				private static final long serialVersionUID = 2319743848498697115L;
+
 				@Override
 				public void valueChange(ValueChangeEvent event) {
 					presenter.changeInvite(i, s.getValue());
@@ -191,6 +194,24 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
 	public void updateGroupDetails(UsersGroup group) {
 		groupsComponent.update(group);
 		detailsComponent.build();
+	}
+
+	@Override
+	public void showEditGroup(UsersGroup usersGroup) {
+		navigateTo(new EditGroupLayout(usersGroup, presenter));
+	}
+
+	@Override
+	public void showGroupSaveConfirmation(UsersGroup group) {
+		Notification.show("[ Group created!");
+	}
+
+	@Override
+	public void backToMainAndReset() {
+		setPreviousComponent(null);
+		setNextComponent(null);
+		setCurrentComponent(groupsComponent);
+		groupsComponent.build();
 	}
 
 }

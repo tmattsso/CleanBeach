@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.ui.mvp;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.vaadin.cdi.UIScoped;
@@ -30,4 +31,9 @@ public abstract class AbstractPresenter<V extends IView> {
 	}
 
 	public abstract void init(User currentUser);
+
+	public void handleError(Exception e) {
+		log.log(Level.SEVERE, "Exception in a view", e);
+		view.showErrorNotification("[An error has occured; the administrator has been notified");
+	}
 }

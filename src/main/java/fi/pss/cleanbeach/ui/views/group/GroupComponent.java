@@ -15,10 +15,11 @@ import fi.pss.cleanbeach.data.UsersGroup;
 
 public class GroupComponent extends CssLayout {
 
+	private static final long serialVersionUID = -1618342523005670175L;
+
 	public GroupComponent(final UsersGroup group,
 			final GroupPresenter presenter, boolean isAdmin) {
 		build(group, presenter, isAdmin);
-		;
 	}
 
 	public void build(final UsersGroup group, final GroupPresenter presenter,
@@ -41,31 +42,29 @@ public class GroupComponent extends CssLayout {
 		if (logo != null) {
 			final byte[] content = logo.getContent();
 			hasLogo = content != null && content.length > 0;
-			addComponent(createLogoComponent(content));
-		}
-
-		if (isAdmin) {
-			String eventInvitations = presenter.getEventInvitations(group);
-			if (eventInvitations != null) {
-				Label invitations = new Label(eventInvitations);
-				invitations.setSizeUndefined();
-				invitations.addStyleName("user-group-event-invitations");
-				addComponent(invitations);
+			if (hasLogo) {
+				addComponent(createLogoComponent(group.getName(), content,
+						logo.getMimetype()));
+				setHeight("175px");
 			}
 		}
 
 		Label name = new Label(group.getName());
-		name.setSizeUndefined();
 		name.addStyleName("user-group-name");
 		addComponent(name);
 
 		Label members = createMembersCount(group, presenter);
-		members.setSizeUndefined();
 		members.addStyleName("user-group-members-count");
-		if (hasLogo) {
-			members.addStyleName("align-bottom");
-		}
 		addComponent(members);
+
+		String eventInvitations = presenter.getEventInvitations(group);
+		if (isAdmin && eventInvitations != null) {
+			Label invitations = new Label(eventInvitations);
+			if (hasLogo) {
+				invitations.addStyleName("user-group-event-invitations");
+			}
+			addComponent(invitations);
+		}
 	}
 
 	private Label createMembersCount(UsersGroup group, GroupPresenter presenter) {
@@ -73,7 +72,8 @@ public class GroupComponent extends CssLayout {
 		return members;
 	}
 
-	static com.vaadin.ui.Image createLogoComponent(final byte[] content) {
+	static com.vaadin.ui.Image createLogoComponent(String groupName,
+			final byte[] content, String mime) {
 		com.vaadin.ui.Image image = new com.vaadin.ui.Image();
 		image.addStyleName("user-group-logo");
 		StreamSource source = new StreamSource() {
@@ -85,7 +85,15 @@ public class GroupComponent extends CssLayout {
 				return new ByteArrayInputStream(content);
 			}
 		};
-		StreamResource resource = new StreamResource(source, null);
+		String filename = groupName;
+		if (mime.contains("png")) {
+			filename += ".png";
+		} else {
+			filename += ".jpg";
+		}
+		StreamResource resource = new StreamResource(source, filename);
+		resource.setMIMEType(mime);
+		resource.setCacheTime(1000 * 60 * 60 * 24 * 7);// 7 days
 		image.setSource(resource);
 		return image;
 	}

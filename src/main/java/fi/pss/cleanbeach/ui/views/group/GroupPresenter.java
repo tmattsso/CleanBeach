@@ -46,6 +46,7 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	public void loadGroups() {
 		User user = view.getUser();
 		if (user != null) {
+			view.backToMainAndReset();
 			view.showAdminGroups(groupService.getAdminGroups(user));
 			view.showMemberGroups(groupService.getMemberGroups(user));
 		}
@@ -86,8 +87,8 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public void createGroup() {
-		// TODO Auto-generated method stub
-
+		UsersGroup usersGroup = new UsersGroup();
+		view.showEditGroup(usersGroup);
 	}
 
 	public void requestLeaveGroup(UsersGroup group) {
@@ -163,6 +164,17 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 		i.setAccepted(value);
 		inviteService.update(i);
 		view.updateGroupDetails(i.getInvitee());
+	}
+
+	public void saveGroup(UsersGroup group, User currentUser) {
+		if (group.getId() == null) {
+			group.setCreator(currentUser);
+			group.getMembers().add(currentUser);
+			group.getAdmins().add(currentUser);
+		}
+		groupService.save(group);
+		loadGroups();
+		view.showGroupSaveConfirmation(group);
 	}
 
 }

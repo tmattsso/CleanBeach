@@ -74,9 +74,11 @@ public class MyTouchKitUI extends UI {
 
 	public static Cookie getUsernameCookie() {
 		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
-		for (Cookie c : cookies) {
-			if (c.getName().equals(COOKIE_NAME)) {
-				return c;
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if (c.getName().equals(COOKIE_NAME)) {
+					return c;
+				}
 			}
 		}
 		return null;
