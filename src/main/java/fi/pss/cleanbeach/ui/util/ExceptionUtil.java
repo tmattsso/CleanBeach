@@ -10,4 +10,15 @@ public class ExceptionUtil {
 			return getRootCause(root.getCause());
 		}
 	}
+
+	public static boolean hasCause(Throwable t, Class<? extends Exception> clazz) {
+
+		if (clazz.isAssignableFrom(t.getClass())) {
+			return true;
+		}
+		if (t.getCause() == null || t.getCause() == t) {
+			return false;
+		}
+		return hasCause(t.getCause(), clazz);
+	}
 }

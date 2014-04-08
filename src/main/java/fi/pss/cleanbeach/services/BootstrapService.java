@@ -21,6 +21,7 @@ import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException;
+import fi.pss.cleanbeach.services.GroupService.CannotDeleteException;
 
 @Singleton
 @Startup
@@ -45,7 +46,7 @@ public class BootstrapService {
 	private InviteService inviteService;
 
 	@PostConstruct
-	public void init() {
+	public void init() throws CannotDeleteException {
 
 		log.warning("===Starting bootstrap===");
 

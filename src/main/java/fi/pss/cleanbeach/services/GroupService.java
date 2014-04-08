@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
@@ -50,9 +51,16 @@ public class GroupService {
 		return userGroup;
 	}
 
-	public UsersGroup removeMember(UsersGroup group, User user) {
+	public UsersGroup removeMember(UsersGroup group, User user)
+			throws CannotDeleteException {
 		UsersGroup userGroup = entityManager.find(UsersGroup.class,
 				group.getId());
+
+		// can't remove creator
+		if (group.getCreator().equals(user)) {
+			throw new CannotDeleteException();
+		}
+
 		userGroup.getMembers().remove(user);
 		userGroup.getAdmins().remove(user);
 		user.getMemberIn().remove(group);
@@ -87,10 +95,39 @@ public class GroupService {
 		return userGroup;
 	}
 
-	public void setAdminStatus(UsersGroup group, User u, Boolean value) {
+	public void setAdminStatus(UsersGroup group, User u, boolean value)
+			throws CannotDeleteException {
+
 		group = entityManager.find(group.getClass(), group.getId());
-		group.getAdmins().add(u);
+		if (value) {
+			group.getAdmins().add(u);
+		} else {
+
+			// can't remove creator
+			if (group.getCreator().equals(u)) {
+				throw new CannotDeleteException();
+			}
+
+			group.getAdmins().remove(u);
+		}
 
 		entityManager.merge(group);
+	}
+
+	public void delete(UsersGroup group) throws CannotDeleteException {
+		try {
+			group = entityManager.find(UsersGroup.class, group.getId());
+			entityManager.remove(group);
+			entityManager.flush();
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new CannotDeleteException();
+		}
+	}
+
+	public static class CannotDeleteException extends Exception {
+
+		private static final long serialVersionUID = -8820995400069653254L;
+
 	}
 }

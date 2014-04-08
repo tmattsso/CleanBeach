@@ -205,11 +205,35 @@ class GroupDetailsLayout extends NavigationView {
 			getNavigationBar().setRightComponent(
 					createJoinButton(presenter, group));
 		} else if (presenter.canLeave(group)) {
-			getNavigationBar().setRightComponent(
-					createLeaveButton(presenter, group));
+			getNavigationBar().setRightComponent(createLeaveButton(group));
+		} else if (presenter.canDelete(group)) {
+			getNavigationBar().setRightComponent(createDeleteButton(group));
 		} else {
 			getNavigationBar().setRightComponent(null);
 		}
+	}
+
+	private Component createDeleteButton(final UsersGroup group) {
+		Button button = new Button(Lang.get("Group.details.delete.group"));
+		button.setStyleName(BaseTheme.BUTTON_LINK);
+		button.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 4414454544724918833L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+
+				ConfirmPopover pop = new ConfirmPopover(new ConfirmListener() {
+
+					@Override
+					public void confirmed() {
+						presenter.delete(group);
+					}
+				}, Lang.get("Group.details.delete.confirmation"));
+				pop.showRelativeTo(GroupDetailsLayout.this);
+			}
+		});
+		return button;
 	}
 
 	private Component createGroupInfoComponent() {
@@ -257,8 +281,7 @@ class GroupDetailsLayout extends NavigationView {
 		return layout;
 	}
 
-	private Button createLeaveButton(final GroupPresenter presenter,
-			final UsersGroup group) {
+	private Button createLeaveButton(final UsersGroup group) {
 		Button button = new Button(Lang.get("Group.details.leave.group"));
 		button.setStyleName(BaseTheme.BUTTON_LINK);
 		button.addStyleName("groupview-details-leave");

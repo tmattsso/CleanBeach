@@ -15,6 +15,7 @@ import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.GroupService;
+import fi.pss.cleanbeach.services.GroupService.CannotDeleteException;
 import fi.pss.cleanbeach.services.InviteService;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 import fi.pss.cleanbeach.ui.util.Lang;
@@ -100,8 +101,13 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public void leaveGroup(UsersGroup group) {
-		UsersGroup userGroup = groupService.removeMember(group, view.getUser());
-		view.updateMembershipState(userGroup);
+		try {
+			UsersGroup userGroup;
+			userGroup = groupService.removeMember(group, view.getUser());
+			view.updateMembershipState(userGroup);
+		} catch (CannotDeleteException e) {
+			view.showErrorNotification(Lang.get("Group.errors.leavegroup"));
+		}
 	}
 
 	public void joinGroup(UsersGroup group) {
@@ -129,7 +135,7 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	public boolean canLeave(UsersGroup group) {
 		if (group.getMembers().contains(view.getUser())) {
 			if (group.getAdmins().contains(view.getUser())) {
-				return group.getAdmins().size() != 1;
+				return !group.getCreator().equals(view.getUser());
 			}
 			return true;
 		}
@@ -151,7 +157,11 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 	}
 
 	public void setAdmin(UsersGroup group, User u, Boolean value) {
-		groupService.setAdminStatus(group, u, value);
+		try {
+			groupService.setAdminStatus(group, u, value);
+		} catch (CannotDeleteException e) {
+			view.showErrorNotification(Lang.get("Group.errors.admin"));
+		}
 	}
 
 	public void showInvitations(UsersGroup group) {
@@ -182,6 +192,20 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
 	public void showEdit(UsersGroup group) {
 		view.showEditGroup(group);
+	}
+
+	public boolean canDelete(UsersGroup group) {
+		return group.getCreator().equals(view.getUser());
+	}
+
+	public void delete(UsersGroup group) {
+		try {
+			groupService.delete(group);
+			loadGroups();
+		} catch (CannotDeleteException e) {
+			view.showErrorNotification(Lang.get("Group.errors.delete.caption"),
+					Lang.get("Group.errors.delete.msg"));
+		}
 	}
 
 }
