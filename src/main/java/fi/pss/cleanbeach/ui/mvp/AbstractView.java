@@ -59,6 +59,6 @@ public abstract class AbstractView<P extends AbstractPresenter> extends
 
 	@Override
 	public void showErrorNotification(String string, String msg) {
-		Notification.show(string, "<br/>" + msg, Type.ERROR_MESSAGE);
+		Notification.show(string, msg, Type.ERROR_MESSAGE);
 	}
 }

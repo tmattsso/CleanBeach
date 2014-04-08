@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.data.Validator.EmptyValueException;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
@@ -28,6 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.util.ExceptionUtil;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 public class EditGroupLayout extends NavigationView {
@@ -104,7 +106,11 @@ public class EditGroupLayout extends NavigationView {
 							EditGroupLayout.this.group,
 							MyTouchKitUI.getCurrentUser());
 				} catch (CommitException e) {
-					EditGroupLayout.this.presenter.handleError(e);
+					if (ExceptionUtil.getRootCause(e) instanceof EmptyValueException) {
+						Notification.show(Lang.get("Group.edit.error.fillall"));
+					} else {
+						EditGroupLayout.this.presenter.handleError(e);
+					}
 				}
 			}
 		});

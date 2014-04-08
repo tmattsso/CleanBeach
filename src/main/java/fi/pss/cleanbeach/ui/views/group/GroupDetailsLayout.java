@@ -183,6 +183,19 @@ class GroupDetailsLayout extends NavigationView {
 			}
 		});
 		layout.addComponent(manage);
+
+		Button edit = new Button(Lang.get("Group.details.manage.edit"));
+		TouchKitIcon.edit.addTo(edit);
+		edit.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 2574122824910031111L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.showEdit(group);
+			}
+		});
+		layout.addComponent(edit);
 		return layout;
 	}
 

@@ -172,9 +172,16 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 			group.getMembers().add(currentUser);
 			group.getAdmins().add(currentUser);
 		}
-		groupService.save(group);
+
+		group = groupService.save(group);
+
 		loadGroups();
+		view.showGroupDetails(group);
 		view.showGroupSaveConfirmation(group);
+	}
+
+	public void showEdit(UsersGroup group) {
+		view.showEditGroup(group);
 	}
 
 }

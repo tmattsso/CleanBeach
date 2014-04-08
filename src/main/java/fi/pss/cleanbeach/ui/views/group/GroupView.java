@@ -68,6 +68,9 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
 
 	@Override
 	public void showGroupDetails(UsersGroup group) {
+		setPreviousComponent(null);
+		setNextComponent(null);
+		setCurrentComponent(groupsComponent);
 		detailsComponent = new GroupDetailsLayout(presenter, group);
 		navigateTo(detailsComponent);
 	}
