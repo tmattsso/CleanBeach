@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.vaadin.cdi.UIScoped;
 
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 /**
  * Abstract Presenter superclass. Annotate subclass with {@link UIScoped}. You
@@ -34,6 +35,7 @@ public abstract class AbstractPresenter<V extends IView> {
 
 	public void handleError(Exception e) {
 		log.log(Level.SEVERE, "Exception in a view", e);
-		view.showErrorNotification("[An error has occured; the administrator has been notified");
+		view.showErrorNotification(Lang.get("main.errornotification.caption"),
+				Lang.get("main.errornotification.msg"));
 	}
 }

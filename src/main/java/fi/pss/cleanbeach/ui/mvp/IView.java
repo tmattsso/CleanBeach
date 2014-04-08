@@ -6,5 +6,7 @@ public interface IView {
 
 	public User getUser();
 
-	void showErrorNotification(String string);
+	void showErrorNotification(String caption, String msg);
+
+	void showErrorNotification(String caption);
 }

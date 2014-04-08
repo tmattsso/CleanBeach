@@ -203,7 +203,7 @@ public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
 
 	@Override
 	public void showGroupSaveConfirmation(UsersGroup group) {
-		Notification.show("[ Group created!");
+		Notification.show(Lang.get("Group.edit.created", group.getName()));
 	}
 
 	@Override
