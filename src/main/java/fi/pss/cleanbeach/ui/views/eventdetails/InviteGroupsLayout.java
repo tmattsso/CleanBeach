@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.ui.views.events;
+package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class InviteGroupsLayout extends NavigationView {
 
 	public InviteGroupsLayout(Collection<Invite> coll,
 			final fi.pss.cleanbeach.data.Event e, User u,
-			final EventsPresenter presenter) {
+			final EventDetailsPresenter<?> presenter) {
 
 		setCaption("Invite other groups");
 

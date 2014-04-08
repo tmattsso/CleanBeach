@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.ui.views.events;
+package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ public class ThrashInputEventLayout extends ThrashInputLayout {
 
 	private static final long serialVersionUID = -1504594448394008523L;
 
-	private final EventsPresenter presenter;
+	private final EventDetailsPresenter<?> presenter;
 	private final fi.pss.cleanbeach.data.Event event;
 
 	public ThrashInputEventLayout(fi.pss.cleanbeach.data.Event e,
-			final EventsPresenter presenter) {
+			final EventDetailsPresenter<?> presenter) {
 
 		this.presenter = presenter;
 		event = e;

@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.ui.views.events;
+package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,13 +21,15 @@ import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
 import fi.pss.cleanbeach.ui.util.Lang;
+import fi.pss.cleanbeach.ui.views.events.CommentComponent;
+import fi.pss.cleanbeach.ui.views.events.SimpleMap;
 
 public class EventDetailLayout extends NavigationView {
 
 	private static final long serialVersionUID = 4303038489004245363L;
 
 	private final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-	private final EventsPresenter presenter;
+	private final EventDetailsPresenter<?> presenter;
 
 	private fi.pss.cleanbeach.data.Event selectedEvent;
 
@@ -43,9 +45,9 @@ public class EventDetailLayout extends NavigationView {
 	private Button itemsButton;
 
 	public EventDetailLayout(final fi.pss.cleanbeach.data.Event e,
-			final EventsPresenter presenter) {
+			final EventDetailsPresenter<?> p) {
 
-		this.presenter = presenter;
+		presenter = p;
 		selectedEvent = e;
 
 		addStyleName("eventdetail");

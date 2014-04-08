@@ -8,13 +8,13 @@ import java.util.Set;
 
 import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.UsersGroup;
-import fi.pss.cleanbeach.ui.mvp.IView;
+import fi.pss.cleanbeach.ui.views.eventdetails.IEventDetails;
 
 /**
  * @author denis
  * 
  */
-public interface IGroup extends IView {
+public interface IGroup extends IEventDetails {
 
 	void showAdminGroups(Set<UsersGroup> groups);
 

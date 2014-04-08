@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
@@ -17,15 +16,15 @@ import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.GroupService;
 import fi.pss.cleanbeach.services.GroupService.CannotDeleteException;
 import fi.pss.cleanbeach.services.InviteService;
-import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 import fi.pss.cleanbeach.ui.util.Lang;
+import fi.pss.cleanbeach.ui.views.eventdetails.EventDetailsPresenter;
 import fi.pss.cleanbeach.ui.views.events.IEventPresenter;
 
 /**
  * @author denis
  * 
  */
-public class GroupPresenter extends AbstractPresenter<IGroup> implements
+public class GroupPresenter extends EventDetailsPresenter<IGroup> implements
 		Serializable, IEventPresenter {
 
 	private static final long serialVersionUID = 8624452511940560036L;
@@ -144,12 +143,6 @@ public class GroupPresenter extends AbstractPresenter<IGroup> implements
 
 	public boolean canManage(UsersGroup group) {
 		return group.getAdmins().contains(view.getUser());
-	}
-
-	@Override
-	public void openSingleEvent(Event event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public List<fi.pss.cleanbeach.data.Event> getEvents(UsersGroup group) {

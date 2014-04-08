@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.ui.views.events;
+package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,7 +30,8 @@ public class CommentInputLayout extends NavigationView {
 	private Image uploadedImage;
 
 	public CommentInputLayout(final fi.pss.cleanbeach.data.Event e,
-			boolean addImageImmediately, final EventsPresenter presenter) {
+			boolean addImageImmediately,
+			final EventDetailsPresenter<?> presenter) {
 
 		VerticalLayout root = new VerticalLayout();
 		root.setMargin(true);

@@ -29,21 +29,21 @@ import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
-import fi.pss.cleanbeach.ui.mvp.AbstractView;
 import fi.pss.cleanbeach.ui.util.Lang;
+import fi.pss.cleanbeach.ui.views.eventdetails.EventDetailsCapableView;
 
 /**
  * @author denis
  * 
  */
 @UIScoped
-public class GroupView extends AbstractView<GroupPresenter> implements IGroup {
+public class GroupView extends EventDetailsCapableView<GroupPresenter>
+		implements IGroup {
 
 	private static final long serialVersionUID = 4837511726547892725L;
 
 	private GroupsLayout groupsComponent;
-
-	private GroupDetailsLayout detailsComponent;
+	protected GroupDetailsLayout detailsComponent;
 
 	public GroupView() {
 		setCaption("Groups");
