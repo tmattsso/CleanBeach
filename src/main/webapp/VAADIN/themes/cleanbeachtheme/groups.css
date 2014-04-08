@@ -2,10 +2,6 @@
 	color: #00a3e8;
 }
 
-.groups .user-group {
-	position: relative;
-}
-
 .groups .user-group .v-label {
 	display: block;
 }
@@ -15,9 +11,7 @@
 	font-weight: bold;
 }
 
-.groups .user-group-logo {
-	max-height: 150px;
-	max-width: 150px;
+.groups .user-group .user-group-logo {
 	position: absolute;
 	right: 15px;
 }
@@ -33,11 +27,24 @@
 	background-color: white;
 	border-radius: 5px;
 	border: 1px solid gray;
+	position:relative;
 }
 
 .groups .groupview-details-invitations .invitations-prefix,.groups .groupview-details-invitations .invitations-link,.groups .groupview-details-invitations .invitations-link .v-button-wrap
 	{
 	display: inline;
+}
+
+
+.groups .user-group-logo {
+	max-height: 150px;
+	max-width: 150px;
+}
+
+
+.groups .group-details-info img,
+.groups .group-details-info .v-button-link {
+	display: block;
 }
 
 .groups .group-details-name {
