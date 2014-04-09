@@ -1,17 +1,13 @@
 package fi.pss.cleanbeach.ui.views.group;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
-import com.vaadin.server.StreamResource;
-import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.ui.util.ImageUtil;
 
 public class GroupComponent extends CssLayout {
 
@@ -43,9 +39,11 @@ public class GroupComponent extends CssLayout {
 			final byte[] content = logo.getContent();
 			hasLogo = content != null && content.length > 0;
 			if (hasLogo) {
-				addComponent(createLogoComponent(group.getName(), content,
-						logo.getMimetype()));
-				setHeight("175px");
+				com.vaadin.ui.Image groupLogo = ImageUtil.getGroupLogo(group);
+				groupLogo.addStyleName("logosmall");
+				groupLogo.addStyleName("user-group-logo");
+				addComponent(groupLogo);
+				setHeight("125px");
 			}
 		}
 
@@ -70,32 +68,6 @@ public class GroupComponent extends CssLayout {
 	private Label createMembersCount(UsersGroup group, GroupPresenter presenter) {
 		Label members = new Label(presenter.getMembers(group));
 		return members;
-	}
-
-	static com.vaadin.ui.Image createLogoComponent(String groupName,
-			final byte[] content, String mime) {
-		com.vaadin.ui.Image image = new com.vaadin.ui.Image();
-		image.addStyleName("user-group-logo");
-		StreamSource source = new StreamSource() {
-
-			private static final long serialVersionUID = 158820412989991373L;
-
-			@Override
-			public InputStream getStream() {
-				return new ByteArrayInputStream(content);
-			}
-		};
-		String filename = groupName;
-		if (mime.contains("png")) {
-			filename += ".png";
-		} else {
-			filename += ".jpg";
-		}
-		StreamResource resource = new StreamResource(source, filename);
-		resource.setMIMEType(mime);
-		resource.setCacheTime(1000 * 60 * 60 * 24 * 7);// 7 days
-		image.setSource(resource);
-		return image;
 	}
 
 }

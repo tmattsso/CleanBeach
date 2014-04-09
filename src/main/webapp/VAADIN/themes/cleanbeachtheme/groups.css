@@ -36,12 +36,6 @@
 }
 
 
-.groups .user-group-logo {
-	max-height: 150px;
-	max-width: 150px;
-}
-
-
 .groups .group-details-info img,
 .groups .group-details-info .v-button-link {
 	display: block;

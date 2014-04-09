@@ -31,6 +31,9 @@ public class EventService {
 
 	private final Logger log = Logger.getLogger(getClass().getSimpleName());
 
+	/**
+	 * Should be about 20km in all directions
+	 */
 	private final static double EVENT_SEARCH_COORDINATE_THRESHOLD = 0.009;
 
 	@PersistenceContext(unitName = "cleanbeach")
@@ -353,9 +356,13 @@ public class EventService {
 	 * @return
 	 */
 	public List<Event> getEvents(UsersGroup group) {
-		TypedQuery<Event> query = em.createQuery(
-				"SELECT e from Event e WHERE e.organizer=:group", Event.class);
+		TypedQuery<Event> query = em
+				.createQuery(
+						"SELECT e from Event e WHERE e.organizer=:group OR e IN "
+								+ "(SELECT i.event FROM Invite i WHERE i.invitee=:group AND accepted=:acc)",
+						Event.class);
 		query.setParameter("group", group);
+		query.setParameter("acc", true);
 
 		List<Event> l = query.getResultList();
 		fillWithThrashDetails(l);

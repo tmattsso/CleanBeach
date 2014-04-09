@@ -1,30 +1,119 @@
 package fi.pss.cleanbeach.ui.views.events;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
 
+import com.vaadin.event.LayoutEvents.LayoutClickEvent;
+import com.vaadin.event.LayoutEvents.LayoutClickListener;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 
-public class EventPanel extends AbstractEventPanel<EventsPresenter> {
+import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.ui.util.ImageUtil;
+import fi.pss.cleanbeach.ui.util.Lang;
+import fi.pss.cleanbeach.ui.views.eventdetails.EventDetailsPresenter;
+
+public class EventPanel extends CustomComponent {
 
 	private static final long serialVersionUID = -6402313439815158102L;
 
-	public EventPanel(fi.pss.cleanbeach.data.Event e, EventsPresenter presenter) {
-		super(e, presenter);
+	private final EventDetailsPresenter<?> presenter;
+
+	public EventPanel(fi.pss.cleanbeach.data.Event e,
+			EventDetailsPresenter<?> presenter) {
+		this.presenter = presenter;
+
+		setWidth("100%");
+		addStyleName("eventbox");
+
+		update(e);
 	}
 
-	@Override
-	protected Collection<? extends Component> createContent(
-			fi.pss.cleanbeach.data.Event e) {
-		List<Component> result = new ArrayList<>(2);
-		// group logo
-		HorizontalLayout hl = new HorizontalLayout();
-		result.add(hl);
+	public void update(final fi.pss.cleanbeach.data.Event e) {
+		GridLayout root = new GridLayout(3, 3);
+		root.setSpacing(true);
+		root.setMargin(true);
+		setCompositionRoot(root);
+		root.setWidth("100%");
+		root.setColumnExpandRatio(1, 1);
+		root.setRowExpandRatio(1, 1);
 
-		result.add(createCollectedComponent(e));
-		return result;
+		Label l = new Label(e.getLocation().getName());
+		l.setSizeUndefined();
+		l.addStyleName("location");
+		root.addComponent(l, 0, 0, 1, 0);
+
+		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		l = new Label(df.format(e.getStart()));
+		l.setSizeUndefined();
+		l.addStyleName("date");
+		root.addComponent(l);
+
+		Image i = ImageUtil.getGroupLogo(e.getOrganizer());
+		if (i != null) {
+			i.addStyleName("logosmall");
+			root.addComponent(i, 0, 1, 0, 2);
+		}
+
+		Component collected = createCollectedComponent(e);
+		root.addComponent(collected);
+		root.setComponentAlignment(collected, Alignment.MIDDLE_CENTER);
+
+		l = new Label(e.getNumComments() + " "
+				+ Lang.get("events.eventpanel.numcomments") + "<br/>"
+				+ e.getNumCommentsWithImage() + " "
+				+ Lang.get("events.eventpanel.numpics"), ContentMode.HTML);
+		l.setSizeUndefined();
+		l.addStyleName("comments");
+		root.addComponent(l);
+		root.setComponentAlignment(l, Alignment.MIDDLE_CENTER);
+
+		Label members = new Label();
+		members.setSizeUndefined();
+		members.addStyleName("people");
+		if (i == null) {
+			root.addComponent(members, 0, 2, 2, 2);
+		} else {
+			root.addComponent(members, 1, 2, 2, 2);
+		}
+		Iterator<User> users = e.getJoinedUsers().iterator();
+		if (e.getJoinedUsers().size() > 2) {
+			members.setValue(users.next().getName() + ", "
+					+ users.next().getName() + ", "
+					+ Lang.get("events.details.joined.andseparator") + " "
+					+ (e.getJoinedUsers().size() - 2) + " "
+					+ Lang.get("events.details.joined.more"));
+		} else if (e.getJoinedUsers().size() == 2) {
+			members.setValue(users.next().getName() + ", "
+					+ users.next().getName());
+		} else if (e.getJoinedUsers().size() == 1) {
+			members.setValue(users.next().getName());
+		} else {
+			members.setValue(Lang.get("events.details.joined.none"));
+		}
+
+		root.addLayoutClickListener(new LayoutClickListener() {
+
+			private static final long serialVersionUID = 2235608101030585861L;
+
+			@Override
+			public void layoutClick(LayoutClickEvent event) {
+				presenter.openSingleEvent(e);
+			}
+		});
 	}
 
+	protected Component createCollectedComponent(fi.pss.cleanbeach.data.Event e) {
+		Label label = new Label("<div><span>" + e.getThrash().getTotalNum()
+				+ "</span></div><br/>"
+				+ Lang.get("events.eventpanel.numpieces"), ContentMode.HTML);
+		label.addStyleName("numpieces");
+		label.setWidth("100px");
+		return label;
+	}
 }

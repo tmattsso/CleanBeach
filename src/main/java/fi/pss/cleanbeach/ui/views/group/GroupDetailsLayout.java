@@ -19,7 +19,9 @@ import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.components.ConfirmPopover;
 import fi.pss.cleanbeach.ui.components.ConfirmPopover.ConfirmListener;
+import fi.pss.cleanbeach.ui.util.ImageUtil;
 import fi.pss.cleanbeach.ui.util.Lang;
+import fi.pss.cleanbeach.ui.views.events.EventPanel;
 
 /**
  * @author denis
@@ -146,7 +148,7 @@ class GroupDetailsLayout extends NavigationView {
 	}
 
 	private Component createEventComponent(fi.pss.cleanbeach.data.Event event) {
-		return new EventComponent(event, presenter);
+		return new EventPanel(event, presenter);
 	}
 
 	private Component createButtonsComponent() {
@@ -259,8 +261,9 @@ class GroupDetailsLayout extends NavigationView {
 		Image logo = group.getLogo();
 		if (logo != null && logo.getContent() != null
 				&& logo.getContent().length > 0) {
-			rightLayout.addComponent(GroupComponent.createLogoComponent(
-					group.getName(), logo.getContent(), logo.getMimetype()));
+			com.vaadin.ui.Image groupLogo = ImageUtil.getGroupLogo(group);
+			groupLogo.addStyleName("logobig");
+			rightLayout.addComponent(groupLogo);
 		}
 
 		String members = presenter.getMembers(group);
