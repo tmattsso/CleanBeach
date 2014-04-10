@@ -28,11 +28,13 @@ public class CommentInputLayout extends NavigationView {
 	private final Upload addImage;
 
 	private Image uploadedImage;
+	private final EventDetailsPresenter<?> presenter;
 
 	public CommentInputLayout(final fi.pss.cleanbeach.data.Event e,
 			boolean addImageImmediately,
 			final EventDetailsPresenter<?> presenter) {
 
+		this.presenter = presenter;
 		VerticalLayout root = new VerticalLayout();
 		root.setMargin(true);
 		root.setSpacing(true);
@@ -120,8 +122,7 @@ public class CommentInputLayout extends NavigationView {
 			try {
 				fos.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				presenter.handleError(e);
 			}
 			uploadedImage.setMimetype("image/jpeg");
 			uploadedImage.setUploaded(new Date());

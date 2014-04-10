@@ -2,9 +2,13 @@ package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import java.util.Collection;
 
+import com.vaadin.ui.Component;
+
 import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
+import fi.pss.cleanbeach.ui.views.events.MainEventsLayout;
+import fi.pss.cleanbeach.ui.views.group.GroupDetailsLayout;
 
 public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>>
 		extends AbstractView<T> implements IEventDetails {
@@ -19,7 +23,18 @@ public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>
 
 	@Override
 	public void showDetails(fi.pss.cleanbeach.data.Event e) {
+
+		while (!isOkToNavigateToEventDetails()) {
+			navigateBack();
+		}
 		navigateTo(details = new EventDetailLayout(e, presenter));
+	}
+
+	private boolean isOkToNavigateToEventDetails() {
+		Component current = getCurrentComponent();
+		boolean isGroupDetails = current instanceof GroupDetailsLayout;
+		boolean isEventsList = current instanceof MainEventsLayout;
+		return current == null || isGroupDetails || isEventsList;
 	}
 
 	@Override
@@ -45,7 +60,8 @@ public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>
 
 	@Override
 	public void navigateAndUpdate(fi.pss.cleanbeach.data.Event e) {
-		while (getCurrentComponent() != details) {
+		while (getCurrentComponent() != null
+				&& getCurrentComponent() != details) {
 			navigateBack();
 		}
 		updateEventDetails(e);

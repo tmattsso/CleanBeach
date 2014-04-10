@@ -217,4 +217,9 @@ public class GroupView extends EventDetailsCapableView<GroupPresenter>
 		groupsComponent.build();
 	}
 
+	@Override
+	public void showCreateEvent(UsersGroup group) {
+		navigateTo(new CreateEventLayout(group, presenter));
+	}
+
 }

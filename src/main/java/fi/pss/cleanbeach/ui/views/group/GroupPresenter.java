@@ -5,11 +5,14 @@ package fi.pss.cleanbeach.ui.views.group;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Invite;
+import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.EventService;
@@ -114,9 +117,8 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> implements
 		view.updateMembershipState(userGroup);
 	}
 
-	public void createEvent() {
-		// TODO Auto-generated method stub
-
+	public void showCreateEvent(UsersGroup group) {
+		view.showCreateEvent(group);
 	}
 
 	public void showManageAdmins(UsersGroup group) {
@@ -199,6 +201,17 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> implements
 			view.showErrorNotification(Lang.get("Group.errors.delete.caption"),
 					Lang.get("Group.errors.delete.msg"));
 		}
+	}
+
+	public void createEvent(UsersGroup creator, String desc, Date start,
+			Location loc) {
+		Event e = eventService.createEvent(start, loc, creator, desc);
+		view.updateGroupDetails(creator);
+		view.showDetails(e);
+	}
+
+	public Collection<Location> getLocations() {
+		return locService.getLocationsForCreate();
 	}
 
 }

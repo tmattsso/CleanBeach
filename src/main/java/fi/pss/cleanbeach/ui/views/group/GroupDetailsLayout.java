@@ -27,7 +27,7 @@ import fi.pss.cleanbeach.ui.views.events.EventPanel;
  * @author denis
  * 
  */
-class GroupDetailsLayout extends NavigationView {
+public class GroupDetailsLayout extends NavigationView {
 
 	private static final long serialVersionUID = -4152802888155514945L;
 
@@ -167,7 +167,7 @@ class GroupDetailsLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.createEvent();
+				presenter.showCreateEvent(group);
 			}
 		});
 		layout.addComponent(createButton);

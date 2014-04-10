@@ -50,8 +50,7 @@ public class ThrashInputLocationLayout extends ThrashInputLayout {
 
 	@Override
 	protected void navigateAway() {
-		// TODO Auto-generated method stub
-
+		// no need to do anything
 	}
 
 }

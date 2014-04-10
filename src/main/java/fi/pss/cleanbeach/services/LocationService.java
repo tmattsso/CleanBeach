@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.services;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -163,5 +164,15 @@ public class LocationService {
 		}
 		thrash.setDescription(value);
 		em.merge(thrash);
+	}
+
+	public Collection<Location> getLocationsForCreate() {
+		Query q = em.createQuery("SELECT l FROM Location l");
+
+		@SuppressWarnings("unchecked")
+		java.util.List<Location> list = q.getResultList();
+
+		return list == null ? new HashSet<Location>() : new HashSet<Location>(
+				list);
 	}
 }

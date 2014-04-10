@@ -60,6 +60,8 @@ public class EventService {
 
 		em.persist(e);
 
+		e = loadDetails(e);
+
 		return e;
 	}
 
