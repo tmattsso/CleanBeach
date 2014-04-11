@@ -54,4 +54,9 @@ public class EventsView extends EventDetailsCapableView<EventsPresenter>
 		events.populateSearchResults(l);
 	}
 
+	@Override
+	public void navigateBackAfterDelete(long eventId) {
+		navigateBack();
+		events.remove(eventId);
+	}
 }

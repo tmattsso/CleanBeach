@@ -434,4 +434,34 @@ public class EventService {
 		t.setNum(value);
 		em.merge(t);
 	}
+
+	public void delete(Event e) {
+
+		// invitations
+		String q = "DELETE FROM Invite i WHERE i.event=:event";
+		Query query = em.createQuery(q);
+		query.setParameter("event", e);
+		query.executeUpdate();
+		em.flush();
+
+		// signups
+		q = "DELETE FROM Signup i WHERE i.event=:event";
+		query = em.createQuery(q);
+		query.setParameter("event", e);
+		query.executeUpdate();
+		em.flush();
+
+		// thrash
+		q = "DELETE FROM Thrash i WHERE i.event=:event";
+		query = em.createQuery(q);
+		query.setParameter("event", e);
+		query.executeUpdate();
+		em.flush();
+
+		// event itself
+		e = em.find(Event.class, e.getId());
+		em.remove(e);
+
+		em.flush();
+	}
 }

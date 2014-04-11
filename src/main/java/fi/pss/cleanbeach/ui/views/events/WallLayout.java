@@ -50,4 +50,13 @@ public class WallLayout extends VerticalLayout {
 			eventToPanel.get(e).update(e);
 		}
 	}
+
+	public void remove(long eventId) {
+		for (fi.pss.cleanbeach.data.Event e : eventToPanel.keySet()) {
+			if (e.getId() == eventId) {
+				removeComponent(eventToPanel.get(e));
+				break;
+			}
+		}
+	}
 }

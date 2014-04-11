@@ -118,4 +118,10 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 		allEventsLayout.update(e);
 		searchLayout.update(e);
 	}
+
+	public void remove(long eventId) {
+		joinedEventsLayout.remove(eventId);
+		allEventsLayout.remove(eventId);
+		searchLayout.remove(eventId);
+	}
 }

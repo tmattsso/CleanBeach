@@ -1,6 +1,8 @@
 package fi.pss.cleanbeach.ui.views.group;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
@@ -35,7 +37,10 @@ public class GroupDetailsLayout extends NavigationView {
 
 	private UsersGroup group;
 
+	Map<fi.pss.cleanbeach.data.Event, EventPanel> eventToPanel = new HashMap<>();
 	private Component adminComponent;
+
+	private CssLayout eventsLayout;
 
 	GroupDetailsLayout(final GroupPresenter presenter, final UsersGroup group) {
 		this.presenter = presenter;
@@ -132,23 +137,22 @@ public class GroupDetailsLayout extends NavigationView {
 	}
 
 	private Component createEventsComponent() {
-		CssLayout layout = new CssLayout();
-		layout.addStyleName("groupview-details-events");
+		eventsLayout = new CssLayout();
+		eventsLayout.addStyleName("groupview-details-events");
 
 		Label header = new Label(Lang.get("Group.details.events.caption"));
 		header.addStyleName("groupview-details-events-caption");
-		layout.addComponent(header);
+		eventsLayout.addComponent(header);
 
+		eventToPanel.clear();
 		List<fi.pss.cleanbeach.data.Event> events = presenter.getEvents(group);
 		for (fi.pss.cleanbeach.data.Event event : events) {
-			layout.addComponent(createEventComponent(event));
+			EventPanel eventPanel = new EventPanel(event, presenter);
+			eventsLayout.addComponent(eventPanel);
+			eventToPanel.put(event, eventPanel);
 		}
 
-		return layout;
-	}
-
-	private Component createEventComponent(fi.pss.cleanbeach.data.Event event) {
-		return new EventPanel(event, presenter);
+		return eventsLayout;
 	}
 
 	private Component createButtonsComponent() {
@@ -315,6 +319,15 @@ public class GroupDetailsLayout extends NavigationView {
 			}
 		});
 		return button;
+	}
+
+	public void remove(long eventId) {
+		for (fi.pss.cleanbeach.data.Event e : eventToPanel.keySet()) {
+			if (e.getId() == eventId) {
+				eventsLayout.removeComponent(eventToPanel.get(e));
+				break;
+			}
+		}
 	}
 
 }

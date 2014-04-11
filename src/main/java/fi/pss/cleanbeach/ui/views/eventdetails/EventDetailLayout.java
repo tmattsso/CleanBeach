@@ -15,11 +15,14 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.BaseTheme;
 
 import fi.pss.cleanbeach.data.Comment;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.MainAppUI;
+import fi.pss.cleanbeach.ui.components.ConfirmPopover;
+import fi.pss.cleanbeach.ui.components.ConfirmPopover.ConfirmListener;
 import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.events.CommentComponent;
 import fi.pss.cleanbeach.ui.views.events.SimpleMap;
@@ -88,6 +91,30 @@ public class EventDetailLayout extends NavigationView {
 		twitter.setEnabled(false);
 		TouchKitIcon.twitterSign.addTo(twitter);
 		gl.addComponent(twitter, 2, 1);
+
+		if (e.getOrganizer().isAdmin(MainAppUI.getCurrentUser())) {
+			Button delete = new Button(Lang.get("events.details.delete"));
+			delete.addStyleName(BaseTheme.BUTTON_LINK);
+			content.addComponent(delete);
+			delete.addClickListener(new ClickListener() {
+
+				private static final long serialVersionUID = 8307055006289465506L;
+
+				@Override
+				public void buttonClick(ClickEvent event) {
+
+					final ConfirmPopover pop = new ConfirmPopover(
+							new ConfirmListener() {
+
+								@Override
+								public void confirmed() {
+									presenter.deleteEvent(e);
+								}
+							}, Lang.get("events.details.delete.prompt"));
+					pop.showRelativeTo(EventDetailLayout.this);
+				}
+			});
+		}
 
 		desc = new Label();
 		desc.addStyleName("eventdescriptions");

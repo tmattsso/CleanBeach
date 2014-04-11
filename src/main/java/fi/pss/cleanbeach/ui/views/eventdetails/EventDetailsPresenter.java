@@ -96,4 +96,9 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 	public void invite(UsersGroup g, Event event) {
 		inviteService.invite(view.getUser(), g, event);
 	}
+
+	public void deleteEvent(fi.pss.cleanbeach.data.Event e) {
+		service.delete(e);
+		view.navigateBackAfterDelete(e.getId());
+	}
 }

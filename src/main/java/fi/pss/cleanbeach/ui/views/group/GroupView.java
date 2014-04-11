@@ -135,4 +135,12 @@ public class GroupView extends EventDetailsCapableView<GroupPresenter>
 		navigateTo(new SearchGroupsLayout(presenter));
 	}
 
+	@Override
+	public void navigateBackAfterDelete(long eventId) {
+		if (detailsComponent != null) {
+			navigateBack();
+			detailsComponent.remove(eventId);
+		}
+	}
+
 }

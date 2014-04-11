@@ -79,4 +79,13 @@ public class EventSearchLayout extends VerticalLayout {
 		}
 	}
 
+	public void remove(long eventId) {
+		for (fi.pss.cleanbeach.data.Event e : eventToPanel.keySet()) {
+			if (e.getId() == eventId) {
+				resultContainer.removeComponent(eventToPanel.get(e));
+				break;
+			}
+		}
+	}
+
 }

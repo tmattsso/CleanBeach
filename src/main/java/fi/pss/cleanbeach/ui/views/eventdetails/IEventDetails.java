@@ -20,4 +20,6 @@ public interface IEventDetails extends ICreateEvent {
 
 	void navigateAndUpdate(Event e);
 
+	void navigateBackAfterDelete(long eventId);
+
 }
