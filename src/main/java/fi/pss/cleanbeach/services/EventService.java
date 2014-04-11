@@ -213,13 +213,19 @@ public class EventService {
 		}
 
 		String q = "SELECT e FROM Event e "
-				+ "WHERE e.description LIKE :param "
-				+ "OR e.organizer.name LIKE :param "
-				+ "OR e.organizer.description LIKE :param "
-				+ "OR e.location.name LIKE :param";
+				+ "WHERE UPPER(e.description) LIKE :param "
+				+ "OR UPPER(e.organizer.name) LIKE :param "
+				+ "OR UPPER(e.organizer.description) LIKE :param "
+				+ "OR UPPER(e.location.name) LIKE :param "
+				+ "AND e.start > :start";
 
 		Query query = em.createQuery(q);
-		query.setParameter("param", "%" + searchText + "%");
+		query.setParameter("param", "%" + searchText.toUpperCase() + "%");
+
+		Calendar cal = Calendar.getInstance();
+		// all events from a week ago forward
+		cal.add(Calendar.WEEK_OF_YEAR, -1);
+		query.setParameter("start", cal.getTime());
 
 		@SuppressWarnings("unchecked")
 		List<Event> l = query.getResultList();
