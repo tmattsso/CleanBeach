@@ -138,13 +138,13 @@ public class MapComponent extends LMap implements PositionCallback {
 	private static void setIcon(LMarker m, Location loc) {
 		switch (loc.getStatus()) {
 		case OK:
-			m.setIcon(new ClassResource("flag_green.png"));
+			m.setIcon(new ClassResource("../../ui/flag_green.png"));
 			break;
 		case DIRTY:
-			m.setIcon(new ClassResource("flag_red.png"));
+			m.setIcon(new ClassResource("../../ui/flag_red.png"));
 			break;
 		case NO_DATA:
-			m.setIcon(new ClassResource("flag_gray.png"));
+			m.setIcon(new ClassResource("../../ui/flag_gray.png"));
 			break;
 
 		default:

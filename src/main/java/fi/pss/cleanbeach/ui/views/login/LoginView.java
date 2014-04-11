@@ -25,7 +25,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
 import fi.pss.cleanbeach.data.User;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.mvp.AbstractView;
 import fi.pss.cleanbeach.ui.util.Lang;
 
@@ -120,7 +120,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		main.addComponent(login);
 
 		// auto-fill username
-		Cookie c = MyTouchKitUI.getUsernameCookie();
+		Cookie c = MainAppUI.getUsernameCookie();
 		if (c != null) {
 			username.setValue(c.getValue());
 			password.focus();

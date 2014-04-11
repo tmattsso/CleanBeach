@@ -11,7 +11,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 public class GroupMembersLayout extends NavigationView {
@@ -34,8 +34,8 @@ public class GroupMembersLayout extends NavigationView {
 		List<User> users = new ArrayList<>(group.getMembers());
 		Collections.sort(users);
 		boolean isAdmin = group.getCreator().equals(
-				MyTouchKitUI.getCurrentUser())
-				|| group.getAdmins().contains(MyTouchKitUI.getCurrentUser());
+				MainAppUI.getCurrentUser())
+				|| group.getAdmins().contains(MainAppUI.getCurrentUser());
 		for (User u : users) {
 
 			Label user = new Label();

@@ -13,7 +13,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.UsersGroup;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 public class SearchGroupsLayout extends NavigationView {
@@ -50,7 +50,7 @@ public class SearchGroupsLayout extends NavigationView {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				List<UsersGroup> results = presenter.getSearchResults(
-						tf.getValue(), MyTouchKitUI.getCurrentUser());
+						tf.getValue(), MainAppUI.getCurrentUser());
 				populateResults(results);
 			}
 		});
@@ -67,7 +67,7 @@ public class SearchGroupsLayout extends NavigationView {
 	protected void populateResults(List<UsersGroup> results) {
 		resultsLayout.removeAllComponents();
 		for (UsersGroup group : results) {
-			boolean isAdmin = group.isAdmin(MyTouchKitUI.getCurrentUser());
+			boolean isAdmin = group.isAdmin(MainAppUI.getCurrentUser());
 			GroupComponent component = new GroupComponent(group, presenter,
 					isAdmin);
 			resultsLayout.addComponent(component);

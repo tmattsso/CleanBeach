@@ -19,7 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 import fi.pss.cleanbeach.data.Comment;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.events.CommentComponent;
 import fi.pss.cleanbeach.ui.views.events.SimpleMap;
@@ -193,7 +193,7 @@ public class EventDetailLayout extends NavigationView {
 
 		selectedEvent = e;
 
-		if (e.getJoinedUsers().contains(MyTouchKitUI.getCurrentUser())) {
+		if (e.getJoinedUsers().contains(MainAppUI.getCurrentUser())) {
 			Button leave = new Button(Lang.get("events.details.leave"));
 			getNavigationBar().setRightComponent(leave);
 			leave.addClickListener(new ClickListener() {
@@ -246,7 +246,7 @@ public class EventDetailLayout extends NavigationView {
 		updateItemsButton(e);
 
 		actions.setVisible(e.getJoinedUsers().contains(
-				MyTouchKitUI.getCurrentUser()));
+				MainAppUI.getCurrentUser()));
 
 		comments.removeAllComponents();
 		for (Comment c : e.getComments()) {

@@ -23,7 +23,7 @@ import fi.pss.cleanbeach.ui.views.login.LoginView;
 @Widgetset("fi.pss.cleanbeach.ui.gwt.AppWidgetSet")
 @Theme("cleanbeachtheme")
 @CDIUI
-public class MyTouchKitUI extends UI {
+public class MainAppUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
 
@@ -91,7 +91,7 @@ public class MyTouchKitUI extends UI {
 		}
 
 		Cookie newCookie = new Cookie(COOKIE_NAME,
-				((MyTouchKitUI) UI.getCurrent()).currentUser.getEmail());
+				((MainAppUI) UI.getCurrent()).currentUser.getEmail());
 		newCookie.setDomain("localhost");
 		// newCookie.setSecure(true); TODO enable
 		// store for 30 days
@@ -104,7 +104,7 @@ public class MyTouchKitUI extends UI {
 	 * Returns the currently logged in user.
 	 */
 	public static User getCurrentUser() {
-		return ((MyTouchKitUI) getCurrent()).currentUser;
+		return ((MainAppUI) getCurrent()).currentUser;
 	}
 
 }

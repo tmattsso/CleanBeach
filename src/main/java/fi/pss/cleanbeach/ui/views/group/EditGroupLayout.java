@@ -28,7 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.UsersGroup;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.ExceptionUtil;
 import fi.pss.cleanbeach.ui.util.Lang;
 
@@ -104,7 +104,7 @@ public class EditGroupLayout extends NavigationView {
 					form.commit();
 					EditGroupLayout.this.presenter.saveGroup(
 							EditGroupLayout.this.group,
-							MyTouchKitUI.getCurrentUser());
+							MainAppUI.getCurrentUser());
 				} catch (CommitException e) {
 					if (ExceptionUtil.getRootCause(e) instanceof EmptyValueException) {
 						Notification.show(Lang.get("Group.edit.error.fillall"));

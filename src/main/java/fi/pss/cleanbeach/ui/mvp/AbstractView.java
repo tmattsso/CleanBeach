@@ -11,7 +11,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
 import fi.pss.cleanbeach.data.User;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.MainAppUI;
 
 /**
  * Abstract View superclass. Annotate the view implementation with
@@ -49,7 +49,7 @@ public abstract class AbstractView<P extends AbstractPresenter> extends
 
 	@Override
 	public User getUser() {
-		return MyTouchKitUI.getCurrentUser();
+		return MainAppUI.getCurrentUser();
 	}
 
 	@Override

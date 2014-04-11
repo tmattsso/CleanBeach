@@ -18,7 +18,7 @@ import com.vaadin.ui.Layout;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.UsersGroup;
-import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 /**
@@ -88,7 +88,7 @@ class GroupsLayout extends NavigationView {
 			memberTitle.addStyleName("member-title");
 			getContent().addComponent(memberTitle);
 			for (UsersGroup group : groups) {
-				if (!group.getAdmins().contains(MyTouchKitUI.getCurrentUser())) {
+				if (!group.getAdmins().contains(MainAppUI.getCurrentUser())) {
 					getContent().addComponent(
 							createGroupComponent(group, false));
 				}
@@ -137,7 +137,7 @@ class GroupsLayout extends NavigationView {
 
 	public void update(UsersGroup group) {
 		groupToComponent.get(group).build(group, presenter,
-				group.getAdmins().contains(MyTouchKitUI.getCurrentUser()));
+				group.getAdmins().contains(MainAppUI.getCurrentUser()));
 	}
 
 }
