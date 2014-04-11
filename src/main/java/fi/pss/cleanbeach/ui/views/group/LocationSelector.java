@@ -9,8 +9,15 @@ import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Location;
+import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.eventdetails.CreateEventPresenter;
 
+/**
+ * TODO make this better (e.g. map, search..)
+ * 
+ * @author thomas
+ * 
+ */
 public class LocationSelector extends NavigationView {
 
 	private static final long serialVersionUID = -3614854496104509958L;
@@ -27,7 +34,7 @@ public class LocationSelector extends NavigationView {
 		vl.setMargin(true);
 		setContent(vl);
 
-		setCaption("[selec location");
+		setCaption(Lang.get("events.locselect.caption"));
 
 		BeanItemContainer<Location> cont = new BeanItemContainer<>(
 				Location.class, presenter.getLocations());
@@ -38,7 +45,7 @@ public class LocationSelector extends NavigationView {
 		cb.setWidth("100%");
 		vl.addComponent(cb);
 
-		Button select = new Button("[sel");
+		Button select = new Button(Lang.get("events.locselect.select"));
 		vl.addComponent(select);
 
 		select.addClickListener(new ClickListener() {

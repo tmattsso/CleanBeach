@@ -2,6 +2,7 @@ package fi.pss.cleanbeach.ui.views.group;
 
 import java.util.List;
 
+import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Button;
@@ -13,6 +14,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.MyTouchKitUI;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 public class SearchGroupsLayout extends NavigationView {
 
@@ -30,14 +32,16 @@ public class SearchGroupsLayout extends NavigationView {
 		setContent(vl);
 		setSizeFull();
 
-		setCaption("[search for groups");
+		setCaption(Lang.get("group.search.caption"));
 
-		final TextField tf = new TextField("[search");
+		final TextField tf = new TextField();
+		tf.setInputPrompt(Lang.get("group.search.prompt"));
 		tf.setWidth("100%");
 		vl.addComponent(tf);
 
-		Button search = new Button("[searc");
+		Button search = new Button(Lang.get("group.search.search"));
 		search.setClickShortcut(KeyCode.ENTER);
+		TouchKitIcon.search.addTo(search);
 		vl.addComponent(search);
 		search.addClickListener(new ClickListener() {
 
