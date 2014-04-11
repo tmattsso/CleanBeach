@@ -6,6 +6,7 @@
 
 	<persistence-unit name="cleanbeach" transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:jboss/siistibiitsiDS</jta-data-source>
 
 		<class>fi.pss.cleanbeach.data.AbstractEntity</class>
 		<class>fi.pss.cleanbeach.data.Comment</class>
@@ -21,11 +22,8 @@
 
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
-			<property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
-			<property name="hibernate.connection.username" value="sa" />
-			<property name="hibernate.connection.password" value="" />
-			<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:testdb" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
 			<property name="hibernate.showSql" value="true" />
 		</properties>
 	</persistence-unit>
