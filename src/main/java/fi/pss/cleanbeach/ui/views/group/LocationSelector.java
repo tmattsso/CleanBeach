@@ -9,6 +9,7 @@ import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Location;
+import fi.pss.cleanbeach.ui.views.eventdetails.CreateEventPresenter;
 
 public class LocationSelector extends NavigationView {
 
@@ -19,7 +20,7 @@ public class LocationSelector extends NavigationView {
 	}
 
 	public LocationSelector(final LocationSelectedListener listener,
-			GroupPresenter presenter) {
+			CreateEventPresenter<?> presenter) {
 
 		VerticalLayout vl = new VerticalLayout();
 		vl.setSpacing(true);

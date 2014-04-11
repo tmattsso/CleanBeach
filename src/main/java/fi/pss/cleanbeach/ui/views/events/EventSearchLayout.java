@@ -49,6 +49,7 @@ public class EventSearchLayout extends VerticalLayout {
 		addComponent(search);
 
 		resultContainer = new VerticalLayout();
+		resultContainer.setSpacing(true);
 		addComponent(resultContainer);
 
 	}

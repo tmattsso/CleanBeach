@@ -6,12 +6,11 @@ import com.vaadin.ui.Component;
 
 import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
-import fi.pss.cleanbeach.ui.mvp.AbstractView;
 import fi.pss.cleanbeach.ui.views.events.MainEventsLayout;
 import fi.pss.cleanbeach.ui.views.group.GroupDetailsLayout;
 
 public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>>
-		extends AbstractView<T> implements IEventDetails {
+		extends CreateEventCapableView<T> implements IEventDetails {
 
 	private static final long serialVersionUID = 5027141664466020875L;
 

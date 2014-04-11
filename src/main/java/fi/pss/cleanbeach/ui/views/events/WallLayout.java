@@ -20,6 +20,7 @@ public class WallLayout extends VerticalLayout {
 	public WallLayout(EventsPresenter presenter) {
 		this.presenter = presenter;
 		setMargin(false);
+		setSpacing(true);
 	}
 
 	public void update(List<fi.pss.cleanbeach.data.Event> events) {

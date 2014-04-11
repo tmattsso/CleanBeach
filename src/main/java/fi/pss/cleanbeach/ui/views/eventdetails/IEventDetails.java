@@ -5,9 +5,8 @@ import java.util.Collection;
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
-import fi.pss.cleanbeach.ui.mvp.IView;
 
-public interface IEventDetails extends IView {
+public interface IEventDetails extends ICreateEvent {
 
 	void showDetails(Event e);
 

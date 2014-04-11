@@ -3,7 +3,6 @@
  */
 package fi.pss.cleanbeach.ui.views.group;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -21,16 +20,12 @@ import fi.pss.cleanbeach.services.GroupService.CannotDeleteException;
 import fi.pss.cleanbeach.services.InviteService;
 import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.eventdetails.EventDetailsPresenter;
-import fi.pss.cleanbeach.ui.views.events.IEventPresenter;
 
 /**
  * @author denis
  * 
  */
-public class GroupPresenter extends EventDetailsPresenter<IGroup> implements
-		Serializable, IEventPresenter {
-
-	private static final long serialVersionUID = 8624452511940560036L;
+public class GroupPresenter extends EventDetailsPresenter<IGroup> {
 
 	@Inject
 	private GroupService groupService;
@@ -118,7 +113,7 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> implements
 	}
 
 	public void showCreateEvent(UsersGroup group) {
-		view.showCreateEvent(group);
+		view.showCreateEvent(group, null);
 	}
 
 	public void showManageAdmins(UsersGroup group) {
@@ -203,15 +198,12 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> implements
 		}
 	}
 
+	@Override
 	public void createEvent(UsersGroup creator, String desc, Date start,
 			Location loc) {
 		Event e = eventService.createEvent(start, loc, creator, desc);
 		view.updateGroupDetails(creator);
 		view.showDetails(e);
-	}
-
-	public Collection<Location> getLocations() {
-		return locService.getLocationsForCreate();
 	}
 
 }

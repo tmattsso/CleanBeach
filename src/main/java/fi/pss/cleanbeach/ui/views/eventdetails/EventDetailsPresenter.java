@@ -15,11 +15,9 @@ import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.InviteService;
 import fi.pss.cleanbeach.services.LocationService;
-import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
-import fi.pss.cleanbeach.ui.views.events.IEventPresenter;
 
 public abstract class EventDetailsPresenter<T extends IEventDetails> extends
-		AbstractPresenter<T> implements IEventPresenter {
+		CreateEventPresenter<T> {
 
 	@Inject
 	protected EventService service;
@@ -45,7 +43,6 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 		service.setThrash(value, t, e, view.getUser());
 	}
 
-	@Override
 	public void openSingleEvent(Event event) {
 		event = service.loadDetails(event);
 		view.showDetails(event);
