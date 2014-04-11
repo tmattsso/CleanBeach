@@ -146,6 +146,7 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 	public void onFailure(int errorCode) {
 		Notification.show(Lang.get("locations.map.noposition"),
 				Type.WARNING_MESSAGE);
+		presenter.readyForPoints(getCenter().getLat(), getCenter().getLon());
 	}
 
 	public void runPositioning() {
