@@ -19,6 +19,7 @@ import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -173,6 +174,7 @@ public class GroupView extends EventDetailsCapableView<GroupPresenter>
 					+ df.format(i.getEvent().getStart()));
 			invite.addStyleName("user");
 			content.addComponent(invite);
+			content.setComponentAlignment(invite, Alignment.MIDDLE_LEFT);
 
 			final Switch s = new Switch();
 			s.setSizeUndefined();

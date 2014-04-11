@@ -74,15 +74,16 @@ public class BootstrapService {
 
 		log.info("Added user " + user2.getId());
 
-		UsersGroup group = groupService
+		UsersGroup group2 = groupService
 				.createGroup(
 						user,
 						"PSS ry",
 						"Ullamco fatback pork, strip steak anim do irure meatloaf shoulder frankfurter non fugiat tri-tip. Cow kevin cupidatat venison chuck biltong in laborum. Mollit pastrami pork belly, ex ad est id ullamco");
-		groupService.addMember(group, user);
-		groupService.setAdminStatus(group, user, true);
+		groupService.addMember(group2, user);
+		groupService.setAdminStatus(group2, user, true);
 
-		group = groupService.createGroup(user, "Vaadin Ltd", "descr");
+		UsersGroup group = groupService
+				.createGroup(user, "Vaadin Ltd", "descr");
 		groupService.addMember(group, user);
 		groupService.setAdminStatus(group, user, true);
 		groupService.addMember(group, user2);
@@ -134,7 +135,7 @@ public class BootstrapService {
 		}
 		eventService.addComment(e, "image to test with", img, user2);
 
-		Invite invite = inviteService.invite(user, group, e);
+		Invite invite = inviteService.invite(user, group2, e);
 
 		log.info("Sent invitation " + invite.getId());
 
