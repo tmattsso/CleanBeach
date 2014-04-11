@@ -42,4 +42,6 @@ public interface IGroup extends IEventDetails {
 
 	void backToMainAndReset();
 
+	void showGroupSearch();
+
 }

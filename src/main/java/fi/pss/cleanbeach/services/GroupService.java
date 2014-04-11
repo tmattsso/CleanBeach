@@ -3,13 +3,17 @@
  */
 package fi.pss.cleanbeach.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
@@ -20,6 +24,8 @@ import fi.pss.cleanbeach.data.UsersGroup;
  */
 @Stateless
 public class GroupService {
+
+	private final Logger log = Logger.getLogger(getClass().getSimpleName());
 
 	@PersistenceContext(unitName = "cleanbeach")
 	private EntityManager entityManager;
@@ -128,5 +134,33 @@ public class GroupService {
 
 		private static final long serialVersionUID = -8820995400069653254L;
 
+	}
+
+	public List<UsersGroup> searchForGroups(User u, String searchText) {
+
+		if (searchText == null || searchText.isEmpty()) {
+			// special case: return all users groups instead
+
+			if (u.getMemberIn().isEmpty()) {
+				// no groups, we can't even make query
+				return new ArrayList<>();
+			}
+
+			return new ArrayList<>(u.getMemberIn());
+		}
+
+		String q = "SELECT g FROM UsersGroup g "
+				+ "WHERE UPPER(g.description) LIKE :param "
+				+ "OR UPPER(g.name) LIKE :param ";
+
+		Query query = entityManager.createQuery(q);
+		query.setParameter("param", "%" + searchText.toUpperCase() + "%");
+
+		@SuppressWarnings("unchecked")
+		List<UsersGroup> l = query.getResultList();
+		log.info("Search with string '" + searchText + "' returned " + l.size()
+				+ " results");
+
+		return l;
 	}
 }

@@ -84,8 +84,7 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> {
 	}
 
 	public void searchGroups() {
-		// TODO Auto-generated method stub
-
+		view.showGroupSearch();
 	}
 
 	public void createGroup() {
@@ -208,6 +207,11 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> {
 		Event e = eventService.createEvent(start, loc, creator, desc);
 		view.updateGroupDetails(creator);
 		view.showDetails(e);
+	}
+
+	public List<UsersGroup> getSearchResults(String value, User u) {
+		// TODO Auto-generated method stub
+		return groupService.searchForGroups(u, value);
 	}
 
 }

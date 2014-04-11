@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import com.vaadin.cdi.UIScoped;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.Notification;
 
@@ -53,9 +54,15 @@ public class GroupView extends EventDetailsCapableView<GroupPresenter>
 
 	@Override
 	public void showGroupDetails(UsersGroup group) {
-		setPreviousComponent(null);
-		setNextComponent(null);
-		setCurrentComponent(groupsComponent);
+
+		Component current = getCurrentComponent();
+		if (current instanceof SearchGroupsLayout) {
+			// keep history
+		} else {
+			setPreviousComponent(null);
+			setNextComponent(null);
+			setCurrentComponent(groupsComponent);
+		}
 		detailsComponent = new GroupDetailsLayout(presenter, group);
 		navigateTo(detailsComponent);
 	}
@@ -121,6 +128,11 @@ public class GroupView extends EventDetailsCapableView<GroupPresenter>
 		setNextComponent(null);
 		setCurrentComponent(groupsComponent);
 		groupsComponent.build();
+	}
+
+	@Override
+	public void showGroupSearch() {
+		navigateTo(new SearchGroupsLayout(presenter));
 	}
 
 }

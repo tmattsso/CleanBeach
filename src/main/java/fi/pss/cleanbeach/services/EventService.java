@@ -175,12 +175,10 @@ public class EventService {
 	}
 
 	/**
-	 * Returns all events that match the query string. TODO: Check organizer
-	 * name, desc, location name
+	 * Returns all events that match the query string.
 	 * 
 	 * <p>
-	 * TODO should we restrict time here as well? what if user wants to search
-	 * for old events?
+	 * TODO what if user wants to search for old events?
 	 * 
 	 * @param u
 	 * @param searchText
