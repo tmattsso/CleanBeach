@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity
-public class Event extends AbstractEntity {
+public class Event extends AbstractEntity implements Comparable<Event> {
 
 	@Column(length = 2048)
 	private String description;
@@ -116,5 +116,10 @@ public class Event extends AbstractEntity {
 
 	public void setThrash(ThrashDAO thrash) {
 		this.thrash = thrash;
+	}
+
+	@Override
+	public int compareTo(Event o) {
+		return o.start.compareTo(start);
 	}
 }

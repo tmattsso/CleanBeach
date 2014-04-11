@@ -2,6 +2,7 @@ package fi.pss.cleanbeach.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -106,6 +107,7 @@ public class EventService {
 		List<Event> l = query.getResultList();
 		fillWithThrashDetails(l);
 		fillWithUserDetails(l);
+		Collections.sort(l);
 
 		return l;
 	}
@@ -161,6 +163,7 @@ public class EventService {
 		List<Event> l = query.getResultList();
 		fillWithThrashDetails(l);
 		fillWithUserDetails(l);
+		Collections.sort(l);
 
 		return l;
 	}
@@ -204,6 +207,8 @@ public class EventService {
 			fillWithThrashDetails(l);
 			fillWithUserDetails(l);
 
+			Collections.sort(l);
+
 			return l;
 		}
 
@@ -223,6 +228,8 @@ public class EventService {
 
 		fillWithThrashDetails(l);
 		fillWithUserDetails(l);
+
+		Collections.sort(l);
 
 		return l;
 	}
@@ -369,6 +376,7 @@ public class EventService {
 		List<Event> l = query.getResultList();
 		fillWithThrashDetails(l);
 		fillWithUserDetails(l);
+		Collections.sort(l);
 		return l;
 	}
 
