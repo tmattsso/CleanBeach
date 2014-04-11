@@ -39,6 +39,10 @@ public class InviteService {
 	 */
 	public Invite invite(User inviter, UsersGroup group, Event event) {
 
+		if (event.getOrganizer().equals(group)) {
+			return null;
+		}
+
 		// check for existing invite
 		String q = "SELECT i FROM Invite i WHERE i.invitee=:group AND i.inviter=:user AND i.event=:event";
 		Query query = entityManager.createQuery(q);

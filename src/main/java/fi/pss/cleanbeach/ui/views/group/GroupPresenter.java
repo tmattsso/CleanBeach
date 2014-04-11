@@ -6,6 +6,7 @@ package fi.pss.cleanbeach.ui.views.group;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -45,8 +46,11 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> {
 		User user = view.getUser();
 		if (user != null) {
 			view.backToMainAndReset();
-			view.showAdminGroups(groupService.getAdminGroups(user));
-			view.showMemberGroups(groupService.getMemberGroups(user));
+			Set<UsersGroup> adminGroups = groupService.getAdminGroups(user);
+			view.showAdminGroups(adminGroups);
+			Set<UsersGroup> memberGroups = groupService.getMemberGroups(user);
+			memberGroups.removeAll(adminGroups);
+			view.showMemberGroups(memberGroups);
 		}
 	}
 

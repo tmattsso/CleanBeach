@@ -3,7 +3,6 @@
  */
 package fi.pss.cleanbeach.services;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +26,7 @@ public class GroupService {
 
 	public Set<UsersGroup> getMemberGroups(User user) {
 		User u = entityManager.find(User.class, user.getId());
-		return Collections.unmodifiableSet(u.getMemberIn());
+		return u.getMemberIn();
 
 	}
 
@@ -40,7 +39,7 @@ public class GroupService {
 				result.add(group);
 			}
 		}
-		return Collections.unmodifiableSet(result);
+		return result;
 	}
 
 	public UsersGroup addMember(UsersGroup group, User user) {
