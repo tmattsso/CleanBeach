@@ -83,6 +83,7 @@ public class LocationView extends EventDetailsCapableView<LocationPresenter>
 	@Override
 	public void navigateBackAfterDelete(long eventId) {
 		navigateBack();
+		historyLayout.remove(eventId);
 	}
 
 	@Override

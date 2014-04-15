@@ -1,6 +1,8 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.ui.Button;
@@ -24,12 +26,15 @@ public class HistoryLayout extends NavigationView {
 	private static final long serialVersionUID = -98682367317399067L;
 	private final LocationPresenter presenter;
 
+	private final Map<Long, EventPanel> eventToPanel = new HashMap<>();
+	private final VerticalLayout root;
+
 	public HistoryLayout(final Location selected,
 			Collection<fi.pss.cleanbeach.data.Event> events,
 			final LocationPresenter presenter) {
 
 		this.presenter = presenter;
-		VerticalLayout root = new VerticalLayout();
+		root = new VerticalLayout();
 		root.setSpacing(true);
 		root.setMargin(true);
 		setContent(root);
@@ -55,12 +60,20 @@ public class HistoryLayout extends NavigationView {
 		for (fi.pss.cleanbeach.data.Event e : events) {
 			EventPanel panel = new EventPanel(e, presenter);
 			root.addComponent(panel);
+
+			eventToPanel.put(e.getId(), panel);
 		}
 	}
 
 	public void add(fi.pss.cleanbeach.data.Event e) {
 		EventPanel p = new EventPanel(e, presenter);
 		// add on top of rest
-		((VerticalLayout) getContent()).addComponent(p, 2);
+		root.addComponent(p, 2);
+
+		eventToPanel.put(e.getId(), p);
+	}
+
+	public void remove(long eventId) {
+		root.removeComponent(eventToPanel.get(eventId));
 	}
 }
