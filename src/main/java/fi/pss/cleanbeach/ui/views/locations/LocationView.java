@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -21,6 +22,8 @@ public class LocationView extends EventDetailsCapableView<LocationPresenter>
 	private static final long serialVersionUID = 6914178286159188531L;
 
 	private MapLayout map;
+
+	private HistoryLayout historyLayout;
 
 	public LocationView() {
 
@@ -54,9 +57,10 @@ public class LocationView extends EventDetailsCapableView<LocationPresenter>
 
 	@Override
 	public void showEvents(Location selected,
-			ArrayList<fi.pss.cleanbeach.data.Event> arrayList) {
+			Collection<fi.pss.cleanbeach.data.Event> events) {
 
-		navigateTo(new HistoryLayout());
+		historyLayout = new HistoryLayout(selected, events, presenter);
+		navigateTo(historyLayout);
 	}
 
 	@Override
@@ -79,6 +83,13 @@ public class LocationView extends EventDetailsCapableView<LocationPresenter>
 	@Override
 	public void navigateBackAfterDelete(long eventId) {
 		navigateBack();
+	}
+
+	@Override
+	public void updateEventList(Location loc, fi.pss.cleanbeach.data.Event e) {
+		if (historyLayout != null) {
+			historyLayout.add(e);
+		}
 	}
 
 }

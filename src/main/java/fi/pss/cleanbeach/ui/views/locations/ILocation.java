@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import fi.pss.cleanbeach.data.Event;
@@ -16,10 +17,12 @@ public interface ILocation extends IEventDetails {
 
 	void selectMarker(Location l);
 
-	void showEvents(Location selected, ArrayList<Event> arrayList);
+	void showEvents(Location selected, Collection<Event> collection);
 
 	void showTrends(Location selected, ArrayList<Event> arrayList);
 
 	void showTrashInput(Location selected, ThrashDAO thrash);
+
+	void updateEventList(Location loc, Event e);
 
 }

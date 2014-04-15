@@ -384,6 +384,24 @@ public class EventService {
 		return l;
 	}
 
+	/**
+	 * TODO restrict time?
+	 * 
+	 * @param group
+	 * @return
+	 */
+	public List<Event> getEvents(Location loc) {
+		TypedQuery<Event> query = em.createQuery(
+				"SELECT e from Event e WHERE e.location=:loc", Event.class);
+		query.setParameter("loc", loc);
+
+		List<Event> l = query.getResultList();
+		fillWithThrashDetails(l);
+		fillWithUserDetails(l);
+		Collections.sort(l);
+		return l;
+	}
+
 	private void fillWithUserDetails(List<Event> l) {
 		if (l == null || l.isEmpty()) {
 			return;

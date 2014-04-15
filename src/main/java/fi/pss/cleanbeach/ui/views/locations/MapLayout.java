@@ -63,18 +63,6 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		Button createEvent = new Button(Lang.get("locations.map.createevent"));
-		TouchKitIcon.calendar.addTo(createEvent);
-		createEvent.addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = 682703780760294261L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				presenter.createEvent(selected);
-			}
-		});
-
 		Button markDirty = new Button(Lang.get("locations.map.marklocdirty"));
 		TouchKitIcon.eyeOpen.addTo(markDirty);
 		markDirty.addClickListener(new ClickListener() {
@@ -131,8 +119,7 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		actionButtons = new HorizontalLayout(createEvent, markDirty,
-				markThrash, showEvents);
+		actionButtons = new HorizontalLayout(markDirty, markThrash, showEvents);
 		actionButtons.setWidth("100%");
 		actionButtons.setSpacing(true);
 		actionButtons.setVisible(false);

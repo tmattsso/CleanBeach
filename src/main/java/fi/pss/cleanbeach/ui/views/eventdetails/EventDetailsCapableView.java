@@ -8,7 +8,7 @@ import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.ui.views.events.MainEventsLayout;
 import fi.pss.cleanbeach.ui.views.group.GroupDetailsLayout;
-import fi.pss.cleanbeach.ui.views.locations.MapLayout;
+import fi.pss.cleanbeach.ui.views.locations.HistoryLayout;
 
 public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>>
 		extends CreateEventCapableView<T> implements IEventDetails {
@@ -34,7 +34,7 @@ public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>
 		Component current = getCurrentComponent();
 		boolean isGroupDetails = current instanceof GroupDetailsLayout;
 		boolean isEventsList = current instanceof MainEventsLayout;
-		boolean isMap = current instanceof MapLayout;
+		boolean isMap = current instanceof HistoryLayout;
 		return current == null || isGroupDetails || isEventsList || isMap;
 	}
 

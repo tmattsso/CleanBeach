@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +45,7 @@ public class LocationPresenter extends EventDetailsPresenter<ILocation> {
 	}
 
 	public void showEvents(Location selected) {
-		view.showEvents(selected, new ArrayList<Event>());
+		view.showEvents(selected, getEvents(selected));
 	}
 
 	public void createEvent(Location selected) {
@@ -92,6 +93,10 @@ public class LocationPresenter extends EventDetailsPresenter<ILocation> {
 
 		Event e = eService.createEvent(start, loc, creator, desc);
 		view.showDetails(e);
-		// FIXME navigte
+		view.updateEventList(loc, e);
+	}
+
+	private Collection<Event> getEvents(Location selected) {
+		return eService.getEvents(selected);
 	}
 }
