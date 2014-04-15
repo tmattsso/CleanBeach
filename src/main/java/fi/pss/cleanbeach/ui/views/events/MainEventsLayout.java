@@ -72,6 +72,8 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 		vl.setExpandRatio(content, 1);
 
 		setContent(vl);
+
+		allEventsLayout.runPositioning();
 	}
 
 	@Override
@@ -85,7 +87,8 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 		event.getButton().addStyleName("selected");
 
 		if (event.getButton() == allEvents) {
-			presenter.loadAllEvents();
+			allEventsLayout.runPositioning();
+			// presenter.loadAllEvents();
 		}
 		if (event.getButton() == joinedEvents) {
 			presenter.loadJoinedEvents();

@@ -42,7 +42,6 @@ public class MapComponent extends LMap implements PositionCallback {
 	private static final long serialVersionUID = -4582977579039441885L;
 
 	private final Map<Location, LMarker> markers = new HashMap<>();
-	private LMarker tempMarker;
 
 	private boolean positioningHasBeenRun;
 
