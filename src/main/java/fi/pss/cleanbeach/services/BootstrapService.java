@@ -27,6 +27,8 @@ import fi.pss.cleanbeach.services.GroupService.CannotDeleteException;
 @Startup
 public class BootstrapService {
 
+	private static final boolean INIT = false;
+
 	private final Logger log = Logger
 			.getLogger(this.getClass().getSimpleName());
 
@@ -47,6 +49,10 @@ public class BootstrapService {
 
 	@PostConstruct
 	public void init() throws CannotDeleteException {
+
+		if (!INIT) {
+			return;
+		}
 
 		log.warning("===Starting bootstrap===");
 
