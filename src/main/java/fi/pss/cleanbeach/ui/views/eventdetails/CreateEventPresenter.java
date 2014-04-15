@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.services.LocationService;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
@@ -16,6 +17,9 @@ public abstract class CreateEventPresenter<T extends ICreateEvent> extends
 
 	@Inject
 	private LocationService locService;
+
+	@Inject
+	private AuthenticationService aService;
 
 	@Override
 	public void init(User currentUser) {
@@ -27,4 +31,8 @@ public abstract class CreateEventPresenter<T extends ICreateEvent> extends
 
 	public abstract void createEvent(UsersGroup creator, String desc,
 			Date start, Location loc);
+
+	public User updateUser(User currentUser) {
+		return aService.refresh(currentUser);
+	}
 }

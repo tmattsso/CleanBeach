@@ -107,4 +107,8 @@ public class MainAppUI extends UI {
 		return ((MainAppUI) getCurrent()).currentUser;
 	}
 
+	public static void setCurrentUser(User current) {
+		((MainAppUI) getCurrent()).currentUser = current;
+	}
+
 }

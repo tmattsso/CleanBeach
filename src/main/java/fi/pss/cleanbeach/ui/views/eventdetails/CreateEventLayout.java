@@ -18,6 +18,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Location;
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.Lang;
@@ -86,7 +87,9 @@ public class CreateEventLayout extends NavigationView {
 		}
 
 		if (group == null) {
-			Set<UsersGroup> groups = MainAppUI.getCurrentUser().getMemberIn();
+			User current = presenter.updateUser(MainAppUI.getCurrentUser());
+			MainAppUI.setCurrentUser(current);
+			Set<UsersGroup> groups = current.getMemberIn();
 			Set<UsersGroup> adminIn = new HashSet<>();
 			for (UsersGroup ug : groups) {
 				if (ug.isAdmin(MainAppUI.getCurrentUser())) {
