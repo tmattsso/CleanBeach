@@ -32,8 +32,9 @@ public class EventsPresenter extends EventDetailsPresenter<IEvents> implements
 
 	}
 
-	public void loadAllEvents() {
-		List<Event> l = service.getEventsForUser(view.getUser(), null, null);
+	public void loadAllEvents(Double latitude, Double longitude) {
+		List<Event> l = service.getEventsForUser(view.getUser(), latitude,
+				longitude);
 		view.showAllEvents(l);
 	}
 

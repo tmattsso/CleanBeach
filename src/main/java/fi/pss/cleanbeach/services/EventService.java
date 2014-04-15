@@ -33,9 +33,9 @@ public class EventService {
 	private final Logger log = Logger.getLogger(getClass().getSimpleName());
 
 	/**
-	 * Should be about 20km in all directions
+	 * Should be about 30km in all directions
 	 */
-	private final static double EVENT_SEARCH_COORDINATE_THRESHOLD = 0.009;
+	private final static double EVENT_SEARCH_COORDINATE_THRESHOLD = 0.27;
 
 	@PersistenceContext(unitName = "cleanbeach")
 	private EntityManager em;
@@ -73,7 +73,6 @@ public class EventService {
 	 * - any events that are near the user<br/>
 	 * - any events that a user group has endorsed<br/>
 	 * - that are max. 1 month old<br/>
-	 * TODO: positioning
 	 * 
 	 * @param u
 	 * @return
@@ -92,6 +91,18 @@ public class EventService {
 		}
 		// the user has signed up for
 		q += "e IN (SELECT s.event FROM Signup s WHERE s.user=:user)";
+
+		if (latitude != null && longitude != null) {
+
+			q += " OR (";
+			q += " e.location.latitude < :latMax";
+			q += " AND e.location.latitude > :latMin";
+
+			q += " AND e.location.longitude < :longMax";
+			q += " AND e.location.longitude > :longMin";
+			q += ")";
+		}
+
 		q += ") AND e.start > :date";
 
 		Query query = em.createQuery(q);
@@ -99,6 +110,17 @@ public class EventService {
 			query.setParameter("orgs", u.getMemberIn());
 			query.setParameter("accepted", true);
 			query.setParameter("usergroups", u.getMemberIn());
+		}
+		if (latitude != null && longitude != null) {
+			query.setParameter("latMax", latitude
+					+ EVENT_SEARCH_COORDINATE_THRESHOLD);
+			query.setParameter("latMin", latitude
+					- EVENT_SEARCH_COORDINATE_THRESHOLD);
+
+			query.setParameter("longMax", longitude
+					+ EVENT_SEARCH_COORDINATE_THRESHOLD);
+			query.setParameter("longMin", longitude
+					- EVENT_SEARCH_COORDINATE_THRESHOLD);
 		}
 		query.setParameter("user", u);
 		query.setParameter("date", getMinStartTime());

@@ -28,8 +28,6 @@ public class EventsView extends EventDetailsCapableView<EventsPresenter>
 		setCaption(Lang.get("events.caption"));
 		events = new MainEventsLayout(presenter);
 
-		presenter.loadAllEvents();
-
 		return events;
 	}
 
