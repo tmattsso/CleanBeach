@@ -1,17 +1,25 @@
 package fi.pss.cleanbeach.ui.views.eventdetails;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.vaadin.addon.touchkit.gwt.client.vcom.DatePickerState.Resolution;
 import com.vaadin.addon.touchkit.ui.DatePicker;
 import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.group.LocationSelector;
 import fi.pss.cleanbeach.ui.views.group.LocationSelector.LocationSelectedListener;
@@ -23,7 +31,7 @@ public class CreateEventLayout extends NavigationView {
 	private final CreateEventPresenter<?> presenter;
 
 	private Location loc;
-	private final UsersGroup group;
+	private UsersGroup group;
 
 	public CreateEventLayout(final UsersGroup g, final Location l,
 			final CreateEventPresenter<?> presenter) {
@@ -34,13 +42,13 @@ public class CreateEventLayout extends NavigationView {
 		VerticalLayout root = new VerticalLayout();
 		root.setMargin(true);
 		root.setSpacing(true);
-		root.setHeight("100%");
 		root.addStyleName("createevent");
 		setContent(root);
 
 		setCaption(Lang.get("events.create.caption"));
 
-		final TextField desc = new TextField(Lang.get("events.create.desc"));
+		final TextArea desc = new TextArea(Lang.get("events.create.desc"));
+		desc.setRows(5);
 		desc.setRequired(true);
 		desc.setWidth("100%");
 		root.addComponent(desc);
@@ -51,27 +59,69 @@ public class CreateEventLayout extends NavigationView {
 		start.setWidth("100%");
 		root.addComponent(start);
 
-		final Button locationSelect = new Button(
-				Lang.get("events.create.noloc"));
-		locationSelect.addClickListener(new ClickListener() {
+		if (loc == null) {
+			final Button locationSelect = new Button(
+					Lang.get("events.create.noloc"));
+			locationSelect.addClickListener(new ClickListener() {
 
-			private static final long serialVersionUID = 7283240300836901481L;
+				private static final long serialVersionUID = 7283240300836901481L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				getNavigationManager().navigateTo(
-						new LocationSelector(new LocationSelectedListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					getNavigationManager().navigateTo(
+							new LocationSelector(
+									new LocationSelectedListener() {
 
-							@Override
-							public void selected(Location loc) {
-								CreateEventLayout.this.loc = loc;
-								locationSelect.setCaption(loc.getName());
-							}
-						}, presenter));
+										@Override
+										public void selected(Location loc) {
+											CreateEventLayout.this.loc = loc;
+											locationSelect.setCaption(loc
+													.getName());
+										}
+									}, presenter));
+				}
+			});
+			root.addComponent(locationSelect);
+			root.setExpandRatio(locationSelect, 1);
+		}
+
+		if (group == null) {
+			Set<UsersGroup> groups = MainAppUI.getCurrentUser().getMemberIn();
+			Set<UsersGroup> adminIn = new HashSet<>();
+			for (UsersGroup ug : groups) {
+				if (ug.isAdmin(MainAppUI.getCurrentUser())) {
+					adminIn.add(ug);
+				}
 			}
-		});
-		root.addComponent(locationSelect);
-		root.setExpandRatio(locationSelect, 1);
+
+			if (adminIn.isEmpty()) {
+				root.removeAllComponents();
+				Label noGroups = new Label(Lang.get("events.create.notadmin"));
+				root.addComponent(noGroups);
+				return;
+			}
+
+			final NativeSelect select = new NativeSelect(
+					Lang.get("events.groupselect.caption"));
+			for (UsersGroup ug : groups) {
+				select.addItem(ug);
+				select.setItemCaption(ug, ug.getName());
+			}
+			select.setRequired(true);
+			select.setNullSelectionAllowed(false);
+			select.setWidth("100%");
+			root.addComponent(select);
+
+			select.addValueChangeListener(new ValueChangeListener() {
+
+				private static final long serialVersionUID = -2371910476692810249L;
+
+				@Override
+				public void valueChange(ValueChangeEvent event) {
+					group = (UsersGroup) select.getValue();
+				}
+			});
+		}
 
 		Button create = new Button(Lang.get("events.create.create"));
 		create.addClickListener(new ClickListener() {
@@ -87,6 +137,10 @@ public class CreateEventLayout extends NavigationView {
 				}
 				if (loc == null) {
 					Notification.show(Lang.get("events.create.selectloc"));
+					return;
+				}
+				if (group == null) {
+					Notification.show(Lang.get("events.create.selectgroup"));
 					return;
 				}
 

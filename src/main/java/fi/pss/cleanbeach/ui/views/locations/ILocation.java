@@ -6,9 +6,9 @@ import java.util.Set;
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.ThrashDAO;
-import fi.pss.cleanbeach.ui.mvp.IView;
+import fi.pss.cleanbeach.ui.views.eventdetails.IEventDetails;
 
-public interface ILocation extends IView {
+public interface ILocation extends IEventDetails {
 
 	void addLocations(Set<Location> locs);
 
@@ -17,8 +17,6 @@ public interface ILocation extends IView {
 	void selectMarker(Location l);
 
 	void showEvents(Location selected, ArrayList<Event> arrayList);
-
-	void showCreateEvent(Location selected);
 
 	void showTrends(Location selected, ArrayList<Event> arrayList);
 

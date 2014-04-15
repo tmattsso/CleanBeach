@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -12,12 +13,13 @@ import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.LocationService;
-import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
+import fi.pss.cleanbeach.ui.views.eventdetails.EventDetailsPresenter;
 
 @UIScoped
-public class LocationPresenter extends AbstractPresenter<ILocation> {
+public class LocationPresenter extends EventDetailsPresenter<ILocation> {
 
 	@Inject
 	private LocationService locService;
@@ -46,7 +48,7 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 	}
 
 	public void createEvent(Location selected) {
-		view.showCreateEvent(selected);
+		view.showCreateEvent(null, selected);
 	}
 
 	public void showTrends(Location selected) {
@@ -71,6 +73,7 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 				locService.getThrash(selected, view.getUser()));
 	}
 
+	@Override
 	public List<ThrashType> getThrashTypes() {
 		return eService.getThrashTypes();
 	}
@@ -83,4 +86,12 @@ public class LocationPresenter extends AbstractPresenter<ILocation> {
 		locService.setDescription(t, view.getUser(), value, null, loc);
 	}
 
+	@Override
+	public void createEvent(UsersGroup creator, String desc, Date start,
+			Location loc) {
+
+		Event e = eService.createEvent(start, loc, creator, desc);
+		view.showDetails(e);
+		// FIXME navigte
+	}
 }
