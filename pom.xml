@@ -69,8 +69,8 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiler</artifactId>
 			<version>${vaadin.version}</version>
-			<!-- <scope>provided</scope> We need this for widgetset optimization -->
-		</dependency>
+                        <scope>provided</scope>
+                </dependency>
 		<dependency>
 			<groupId>org.vaadin.addon</groupId>
 			<artifactId>v-leaflet</artifactId>
@@ -89,8 +89,13 @@
 			<version>1.0.1.Final</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
+	        <dependency>
+	                <artifactId>jetty-util</artifactId>
+	                <groupId>org.mortbay.jetty</groupId>
+	                <type>jar</type>
+	                <version>6.1.11</version>
+	        </dependency>
+	        <dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>6.0</version>
@@ -102,26 +107,6 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.3</version>
 		</dependency>
-                
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-servlets</artifactId>
-                    <version>7.6.14.v20131031</version>
-                        <exclusions>
-                                <exclusion>
-                                        <artifactId>jetty-continuation</artifactId>
-                                        <groupId>org.eclipse.jetty</groupId>
-                                </exclusion>
-                                <exclusion>
-                                        <artifactId>jetty-client</artifactId>
-                                        <groupId>org.eclipse.jetty</groupId>
-                                </exclusion>
-                                <exclusion>
-                                        <artifactId>jetty-util</artifactId>
-                                        <groupId>org.eclipse.jetty</groupId>
-                                </exclusion>
-                        </exclusions>
-                </dependency>
 
 		<!-- used under development -->
 		<!--dependency> <groupId>hsqldb</groupId> <artifactId>hsqldb</artifactId> 
@@ -144,6 +129,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
+                                    <packagingExcludes></packagingExcludes>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
