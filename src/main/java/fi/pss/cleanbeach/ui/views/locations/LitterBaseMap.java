@@ -8,13 +8,13 @@ package fi.pss.cleanbeach.ui.views.locations;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.vaadin.addon.leaflet.LMap;
 import org.vaadin.addon.leaflet.LMarker;
 import org.vaadin.addon.leaflet.LTileLayer;
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
-import org.vaadin.addon.leaflet.client.PopupState;
 import org.vaadin.addon.leaflet.shared.Point;
 
 import com.vaadin.addon.touchkit.extensions.Geolocator;
@@ -43,6 +43,7 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 
 	private final Map<Location, LMarker> markers = new HashMap<>();
 	private LMarker tempMarker;
+	private LMarker selected;
 
 	private boolean positioningHasBeenRun;
 
@@ -79,6 +80,16 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 			@Override
 			public void onClick(LeafletClickEvent event) {
 
+				if (selected != null) {
+					for (Entry<Location, LMarker> e : markers.entrySet()) {
+						if (e.getValue().equals(selected)) {
+							setIcon(selected, e.getKey());
+							break;
+						}
+					}
+					selected = null;
+				}
+
 				if (tempMarker == null || !tempMarker.isAttached()) {
 					tempMarker = new LMarker();
 					addComponent(tempMarker);
@@ -108,27 +119,19 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 	}
 
 	public void addPoint(final Location l) {
-		LMarker m = new LMarker(l.getLatitude(), l.getLongitude());
+		final LMarker m = new LMarker(l.getLatitude(), l.getLongitude());
 		m.setData(l);
 		addComponent(m);
 
 		setIcon(m, l);
 		m.setIconAnchor(new Point(16, 32));
 
-		m.setPopup(l.getName());
-		PopupState state = new PopupState();
-		state.closeButton = false;
-		state.zoomAnimation = false;
-		state.minWidth = 150;
-		state.offset = new Point(0, -32);
-		state.autoPan = true;
-		state.autoPanPadding = new Point(10, 10);
-		m.setPopupState(state);
-
 		m.addClickListener(new LeafletClickListener() {
 
 			@Override
 			public void onClick(LeafletClickEvent event) {
+				selected = m;
+				m.setIcon(new ClassResource("flag_yellow.png"));
 				listener.selectedExisting(l);
 			}
 		});

@@ -10,7 +10,9 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.ui.util.Lang;
@@ -25,8 +27,10 @@ public class MapLayout extends NavigationView implements
 	private final LitterBaseMap lMap;
 	private Location selected;
 
-	private final HorizontalLayout actionButtons;
+	private final GridLayout actionButtons;
 	private final HorizontalLayout addButtons;
+
+	private final Label locName;
 
 	public MapLayout(final LocationPresenter presenter) {
 
@@ -65,6 +69,7 @@ public class MapLayout extends NavigationView implements
 
 		Button markDirty = new Button(Lang.get("locations.map.marklocdirty"));
 		TouchKitIcon.eyeOpen.addTo(markDirty);
+		markDirty.setSizeFull();
 		markDirty.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 682703780760294261L;
@@ -85,6 +90,7 @@ public class MapLayout extends NavigationView implements
 
 		Button markThrash = new Button(Lang.get("locations.map.reportthrash"));
 		TouchKitIcon.exclamationSign.addTo(markThrash);
+		markThrash.setSizeFull();
 		markThrash.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -9055053032611311553L;
@@ -109,6 +115,7 @@ public class MapLayout extends NavigationView implements
 
 		Button showEvents = new Button(Lang.get("locations.map.showhistory"));
 		TouchKitIcon.listAlt.addTo(showEvents);
+		showEvents.setSizeFull();
 		showEvents.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -7853451135198225867L;
@@ -119,7 +126,16 @@ public class MapLayout extends NavigationView implements
 			}
 		});
 
-		actionButtons = new HorizontalLayout(markDirty, markThrash, showEvents);
+		locName = new Label();
+		locName.setHeight("40px");
+		locName.addStyleName("locname");
+
+		actionButtons = new GridLayout(3, 2);
+		actionButtons.setWidth("100%");
+		actionButtons.addComponent(locName, 0, 0, 2, 0);
+		actionButtons.addComponent(markDirty);
+		actionButtons.addComponent(markThrash);
+		actionButtons.addComponent(showEvents);
 		actionButtons.setWidth("100%");
 		actionButtons.setSpacing(true);
 		actionButtons.setVisible(false);
@@ -175,6 +191,8 @@ public class MapLayout extends NavigationView implements
 		addButtons.setVisible(false);
 
 		selected = loc;
+
+		locName.setValue(loc.getName());
 		lMap.clearTempMarker();
 	}
 }
