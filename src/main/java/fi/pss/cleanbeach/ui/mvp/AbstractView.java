@@ -61,4 +61,8 @@ public abstract class AbstractView<P extends AbstractPresenter> extends
 	public void showErrorNotification(String string, String msg) {
 		Notification.show(string, msg, Type.ERROR_MESSAGE);
 	}
+
+	public void setUser(User current) {
+		MainAppUI.setCurrentUser(current);
+	}
 }

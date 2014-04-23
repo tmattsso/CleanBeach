@@ -32,7 +32,8 @@ public abstract class CreateEventPresenter<T extends ICreateEvent> extends
 	public abstract void createEvent(UsersGroup creator, String desc,
 			Date start, Location loc);
 
-	public User updateUser(User currentUser) {
-		return aService.refresh(currentUser);
+	public void updateUser(User currentUser) {
+		User refresh = aService.refresh(currentUser);
+		view.setUser(refresh);
 	}
 }

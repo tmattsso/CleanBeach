@@ -72,6 +72,12 @@ public class MainAppUI extends UI {
 		mainView.init();
 	}
 
+	public void logout(@Observes LogoutEvent e) {
+
+		getCurrent().close();
+		getCurrent().getPage().setLocation("");
+	}
+
 	public static Cookie getUsernameCookie() {
 		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
 		if (cookies != null) {
@@ -109,6 +115,11 @@ public class MainAppUI extends UI {
 
 	public static void setCurrentUser(User current) {
 		((MainAppUI) getCurrent()).currentUser = current;
+	}
+
+	public static void logout() {
+		getCurrent().close();
+		getCurrent().getPage().setLocation("");
 	}
 
 }

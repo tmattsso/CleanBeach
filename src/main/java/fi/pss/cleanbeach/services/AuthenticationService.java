@@ -52,8 +52,7 @@ public class AuthenticationService {
 			return null;
 		}
 
-		byte[] salt = Arrays.copyOfRange(u.getHashedPass(), 0,
-				User.SALT_LENGTH_BYTES);
+		byte[] salt = getSalt(u);
 		byte[] pass = Arrays.copyOfRange(u.getHashedPass(),
 				User.SALT_LENGTH_BYTES, u.getHashedPass().length);
 
@@ -64,6 +63,10 @@ public class AuthenticationService {
 		}
 
 		return null;
+	}
+
+	private static byte[] getSalt(User u) {
+		return Arrays.copyOfRange(u.getHashedPass(), 0, User.SALT_LENGTH_BYTES);
 	}
 
 	private static byte[] hash(byte[] salt, String pwd) {
@@ -164,5 +167,18 @@ public class AuthenticationService {
 		public REGISTRATION_CAUSE getFault() {
 			return cause;
 		}
+	}
+
+	public User changeUserEmail(User currentUser, String newMail) {
+		currentUser = refresh(currentUser);
+		currentUser.setEmail(newMail);
+		currentUser = em.merge(currentUser);
+		return currentUser;
+	}
+
+	public void changeUserPassword(User user, String value) {
+		user = refresh(user);
+		user.setHashedPass(hash(getSalt(user), value));
+		em.merge(user);
 	}
 }
