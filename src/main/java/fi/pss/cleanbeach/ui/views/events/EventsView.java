@@ -57,4 +57,8 @@ public class EventsView extends EventDetailsCapableView<EventsPresenter>
 		navigateBack();
 		events.remove(eventId);
 	}
+
+	public void showEvent(Long selectedEventId) {
+		presenter.openSingleEvent(selectedEventId);
+	}
 }

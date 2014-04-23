@@ -34,7 +34,7 @@ public class MainView extends TabBarView {
 
 	}
 
-	public void init() {
+	public void init(Long selectedEventId) {
 
 		Tab tab;
 
@@ -49,5 +49,9 @@ public class MainView extends TabBarView {
 
 		tab = addTab(settingsView, Lang.get("settings.caption"));
 		TouchKitIcon.cogs.addTo(tab);
+
+		if (selectedEventId != null) {
+			eventsView.showEvent(selectedEventId);
+		}
 	}
 }

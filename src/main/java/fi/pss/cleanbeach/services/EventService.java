@@ -504,4 +504,12 @@ public class EventService {
 
 		em.flush();
 	}
+
+	public fi.pss.cleanbeach.data.Event loadDetails(long eventId) {
+		Event e = em.find(Event.class, eventId);
+		if (e != null) {
+			e = loadDetails(e);
+		}
+		return e;
+	}
 }

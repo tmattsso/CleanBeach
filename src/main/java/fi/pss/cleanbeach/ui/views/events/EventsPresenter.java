@@ -50,4 +50,9 @@ public class EventsPresenter extends EventDetailsPresenter<IEvents> implements
 
 	}
 
+	public void openSingleEvent(Long selectedEventId) {
+		Event e = service.loadDetails(selectedEventId);
+		view.showDetails(e);
+	}
+
 }

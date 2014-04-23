@@ -9,10 +9,13 @@ import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService;
+import fi.pss.cleanbeach.services.EventService;
+import fi.pss.cleanbeach.ui.views.events.PublicEventView;
 import fi.pss.cleanbeach.ui.views.login.LoginEvent;
 import fi.pss.cleanbeach.ui.views.login.LoginView;
 
@@ -27,8 +30,8 @@ public class MainAppUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
 
-	// private static String AUTOLOGIN = null;
-	private static String AUTOLOGIN = "thomas@t.com";
+	private static String AUTOLOGIN = null;
+	// private static String AUTOLOGIN = "thomas@t.com";
 	// private static String AUTOLOGIN = "demo@demo.com";
 
 	private User currentUser;
@@ -41,11 +44,34 @@ public class MainAppUI extends UI {
 
 	@Inject
 	private AuthenticationService authService;
+	@Inject
+	private EventService eService;
+
+	private Long selectedEventId;
 
 	@Override
 	protected void init(VaadinRequest request) {
 
 		setErrorHandler(new PSSErrorHandler());
+
+		String parameter = request.getParameter("event");
+		if (parameter != null) {
+
+			try {
+				long eventId = Long.parseLong(parameter);
+				fi.pss.cleanbeach.data.Event e = eService.loadDetails(eventId);
+				if (e != null) {
+					setContent(new PublicEventView(e));
+					return;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			Label noEventFound = new Label("[No event with that id found");
+			setContent(noEventFound);
+			return;
+		}
 
 		// if (!getPage().getWebBrowser().isTouchDevice()) {
 		// // TODO proper redirection; this obviously doesn't work :)
@@ -69,7 +95,7 @@ public class MainAppUI extends UI {
 		setCookie();
 
 		setContent(mainView);
-		mainView.init();
+		mainView.init(selectedEventId);
 	}
 
 	public void logout(@Observes LogoutEvent e) {
@@ -110,16 +136,21 @@ public class MainAppUI extends UI {
 	 * Returns the currently logged in user.
 	 */
 	public static User getCurrentUser() {
-		return ((MainAppUI) getCurrent()).currentUser;
+		return getCurrent().currentUser;
 	}
 
 	public static void setCurrentUser(User current) {
-		((MainAppUI) getCurrent()).currentUser = current;
+		getCurrent().currentUser = current;
 	}
 
-	public static void logout() {
-		getCurrent().close();
-		getCurrent().getPage().setLocation("");
+	public static MainAppUI getCurrent() {
+		return (MainAppUI) UI.getCurrent();
+	}
+
+	public void loginFromPublic(Long id) {
+
+		selectedEventId = id;
+		setContent(login);
 	}
 
 }

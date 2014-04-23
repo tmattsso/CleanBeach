@@ -13,7 +13,8 @@
 	height: 60px;
 }
 
-.login .desc span {
+.login .desc span,
+.publicevent .desc span {
 	display: block;
 	font-size: 24pt;
 }
