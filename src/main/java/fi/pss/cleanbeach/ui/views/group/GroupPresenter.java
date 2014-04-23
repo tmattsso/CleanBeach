@@ -178,6 +178,9 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> {
 
 		group = groupService.save(group);
 
+		// update CurrentUser
+		view.getUser().getMemberIn().add(group);
+
 		loadGroups();
 		view.showGroupDetails(group);
 		view.showGroupSaveConfirmation(group);

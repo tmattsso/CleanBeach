@@ -27,8 +27,8 @@ public class MainAppUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
 
-	private static String AUTOLOGIN = null;
-	// private static String AUTOLOGIN = "thomas@t.com";
+	// private static String AUTOLOGIN = null;
+	private static String AUTOLOGIN = "thomas@t.com";
 	// private static String AUTOLOGIN = "demo@demo.com";
 
 	private User currentUser;
@@ -72,6 +72,12 @@ public class MainAppUI extends UI {
 		mainView.init();
 	}
 
+	public void logout(@Observes LogoutEvent e) {
+
+		getCurrent().close();
+		getCurrent().getPage().setLocation("");
+	}
+
 	public static Cookie getUsernameCookie() {
 		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
 		if (cookies != null) {
@@ -105,6 +111,15 @@ public class MainAppUI extends UI {
 	 */
 	public static User getCurrentUser() {
 		return ((MainAppUI) getCurrent()).currentUser;
+	}
+
+	public static void setCurrentUser(User current) {
+		((MainAppUI) getCurrent()).currentUser = current;
+	}
+
+	public static void logout() {
+		getCurrent().close();
+		getCurrent().getPage().setLocation("");
 	}
 
 }

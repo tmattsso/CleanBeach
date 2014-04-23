@@ -1,4 +1,4 @@
-
+package fi.pss.cleanbeach.standalone.map;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,7 +34,7 @@ public class OptimizedConnectorBundleLoaderFactory extends
 		} else {
 			// Loads all other connectors immediately after the initial view has
 			// been rendered
-			return LoadStyle.DEFERRED;
+			return LoadStyle.LAZY;
 		}
 	}
 }

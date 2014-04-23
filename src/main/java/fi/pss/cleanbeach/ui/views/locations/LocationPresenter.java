@@ -58,8 +58,6 @@ public class LocationPresenter extends EventDetailsPresenter<ILocation> {
 
 	public void readyForPoints(Double lat, Double long1) {
 		Set<Location> locs = locService.getLocationsNear(lat, long1);
-		log.info("fetched from db:" + locs.size());
-
 		view.addLocations(locs);
 	}
 

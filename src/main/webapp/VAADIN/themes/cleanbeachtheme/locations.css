@@ -8,3 +8,10 @@
 	padding-left: 10px;
 	padding-right: 10px;
 }
+
+.maplayout .actionbuttons .locname {
+	text-align: center;
+	background-color: #fff;
+	line-height: 40px;
+	border-radius: 3px;
+}

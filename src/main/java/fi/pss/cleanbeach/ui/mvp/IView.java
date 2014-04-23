@@ -9,4 +9,6 @@ public interface IView {
 	void showErrorNotification(String caption, String msg);
 
 	void showErrorNotification(String caption);
+
+	public void setUser(User current);
 }

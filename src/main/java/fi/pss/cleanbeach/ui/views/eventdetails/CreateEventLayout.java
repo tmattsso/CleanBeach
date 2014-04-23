@@ -86,6 +86,8 @@ public class CreateEventLayout extends NavigationView {
 		}
 
 		if (group == null) {
+			presenter.updateUser(MainAppUI.getCurrentUser());
+
 			Set<UsersGroup> groups = MainAppUI.getCurrentUser().getMemberIn();
 			Set<UsersGroup> adminIn = new HashSet<>();
 			for (UsersGroup ug : groups) {
