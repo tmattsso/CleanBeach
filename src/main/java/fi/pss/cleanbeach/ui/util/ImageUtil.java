@@ -17,6 +17,11 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
+
 import org.imgscalr.Scalr;
 
 import com.vaadin.server.StreamResource;
@@ -27,14 +32,41 @@ import fi.pss.cleanbeach.data.UsersGroup;
 
 public class ImageUtil {
 
+	private static final String CACHE_NAME = "imgCache";
+
+	private static transient Cache cache;
+
 	private static final int[] RGB_MASKS = { 0xFF0000, 0xFF00, 0xFF };
 	private static final ColorModel RGB_OPAQUE = new DirectColorModel(32,
 			RGB_MASKS[0], RGB_MASKS[1], RGB_MASKS[2]);
+
+	private static final Object CACHE_LOCK = new Object();
+
+	static {
+		// init cache
+		Configuration cfg = new Configuration();
+		cfg.setName("repository");
+		CacheManager cm = CacheManager.create(cfg);
+
+		synchronized (CACHE_LOCK) {
+
+			if (cm.cacheExists(CACHE_NAME)) {
+				cache = cm.getCache(CACHE_NAME);
+			} else {
+
+				CacheConfiguration conf = new CacheConfiguration(CACHE_NAME,
+						1000);
+				cache = new Cache(conf);
+				CacheManager.create(cfg).addCache(cache);
+			}
+		}
+	}
 
 	public static Image getGroupLogo(UsersGroup group) {
 		if (group == null || group.getLogo() == null) {
 			return null;
 		}
+
 		return createLogoComponent(group.getName(), group.getLogo()
 				.getContent(), group.getLogo().getMimetype());
 	}
