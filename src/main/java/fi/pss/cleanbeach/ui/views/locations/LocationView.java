@@ -14,6 +14,7 @@ import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.views.eventdetails.CreateEventLayout;
 import fi.pss.cleanbeach.ui.views.eventdetails.EventDetailsCapableView;
+import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmLocationListener;
 
 @UIScoped
 public class LocationView extends EventDetailsCapableView<LocationPresenter>
@@ -96,6 +97,21 @@ public class LocationView extends EventDetailsCapableView<LocationPresenter>
 	@Override
 	protected void eventDetailsUpdated(fi.pss.cleanbeach.data.Event e) {
 		historyLayout.update(e);
+	}
+
+	@Override
+	public void showLocCreate(final Double lat, final Double lon) {
+		// ask name for new location
+		CreateLocationPopover pop = new CreateLocationPopover(
+				new ConfirmLocationListener() {
+
+					@Override
+					public void confirm(String name) {
+						presenter.addLocation(lat, lon, name);
+						map.clearMarker();
+					}
+				});
+		pop.showRelativeTo(map);
 	}
 
 }

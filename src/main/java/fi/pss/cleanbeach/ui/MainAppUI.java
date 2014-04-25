@@ -15,6 +15,7 @@ import com.vaadin.ui.UI;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.services.EventService;
+import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.events.PublicEventView;
 import fi.pss.cleanbeach.ui.views.login.LoginEvent;
 import fi.pss.cleanbeach.ui.views.login.LoginView;
@@ -68,7 +69,7 @@ public class MainAppUI extends UI {
 				e.printStackTrace();
 			}
 
-			Label noEventFound = new Label("[No event with that id found");
+			Label noEventFound = new Label(Lang.get("public.noevent"));
 			setContent(noEventFound);
 			return;
 		}
