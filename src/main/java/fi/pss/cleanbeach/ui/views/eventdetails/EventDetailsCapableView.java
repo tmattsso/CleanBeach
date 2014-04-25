@@ -51,7 +51,10 @@ public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>
 	@Override
 	public void updateEventDetails(fi.pss.cleanbeach.data.Event e) {
 		details.update(e);
+		eventDetailsUpdated(e);
 	}
+
+	protected abstract void eventDetailsUpdated(fi.pss.cleanbeach.data.Event e);
 
 	@Override
 	public void openInviteGroups(Collection<Invite> coll,

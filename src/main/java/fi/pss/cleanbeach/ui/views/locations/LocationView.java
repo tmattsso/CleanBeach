@@ -93,4 +93,9 @@ public class LocationView extends EventDetailsCapableView<LocationPresenter>
 		}
 	}
 
+	@Override
+	protected void eventDetailsUpdated(fi.pss.cleanbeach.data.Event e) {
+		historyLayout.update(e);
+	}
+
 }

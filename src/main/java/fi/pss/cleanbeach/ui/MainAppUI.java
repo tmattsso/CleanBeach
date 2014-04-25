@@ -30,8 +30,8 @@ public class MainAppUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
 
-	private static String AUTOLOGIN = null;
-	// private static String AUTOLOGIN = "thomas@t.com";
+	// private static String AUTOLOGIN = null;
+	private static String AUTOLOGIN = "thomas@t.com";
 	// private static String AUTOLOGIN = "demo@demo.com";
 
 	private User currentUser;
@@ -125,6 +125,7 @@ public class MainAppUI extends UI {
 		Cookie newCookie = new Cookie(COOKIE_NAME,
 				((MainAppUI) UI.getCurrent()).currentUser.getEmail());
 		newCookie.setDomain("localhost");
+		newCookie.setPath(VaadinService.getCurrentRequest().getContextPath());
 		// newCookie.setSecure(true); TODO enable
 		// store for 30 days
 		newCookie.setMaxAge(60 * 60 * 24 * 30);

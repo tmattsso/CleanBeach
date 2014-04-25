@@ -61,4 +61,9 @@ public class EventsView extends EventDetailsCapableView<EventsPresenter>
 	public void showEvent(Long selectedEventId) {
 		presenter.openSingleEvent(selectedEventId);
 	}
+
+	@Override
+	protected void eventDetailsUpdated(fi.pss.cleanbeach.data.Event e) {
+		events.update(e);
+	}
 }
