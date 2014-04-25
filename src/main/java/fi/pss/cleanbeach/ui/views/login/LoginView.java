@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
 import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
+import com.vaadin.addon.touchkit.ui.EmailField;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -20,7 +21,6 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
@@ -77,7 +77,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		hl.addStyleName("logolayout");
 		main.addComponent(hl);
 
-		final TextField username = new TextField(Lang.get("login.username"));
+		final EmailField username = new EmailField(Lang.get("login.username"));
 		username.setWidth("100%");
 		username.setImmediate(true);
 		username.addStyleName("username");
