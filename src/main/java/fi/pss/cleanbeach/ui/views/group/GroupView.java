@@ -143,4 +143,8 @@ public class GroupView extends EventDetailsCapableView<GroupPresenter>
 		}
 	}
 
+	@Override
+	protected void eventDetailsUpdated(fi.pss.cleanbeach.data.Event e) {
+		detailsComponent.update(e);
+	}
 }

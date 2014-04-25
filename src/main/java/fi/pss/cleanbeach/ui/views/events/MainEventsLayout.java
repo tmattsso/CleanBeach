@@ -13,6 +13,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.ui.util.Lang;
+import fi.pss.cleanbeach.ui.views.eventdetails.CreateEventLayout;
 
 public class MainEventsLayout extends NavigationView implements ClickListener {
 
@@ -21,11 +22,13 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 	private final Button allEvents;
 	private final Button joinedEvents;
 	private final Button search;
+	private final Button create;
 	private final CssLayout content;
 
 	private WallLayout allEventsLayout;
 	private WallLayout joinedEventsLayout;
 	private EventSearchLayout searchLayout;
+	private CreateEventLayout createLayout;
 
 	private final EventsPresenter presenter;
 
@@ -64,6 +67,11 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 		TouchKitIcon.search.addTo(search);
 		tabs.addComponent(search);
 
+		create = new Button(Lang.get("events.main.create"));
+		create.addClickListener(this);
+		TouchKitIcon.plus.addTo(create);
+		tabs.addComponent(create);
+
 		content = new CssLayout((Component) allEvents.getData());
 		content.setSizeFull();
 
@@ -78,6 +86,13 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 
 	@Override
 	public void buttonClick(ClickEvent event) {
+
+		if (event.getButton() == create) {
+			getNavigationManager().navigateTo(
+					new CreateEventLayout(null, null, presenter));
+			return;
+		}
+
 		allEvents.removeStyleName("selected");
 		joinedEvents.removeStyleName("selected");
 		search.removeStyleName("selected");

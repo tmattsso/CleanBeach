@@ -10,6 +10,7 @@ import com.vaadin.data.Validator.EmptyValueException;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -30,6 +31,7 @@ import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.ExceptionUtil;
+import fi.pss.cleanbeach.ui.util.ImageUtil;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 public class EditGroupLayout extends NavigationView {
@@ -39,16 +41,18 @@ public class EditGroupLayout extends NavigationView {
 	private final GroupPresenter presenter;
 	private final FieldGroup form;
 	private final Upload logo;
+	private com.vaadin.ui.Image logoImg;
+	private final VerticalLayout root;
 
 	public EditGroupLayout(UsersGroup group, GroupPresenter presenter) {
 		this.group = group;
 		this.presenter = presenter;
 
-		VerticalLayout vl = new VerticalLayout();
-		vl.setMargin(true);
-		vl.setSpacing(true);
-		vl.setSizeFull();
-		setContent(vl);
+		root = new VerticalLayout();
+		root.setMargin(true);
+		root.setSpacing(true);
+		root.setSizeFull();
+		setContent(root);
 		setSizeFull();
 
 		if (isNew()) {
@@ -64,7 +68,7 @@ public class EditGroupLayout extends NavigationView {
 		groupName.setWidth("100%");
 		groupName.setNullRepresentation("");
 		groupName.setRequired(true);
-		vl.addComponent(groupName);
+		root.addComponent(groupName);
 		form.bind(groupName, "name");
 
 		TextArea groupDesc = new TextArea(Lang.get("Group.edit.desc"));
@@ -72,8 +76,18 @@ public class EditGroupLayout extends NavigationView {
 		groupDesc.setRows(5);
 		groupDesc.setRequired(true);
 		groupDesc.setNullRepresentation("");
-		vl.addComponent(groupDesc);
+		root.addComponent(groupDesc);
 		form.bind(groupDesc, "description");
+
+		if (group.getLogo() != null) {
+
+			logoImg = ImageUtil.getGroupLogo(group);
+		} else {
+			logoImg = new com.vaadin.ui.Image();
+		}
+		logoImg.addStyleName("logo");
+		root.addComponent(logoImg);
+		root.setComponentAlignment(logoImg, Alignment.MIDDLE_CENTER);
 
 		logo = new Upload();
 		if (group.getLogo() == null) {
@@ -88,12 +102,12 @@ public class EditGroupLayout extends NavigationView {
 		logo.addSucceededListener(listener);
 		logo.addFailedListener(listener);
 		logo.addProgressListener(listener);
-		vl.addComponent(logo);
+		root.addComponent(logo);
 
-		vl.setExpandRatio(logo, 1);
+		root.setExpandRatio(logo, 1);
 
 		Button save = new Button(Lang.get("Group.edit.save"));
-		vl.addComponent(save);
+		root.addComponent(save);
 		save.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 2803745753760737634L;
@@ -126,7 +140,7 @@ public class EditGroupLayout extends NavigationView {
 
 		private static final long serialVersionUID = -6303362300158056742L;
 
-		final static int maxLength = 128 * 1024; // 128K;
+		final static int maxLength = 256 * 1024; // 256K;
 		ByteArrayOutputStream fos = null;
 		String filename;
 		Upload upload;
@@ -171,6 +185,13 @@ public class EditGroupLayout extends NavigationView {
 			form.getItemDataSource().getItemProperty("logo")
 					.setValue(uploadedImage);
 			logo.setButtonCaption(Lang.get("Group.edit.logo.edited"));
+
+			com.vaadin.ui.Image temp = ImageUtil.getGroupLogo(group);
+
+			root.replaceComponent(logoImg, temp);
+			logoImg = temp;
+			root.setComponentAlignment(logoImg, Alignment.MIDDLE_CENTER);
+			logoImg.addStyleName("logo");
 		}
 
 		@Override

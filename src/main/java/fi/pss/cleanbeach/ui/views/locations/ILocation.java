@@ -25,4 +25,6 @@ public interface ILocation extends IEventDetails {
 
 	void updateEventList(Location loc, Event e);
 
+	void showLocCreate(Double lat, Double lon);
+
 }

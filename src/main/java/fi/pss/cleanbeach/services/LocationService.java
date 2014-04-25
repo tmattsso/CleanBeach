@@ -26,7 +26,7 @@ public class LocationService {
 
 	/**
 	 * Coordinates closer than this to an existing location are not allowed.
-	 * Should be roughly 100 meter radius.
+	 * Should be roughly 50 meter radius.
 	 */
 	private final static double LOCATION_CREATE_COORDINATE_THRESHOLD = 0.0009;
 
@@ -168,6 +168,23 @@ public class LocationService {
 
 	public Collection<Location> getLocationsForCreate() {
 		Query q = em.createQuery("SELECT l FROM Location l");
+
+		@SuppressWarnings("unchecked")
+		java.util.List<Location> list = q.getResultList();
+
+		return list == null ? new HashSet<Location>() : new HashSet<Location>(
+				list);
+	}
+
+	public HashSet<Location> getLocationsNearForCreate(Double lat, Double lon) {
+		Query q = em.createQuery("SELECT l FROM Location l WHERE "
+				+ "(latitude<:latMax AND latitude>:latMin) "
+				+ "AND (longitude<:longMax AND longitude>:longMin)");
+
+		q.setParameter("latMax", lat + LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("latMin", lat - LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("longMax", lon + LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("longMin", lon - LOCATION_CREATE_COORDINATE_THRESHOLD);
 
 		@SuppressWarnings("unchecked")
 		java.util.List<Location> list = q.getResultList();

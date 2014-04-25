@@ -76,3 +76,7 @@
 .eventdetail .thrash .v-button-caption span {
 	font-size: 24pt;
 }
+
+.publicevent .eventmembers {
+	padding-bottom: 30px;
+}

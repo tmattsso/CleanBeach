@@ -34,18 +34,20 @@ public class EventDetailLayout extends NavigationView {
 	private final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 	private final EventDetailsPresenter<?> presenter;
 
-	private fi.pss.cleanbeach.data.Event selectedEvent;
+	protected fi.pss.cleanbeach.data.Event selectedEvent;
 
 	private final Label caption;
 	private final Label desc;
-	private final Label members;
-	private final Label creator;
+	protected final Label members;
+	protected final Label creator;
 
-	private final HorizontalLayout actions;
+	protected final HorizontalLayout actions;
 
-	private final VerticalLayout comments;
+	protected final VerticalLayout comments;
 
 	private Button itemsButton;
+
+	protected VerticalLayout content;
 
 	public EventDetailLayout(final fi.pss.cleanbeach.data.Event e,
 			final EventDetailsPresenter<?> p) {
@@ -56,7 +58,7 @@ public class EventDetailLayout extends NavigationView {
 		addStyleName("eventdetail");
 		setCaption(Lang.get("events.details.caption"));
 
-		VerticalLayout content = new VerticalLayout();
+		content = new VerticalLayout();
 		content.setMargin(true);
 		content.setSpacing(true);
 		setContent(content);

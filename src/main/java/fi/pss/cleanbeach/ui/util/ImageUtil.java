@@ -1,7 +1,28 @@
 package fi.pss.cleanbeach.ui.util;
 
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferInt;
+import java.awt.image.DirectColorModel;
+import java.awt.image.PixelGrabber;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
+
+import org.imgscalr.Scalr;
 
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
@@ -11,10 +32,41 @@ import fi.pss.cleanbeach.data.UsersGroup;
 
 public class ImageUtil {
 
+	private static final String CACHE_NAME = "imgCache";
+
+	private static transient Cache cache;
+
+	private static final int[] RGB_MASKS = { 0xFF0000, 0xFF00, 0xFF };
+	private static final ColorModel RGB_OPAQUE = new DirectColorModel(32,
+			RGB_MASKS[0], RGB_MASKS[1], RGB_MASKS[2]);
+
+	private static final Object CACHE_LOCK = new Object();
+
+	static {
+		// init cache
+		Configuration cfg = new Configuration();
+		cfg.setName("repository");
+		CacheManager cm = CacheManager.create(cfg);
+
+		synchronized (CACHE_LOCK) {
+
+			if (cm.cacheExists(CACHE_NAME)) {
+				cache = cm.getCache(CACHE_NAME);
+			} else {
+
+				CacheConfiguration conf = new CacheConfiguration(CACHE_NAME,
+						1000);
+				cache = new Cache(conf);
+				CacheManager.create(cfg).addCache(cache);
+			}
+		}
+	}
+
 	public static Image getGroupLogo(UsersGroup group) {
 		if (group == null || group.getLogo() == null) {
 			return null;
 		}
+
 		return createLogoComponent(group.getName(), group.getLogo()
 				.getContent(), group.getLogo().getMimetype());
 	}
@@ -42,6 +94,57 @@ public class ImageUtil {
 		resource.setMIMEType(mime);
 		resource.setCacheTime(1000 * 60 * 60 * 24 * 7);// 7 days
 		image.setSource(resource);
+		return image;
+	}
+
+	public static byte[] resizeIfBigger(byte[] image, int maxSize,
+			String mimetype) {
+
+		String filetype = mimetype.contains("png") ? "png" : "jpg";
+
+		ImageInputStream iis = null;
+		try {
+
+			java.awt.Image in = Toolkit.getDefaultToolkit().createImage(image);
+			in.flush();
+
+			PixelGrabber pg = new PixelGrabber(in, 0, 0, -1, -1, true);
+			pg.grabPixels();
+			int width = pg.getWidth(), height = pg.getHeight();
+
+			if (width < maxSize && height < maxSize) {
+				// image is already smaller
+				return image;
+			}
+
+			DataBuffer buffer = new DataBufferInt((int[]) pg.getPixels(),
+					pg.getWidth() * pg.getHeight());
+			WritableRaster raster = Raster.createPackedRaster(buffer, width,
+					height, width, RGB_MASKS, null);
+			BufferedImage out = new BufferedImage(RGB_OPAQUE, raster, false,
+					null);
+
+			BufferedImage thumbnail = Scalr.resize(out, maxSize);
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			boolean write = ImageIO.write(thumbnail, filetype, output);
+			if (write) {
+				image = output.toByteArray();
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			if (iis != null) {
+				try {
+					iis.close();
+				} catch (IOException e) {
+					// ignore
+				}
+			}
+		}
+
 		return image;
 	}
 }

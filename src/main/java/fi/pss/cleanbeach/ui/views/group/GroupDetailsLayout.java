@@ -330,4 +330,10 @@ public class GroupDetailsLayout extends NavigationView {
 		}
 	}
 
+	public void update(fi.pss.cleanbeach.data.Event e) {
+		if (eventToPanel.containsKey(e)) {
+			eventToPanel.get(e).update(e);
+		}
+	}
+
 }

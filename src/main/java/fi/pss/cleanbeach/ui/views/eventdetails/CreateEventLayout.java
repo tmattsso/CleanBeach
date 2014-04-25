@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.ui.views.eventdetails;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,9 +9,12 @@ import com.vaadin.addon.touchkit.ui.DatePicker;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.InlineDateField;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
@@ -53,8 +57,19 @@ public class CreateEventLayout extends NavigationView {
 		desc.setWidth("100%");
 		root.addComponent(desc);
 
-		final DatePicker start = new DatePicker(Lang.get("events.create.start"));
-		start.setResolution(Resolution.TIME);
+		// desktop or mobile?
+
+		final AbstractField<Date> start;
+		if (MainAppUI.getCurrent().getPage().getWebBrowser().isTouchDevice()) {
+			start = new DatePicker(Lang.get("events.create.start"));
+			((DatePicker) start).setResolution(Resolution.TIME);
+		} else {
+			start = new InlineDateField(Lang.get("events.create.start"));
+			((DateField) start)
+					.setResolution(com.vaadin.shared.ui.datefield.Resolution.MINUTE);
+		}
+		start.setRequired(true);
+
 		start.setRequired(true);
 		start.setWidth("100%");
 		root.addComponent(start);
