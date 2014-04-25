@@ -15,8 +15,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
+import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.ui.util.ImageUtil;
 
 /**
  * @author denis
@@ -89,6 +91,16 @@ public class GroupService {
 	}
 
 	public UsersGroup save(UsersGroup group) {
+
+		if (group.getLogo() != null) {
+
+			Image uploadedImage = group.getLogo();
+
+			byte[] image = ImageUtil.resizeIfBigger(uploadedImage.getContent(),
+					150, uploadedImage.getMimetype());
+			uploadedImage.setContent(image);
+		}
+
 		return entityManager.merge(group);
 	}
 

@@ -26,6 +26,7 @@ import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.ui.util.ImageUtil;
 
 @Stateless
 public class EventService {
@@ -302,6 +303,10 @@ public class EventService {
 		c.setWritetime(new Date());
 
 		if (img != null) {
+
+			img.setContent(ImageUtil.resizeIfBigger(img.getContent(), 1024,
+					img.getMimetype()));
+
 			img.setUploaded(new Date());
 		}
 
