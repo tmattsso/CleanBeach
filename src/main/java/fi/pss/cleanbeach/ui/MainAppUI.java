@@ -13,7 +13,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 
 import fi.pss.cleanbeach.data.User;
-import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.events.PublicEventView;
@@ -39,8 +38,6 @@ public class MainAppUI extends UI {
 	@Inject
 	private LoginView login;
 
-	@Inject
-	private AuthenticationService authService;
 	@Inject
 	private EventService eService;
 
