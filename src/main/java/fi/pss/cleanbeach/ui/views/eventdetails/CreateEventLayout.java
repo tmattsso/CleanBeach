@@ -2,6 +2,7 @@ package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import com.vaadin.addon.touchkit.gwt.client.vcom.DatePickerState.Resolution;
@@ -25,22 +26,21 @@ import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.util.Lang;
-import fi.pss.cleanbeach.ui.views.group.LocationSelector;
-import fi.pss.cleanbeach.ui.views.group.LocationSelector.LocationSelectedListener;
+import fi.pss.cleanbeach.ui.views.eventdetails.LocationSelector.LocationSelectedListener;
 
 public class CreateEventLayout extends NavigationView {
 
 	private static final long serialVersionUID = 9206488173205979006L;
 
-	private final CreateEventPresenter<?> presenter;
+	private final EventDetailsPresenter<?> presenter;
 
 	private Location loc;
 	private UsersGroup group;
 
-	private fi.pss.cleanbeach.data.Event event;
+	private fi.pss.cleanbeach.data.Event e;
 
 	public CreateEventLayout(final UsersGroup g, final Location l,
-			final CreateEventPresenter<?> presenter) {
+			final EventDetailsPresenter<?> presenter) {
 		group = g;
 		loc = l;
 
@@ -50,9 +50,11 @@ public class CreateEventLayout extends NavigationView {
 	}
 
 	public CreateEventLayout(fi.pss.cleanbeach.data.Event e,
-			final CreateEventPresenter<?> presenter) {
-		event = e;
+			final EventDetailsPresenter<?> presenter) {
+		this.e = e;
 		this.presenter = presenter;
+
+		create();
 	}
 
 	private void create() {
@@ -63,7 +65,7 @@ public class CreateEventLayout extends NavigationView {
 		root.addStyleName("createevent");
 		setContent(root);
 
-		if (event == null) {
+		if (e == null) {
 			setCaption(Lang.get("events.create.caption"));
 		} else {
 			setCaption(Lang.get("events.create.caption.edit"));
@@ -75,8 +77,8 @@ public class CreateEventLayout extends NavigationView {
 		desc.setWidth("100%");
 		root.addComponent(desc);
 
-		if (event != null) {
-			desc.setValue(event.getDescription());
+		if (e != null) {
+			desc.setValue(e.getDescription());
 		}
 
 		// desktop or mobile?
@@ -91,16 +93,16 @@ public class CreateEventLayout extends NavigationView {
 					.setResolution(com.vaadin.shared.ui.datefield.Resolution.MINUTE);
 		}
 		start.setRequired(true);
-
+		start.setLocale(new Locale("fi", "FI"));
 		start.setRequired(true);
 		start.setWidth("100%");
 		root.addComponent(start);
 
-		if (event != null) {
-			start.setValue(event.getStart());
+		if (e != null) {
+			start.setValue(e.getStart());
 		}
 
-		if (loc == null && event != null) {
+		if (loc == null && e == null) {
 			final Button locationSelect = new Button(
 					Lang.get("events.create.noloc"));
 			locationSelect.addClickListener(new ClickListener() {
@@ -126,7 +128,7 @@ public class CreateEventLayout extends NavigationView {
 			root.setExpandRatio(locationSelect, 1);
 		}
 
-		if (group == null && event != null) {
+		if (group == null && e == null) {
 			presenter.updateUser(MainAppUI.getCurrentUser());
 
 			Set<UsersGroup> groups = MainAppUI.getCurrentUser().getMemberIn();
@@ -167,7 +169,7 @@ public class CreateEventLayout extends NavigationView {
 		}
 
 		Button create = new Button();
-		if (event == null) {
+		if (e == null) {
 			create.setCaption(Lang.get("events.create.create"));
 		} else {
 			create.setCaption(Lang.get("events.create.save"));
@@ -183,21 +185,20 @@ public class CreateEventLayout extends NavigationView {
 					Notification.show(Lang.get("events.create.fillall"));
 					return;
 				}
-				if (loc == null && event != null) {
+				if (loc == null && e == null) {
 					Notification.show(Lang.get("events.create.selectloc"));
 					return;
 				}
-				if (group == null && event != null) {
+				if (group == null && e == null) {
 					Notification.show(Lang.get("events.create.selectgroup"));
 					return;
 				}
 
-				if (event != null) {
+				if (e == null) {
 					presenter.createEvent(group, desc.getValue(),
 							start.getValue(), loc);
 				} else {
-					presenter.saveEvent(CreateEventLayout.this.event,
-							desc.getValue(), start.getValue());
+					presenter.saveEvent(e, desc.getValue(), start.getValue());
 				}
 			}
 		});

@@ -5,13 +5,16 @@ import java.util.Collection;
 import com.vaadin.ui.Component;
 
 import fi.pss.cleanbeach.data.Invite;
+import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.ui.mvp.AbstractView;
 import fi.pss.cleanbeach.ui.views.events.MainEventsLayout;
 import fi.pss.cleanbeach.ui.views.group.GroupDetailsLayout;
 import fi.pss.cleanbeach.ui.views.locations.HistoryLayout;
 
 public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>>
-		extends CreateEventCapableView<T> implements IEventDetails {
+		extends AbstractView<T> implements IEventDetails {
 
 	private static final long serialVersionUID = 5027141664466020875L;
 
@@ -74,6 +77,19 @@ public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>
 	@Override
 	public void openEditEvent(fi.pss.cleanbeach.data.Event e) {
 		navigateTo(new CreateEventLayout(e, presenter));
+	}
+
+	@Override
+	public void showCreateEvent(UsersGroup selectedGroup,
+			Location selectedLocation) {
+		navigateTo(new CreateEventLayout(selectedGroup, selectedLocation,
+				presenter));
+	}
+
+	@Override
+	public void navigateBackAfterEdit(fi.pss.cleanbeach.data.Event edited) {
+		navigateBack();
+		updateEventDetails(edited);
 	}
 
 }

@@ -523,6 +523,7 @@ public class EventService {
 		event.setDescription(desc);
 		event.setStart(start);
 		event = em.merge(event);
+		event = loadDetails(event);
 		return event;
 	}
 }
