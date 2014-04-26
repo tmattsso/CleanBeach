@@ -125,4 +125,12 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 		Event saveEvent = service.saveEvent(event, desc, start);
 		view.navigateBackAfterEdit(saveEvent);
 	}
+
+	public boolean canUserEdit(fi.pss.cleanbeach.data.Event selectedEvent,
+			User currentUser) {
+		updateUser(currentUser);
+		currentUser = view.getUser();
+
+		return selectedEvent.getOrganizer().isAdmin(currentUser);
+	}
 }

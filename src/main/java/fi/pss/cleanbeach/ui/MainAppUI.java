@@ -32,8 +32,8 @@ public class MainAppUI extends UI {
 	private static final String COOKIE_NAME = "CleanBeachUser";
 
 	// private static String AUTOLOGIN = null;
-	private static String AUTOLOGIN = "thomas@t.com";
-	// private static String AUTOLOGIN = "demo@demo.com";
+	// private static String AUTOLOGIN = "thomas@t.com";
+	private static String AUTOLOGIN = "demo@demo.com";
 
 	private User currentUser;
 
@@ -81,7 +81,7 @@ public class MainAppUI extends UI {
 		// }
 
 		if (AUTOLOGIN != null) {
-			User u = authService.login("thomas@t.com", "vaadin");
+			User u = authService.login(AUTOLOGIN, "vaadin");
 			login(new LoginEvent(u));
 		} else {
 			// build login

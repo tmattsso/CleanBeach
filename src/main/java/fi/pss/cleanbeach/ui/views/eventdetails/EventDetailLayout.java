@@ -176,18 +176,20 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(invite);
 
-		Button edit = new Button(Lang.get("events.details.edit"));
-		TouchKitIcon.edit.addTo(edit);
-		edit.addClickListener(new ClickListener() {
+		if (presenter.canUserEdit(selectedEvent, MainAppUI.getCurrentUser())) {
+			Button edit = new Button(Lang.get("events.details.edit"));
+			TouchKitIcon.edit.addTo(edit);
+			edit.addClickListener(new ClickListener() {
 
-			private static final long serialVersionUID = 3852409971806848078L;
+				private static final long serialVersionUID = 3852409971806848078L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				presenter.openEditEvent(e);
-			}
-		});
-		actions.addComponent(edit);
+				@Override
+				public void buttonClick(ClickEvent event) {
+					presenter.openEditEvent(e);
+				}
+			});
+			actions.addComponent(edit);
+		}
 
 		comments = new VerticalLayout();
 		comments.setCaption(Lang.get("events.details.comments"));
