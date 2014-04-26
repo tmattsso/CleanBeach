@@ -181,4 +181,11 @@ public class AuthenticationService {
 		user.setHashedPass(hash(getSalt(user), value));
 		em.merge(user);
 	}
+
+	public User changeUserName(User user, String value) {
+		user = refresh(user);
+		user.setName(value);
+
+		return em.merge(user);
+	}
 }
