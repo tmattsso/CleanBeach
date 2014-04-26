@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.ui.views.group;
+package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.data.util.BeanItemContainer;
@@ -10,7 +10,6 @@ import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.ui.util.Lang;
-import fi.pss.cleanbeach.ui.views.eventdetails.CreateEventPresenter;
 
 /**
  * TODO make this better (e.g. map, search..)
@@ -27,7 +26,7 @@ public class LocationSelector extends NavigationView {
 	}
 
 	public LocationSelector(final LocationSelectedListener listener,
-			CreateEventPresenter<?> presenter) {
+			EventDetailsPresenter<?> presenter) {
 
 		VerticalLayout vl = new VerticalLayout();
 		vl.setSpacing(true);

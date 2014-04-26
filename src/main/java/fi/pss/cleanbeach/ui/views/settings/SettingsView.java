@@ -6,7 +6,7 @@ import com.vaadin.addon.touchkit.ui.EmailField;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.validator.EmailValidator;
-import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -15,6 +15,7 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.ui.MainAppUI;
@@ -30,6 +31,7 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 	private static final long serialVersionUID = 1762636200155654459L;
 	private PasswordField pf;
 	private EmailField ef;
+	private TextField nf;
 
 	@Override
 	@Inject
@@ -52,13 +54,26 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 
 		Component toExpand;
 
+		nf = new TextField(Lang.get("settings.changename.caption"));
+		nf.setWidth("100%");
+		nf.addValidator(new StringLengthValidator(Lang
+				.get("settings.changename.notvalid"), 1, 100, false));
+		nf.setValue(MainAppUI.getCurrentUser().getName());
+		root.addComponent(nf);
+
+		Button doChange = new Button(Lang.get("settings.changename.button"));
+		doChange.addClickListener(new NameChanger());
+		root.addComponent(doChange);
+
 		pf = new PasswordField(Lang.get("settings.changepass.caption"));
 		pf.setWidth("100%");
+		pf.addValidator(new StringLengthValidator(Lang
+				.get("settings.changepass.notvalid"), 6, 100, false));
+		pf.setValidationVisible(false);
 		root.addComponent(pf);
 
-		Button doChange = new Button(Lang.get("settings.changepass.button"));
+		doChange = new Button(Lang.get("settings.changepass.button"));
 		doChange.addClickListener(new PasswordChanger());
-		doChange.setClickShortcut(KeyCode.ENTER);
 		root.addComponent(doChange);
 
 		ef = new EmailField(Lang.get("settings.changeemail.caption"));
@@ -71,7 +86,6 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 
 		doChange = new Button(Lang.get("settings.changeemail.button"));
 		doChange.addClickListener(new EmailChanger());
-		doChange.setClickShortcut(KeyCode.ENTER);
 		root.addComponent(doChange);
 		toExpand = doChange;
 
@@ -85,7 +99,6 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 				presenter.requestLogout();
 			}
 		});
-		doChange.setClickShortcut(KeyCode.ENTER);
 		root.addComponent(doChange);
 
 		root.setExpandRatio(toExpand, 1);
@@ -98,6 +111,11 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 
 		@Override
 		public void buttonClick(ClickEvent event) {
+			if (!pf.isValid()) {
+				Notification.show(Lang.get("settings.changepass.givevalid"),
+						Type.WARNING_MESSAGE);
+				return;
+			}
 
 			ConfirmPopover pop = new ConfirmPopover(new ConfirmListener() {
 
@@ -135,6 +153,34 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 							MainAppUI.getCurrentUser());
 				}
 			}, Lang.get("settings.changeemail.confirm"));
+
+			pop.showRelativeTo(SettingsView.this);
+		}
+
+	}
+
+	private class NameChanger implements ClickListener {
+
+		private static final long serialVersionUID = 3301538396079645034L;
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+
+			if (!nf.isValid()) {
+				Notification.show(Lang.get("settings.changename.givevalid"),
+						Type.WARNING_MESSAGE);
+				return;
+			}
+
+			ConfirmPopover pop = new ConfirmPopover(new ConfirmListener() {
+
+				@Override
+				public void confirmed() {
+
+					presenter.changeName(nf.getValue(),
+							MainAppUI.getCurrentUser());
+				}
+			}, Lang.get("settings.changename.confirm"));
 
 			pop.showRelativeTo(SettingsView.this);
 		}

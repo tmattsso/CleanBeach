@@ -37,4 +37,9 @@ public class SettingsPresenter extends AbstractPresenter<ISettings> {
 		event.fire(new LogoutEvent());
 	}
 
+	public void changeName(String value, User currentUser) {
+		currentUser = aserv.changeUserName(currentUser, value);
+		view.setUser(currentUser);
+	}
+
 }

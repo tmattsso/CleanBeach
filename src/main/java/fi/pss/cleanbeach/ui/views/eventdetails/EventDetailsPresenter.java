@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -8,6 +9,7 @@ import javax.inject.Inject;
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.Invite;
+import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
@@ -15,9 +17,10 @@ import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.InviteService;
 import fi.pss.cleanbeach.services.LocationService;
+import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
 public abstract class EventDetailsPresenter<T extends IEventDetails> extends
-		CreateEventPresenter<T> {
+		AbstractPresenter<T> {
 
 	@Inject
 	protected EventService service;
@@ -65,8 +68,8 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 		view.openThrashDetails(e);
 	}
 
-	public void openAddComment(boolean addImage, Event e) {
-		view.openAddComment(e, addImage);
+	public void openAddComment(Event e) {
+		view.openAddComment(e);
 	}
 
 	public void openInviteGroups(Event e) {
@@ -100,5 +103,34 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 	public void deleteEvent(fi.pss.cleanbeach.data.Event e) {
 		service.delete(e);
 		view.navigateBackAfterDelete(e.getId());
+	}
+
+	public void openEditEvent(fi.pss.cleanbeach.data.Event e) {
+		view.openEditEvent(e);
+	}
+
+	public Collection<Location> getLocations() {
+		return locService.getLocationsForCreate();
+	}
+
+	public abstract void createEvent(UsersGroup creator, String desc,
+			Date start, Location loc);
+
+	public void updateUser(User currentUser) {
+		User refresh = authService.refresh(currentUser);
+		view.setUser(refresh);
+	}
+
+	public void saveEvent(Event event, String desc, Date start) {
+		Event saveEvent = service.saveEvent(event, desc, start);
+		view.navigateBackAfterEdit(saveEvent);
+	}
+
+	public boolean canUserEdit(fi.pss.cleanbeach.data.Event selectedEvent,
+			User currentUser) {
+		updateUser(currentUser);
+		currentUser = view.getUser();
+
+		return selectedEvent.getOrganizer().isAdmin(currentUser);
 	}
 }

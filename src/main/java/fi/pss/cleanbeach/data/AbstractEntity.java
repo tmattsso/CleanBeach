@@ -25,9 +25,14 @@ public class AbstractEntity {
 		if (obj == null || !(obj instanceof AbstractEntity)) {
 			return false;
 		}
+
+		if (id == null) {
+			return false;
+		}
+
 		AbstractEntity other = (AbstractEntity) obj;
 
-		return other.id == id;
+		return id.equals(other.id);
 	}
 
 	@Override
