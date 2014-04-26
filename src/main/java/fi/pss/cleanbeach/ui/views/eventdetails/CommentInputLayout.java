@@ -31,8 +31,8 @@ public class CommentInputLayout extends NavigationView {
 	private final EventDetailsPresenter<?> presenter;
 
 	public CommentInputLayout(final fi.pss.cleanbeach.data.Event e,
-			boolean addImageImmediately,
-			final EventDetailsPresenter<?> presenter) {
+
+	final EventDetailsPresenter<?> presenter) {
 
 		this.presenter = presenter;
 		VerticalLayout root = new VerticalLayout();
@@ -42,11 +42,7 @@ public class CommentInputLayout extends NavigationView {
 		addStyleName("addcomment");
 
 		setContent(root);
-		if (addImageImmediately) {
-			setCaption(Lang.get("events.comment.addimage"));
-		} else {
-			setCaption(Lang.get("events.comment.addcomment"));
-		}
+		setCaption(Lang.get("events.comment.addcomment"));
 
 		final TextArea comment = new TextArea();
 		comment.setSizeFull();
@@ -76,13 +72,6 @@ public class CommentInputLayout extends NavigationView {
 		});
 		root.addComponent(saveComment);
 
-		if (addImageImmediately) {
-			openUpload();
-		}
-	}
-
-	protected void openUpload() {
-		// TODO how?
 	}
 
 	// Implement both receiver that saves upload in a file and

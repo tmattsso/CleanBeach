@@ -145,23 +145,10 @@ public class EventDetailLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.openAddComment(false, selectedEvent);
+				presenter.openAddComment(selectedEvent);
 			}
 		});
 		actions.addComponent(comment);
-
-		Button photo = new Button(Lang.get("events.details.photo"));
-		TouchKitIcon.cameraRetro.addTo(photo);
-		photo.addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = -5417239994058318781L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				presenter.openAddComment(true, selectedEvent);
-			}
-		});
-		actions.addComponent(photo);
 
 		Button addThrash = new Button(Lang.get("events.details.thrash"));
 		TouchKitIcon.exclamationSign.addTo(addThrash);
@@ -188,6 +175,19 @@ public class EventDetailLayout extends NavigationView {
 			}
 		});
 		actions.addComponent(invite);
+
+		Button edit = new Button(Lang.get("events.details.edit"));
+		TouchKitIcon.edit.addTo(edit);
+		edit.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 3852409971806848078L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.openEditEvent(e);
+			}
+		});
+		actions.addComponent(edit);
 
 		comments = new VerticalLayout();
 		comments.setCaption(Lang.get("events.details.comments"));

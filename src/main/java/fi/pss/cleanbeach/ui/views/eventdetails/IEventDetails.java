@@ -12,7 +12,9 @@ public interface IEventDetails extends ICreateEvent {
 
 	void openThrashDetails(Event e);
 
-	void openAddComment(Event e, boolean addImage);
+	void openEditEvent(Event e);
+
+	void openAddComment(Event e);
 
 	void updateEventDetails(Event e);
 

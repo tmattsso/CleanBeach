@@ -8,4 +8,5 @@ public interface ICreateEvent extends IView {
 
 	void showCreateEvent(UsersGroup selectedGroup, Location selectedLocation);
 
+	void navigateBackAfterEdit();
 }

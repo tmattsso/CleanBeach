@@ -37,11 +37,25 @@ public class CreateEventLayout extends NavigationView {
 	private Location loc;
 	private UsersGroup group;
 
+	private fi.pss.cleanbeach.data.Event event;
+
 	public CreateEventLayout(final UsersGroup g, final Location l,
 			final CreateEventPresenter<?> presenter) {
 		group = g;
 		loc = l;
+
 		this.presenter = presenter;
+
+		create();
+	}
+
+	public CreateEventLayout(fi.pss.cleanbeach.data.Event e,
+			final CreateEventPresenter<?> presenter) {
+		event = e;
+		this.presenter = presenter;
+	}
+
+	private void create() {
 
 		VerticalLayout root = new VerticalLayout();
 		root.setMargin(true);
@@ -49,13 +63,21 @@ public class CreateEventLayout extends NavigationView {
 		root.addStyleName("createevent");
 		setContent(root);
 
-		setCaption(Lang.get("events.create.caption"));
+		if (event == null) {
+			setCaption(Lang.get("events.create.caption"));
+		} else {
+			setCaption(Lang.get("events.create.caption.edit"));
+		}
 
 		final TextArea desc = new TextArea(Lang.get("events.create.desc"));
 		desc.setRows(5);
 		desc.setRequired(true);
 		desc.setWidth("100%");
 		root.addComponent(desc);
+
+		if (event != null) {
+			desc.setValue(event.getDescription());
+		}
 
 		// desktop or mobile?
 
@@ -74,7 +96,11 @@ public class CreateEventLayout extends NavigationView {
 		start.setWidth("100%");
 		root.addComponent(start);
 
-		if (loc == null) {
+		if (event != null) {
+			start.setValue(event.getStart());
+		}
+
+		if (loc == null && event != null) {
 			final Button locationSelect = new Button(
 					Lang.get("events.create.noloc"));
 			locationSelect.addClickListener(new ClickListener() {
@@ -100,7 +126,7 @@ public class CreateEventLayout extends NavigationView {
 			root.setExpandRatio(locationSelect, 1);
 		}
 
-		if (group == null) {
+		if (group == null && event != null) {
 			presenter.updateUser(MainAppUI.getCurrentUser());
 
 			Set<UsersGroup> groups = MainAppUI.getCurrentUser().getMemberIn();
@@ -140,7 +166,12 @@ public class CreateEventLayout extends NavigationView {
 			});
 		}
 
-		Button create = new Button(Lang.get("events.create.create"));
+		Button create = new Button();
+		if (event == null) {
+			create.setCaption(Lang.get("events.create.create"));
+		} else {
+			create.setCaption(Lang.get("events.create.save"));
+		}
 		create.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -2735729970887726549L;
@@ -152,20 +183,26 @@ public class CreateEventLayout extends NavigationView {
 					Notification.show(Lang.get("events.create.fillall"));
 					return;
 				}
-				if (loc == null) {
+				if (loc == null && event != null) {
 					Notification.show(Lang.get("events.create.selectloc"));
 					return;
 				}
-				if (group == null) {
+				if (group == null && event != null) {
 					Notification.show(Lang.get("events.create.selectgroup"));
 					return;
 				}
 
-				CreateEventLayout.this.presenter.createEvent(group,
-						desc.getValue(), start.getValue(), loc);
+				if (event != null) {
+					presenter.createEvent(group, desc.getValue(),
+							start.getValue(), loc);
+				} else {
+					presenter.saveEvent(CreateEventLayout.this.event,
+							desc.getValue(), start.getValue());
+				}
 			}
 		});
 		root.addComponent(create);
 
 	}
+
 }

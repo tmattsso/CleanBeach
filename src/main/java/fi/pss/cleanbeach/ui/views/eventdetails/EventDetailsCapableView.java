@@ -44,8 +44,8 @@ public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>
 	}
 
 	@Override
-	public void openAddComment(fi.pss.cleanbeach.data.Event e, boolean addImage) {
-		navigateTo(new CommentInputLayout(e, false, presenter));
+	public void openAddComment(fi.pss.cleanbeach.data.Event e) {
+		navigateTo(new CommentInputLayout(e, presenter));
 	}
 
 	@Override
@@ -69,6 +69,11 @@ public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>
 			navigateBack();
 		}
 		updateEventDetails(e);
+	}
+
+	@Override
+	public void openEditEvent(fi.pss.cleanbeach.data.Event e) {
+		navigateTo(new CreateEventLayout(e, presenter));
 	}
 
 }

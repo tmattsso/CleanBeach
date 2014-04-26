@@ -15,4 +15,10 @@ public abstract class CreateEventCapableView<T extends CreateEventPresenter<?>>
 		navigateTo(new CreateEventLayout(selectedGroup, selectedLocation,
 				presenter));
 	}
+
+	@Override
+	public void navigateBackAfterEdit() {
+		navigateBack();
+		// TODO update view
+	}
 }

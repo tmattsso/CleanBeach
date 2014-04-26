@@ -65,8 +65,8 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 		view.openThrashDetails(e);
 	}
 
-	public void openAddComment(boolean addImage, Event e) {
-		view.openAddComment(e, addImage);
+	public void openAddComment(Event e) {
+		view.openAddComment(e);
 	}
 
 	public void openInviteGroups(Event e) {
@@ -100,5 +100,9 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 	public void deleteEvent(fi.pss.cleanbeach.data.Event e) {
 		service.delete(e);
 		view.navigateBackAfterDelete(e.getId());
+	}
+
+	public void openEditEvent(fi.pss.cleanbeach.data.Event e) {
+		view.openEditEvent(e);
 	}
 }

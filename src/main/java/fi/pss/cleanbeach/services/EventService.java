@@ -517,4 +517,12 @@ public class EventService {
 		}
 		return e;
 	}
+
+	public Event saveEvent(Event event, String desc, Date start) {
+		event = em.find(Event.class, event.getId());
+		event.setDescription(desc);
+		event.setStart(start);
+		event = em.merge(event);
+		return event;
+	}
 }
