@@ -181,6 +181,7 @@ public class MapLayout extends NavigationView implements
 
 		locName.setValue(loc.getName());
 		lMap.clearTempMarker();
+		lMap.select(loc);
 	}
 
 	void clearMarker() {
