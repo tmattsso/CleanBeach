@@ -94,10 +94,6 @@ public class MainAppUI extends UI {
 		// return;
 		// }
 
-		fb = new Facebook(APPID);
-		addExtension(fb);
-		fb.addListener(loginPresenter);
-
 		if (AUTOLOGIN != null) {
 			User u = authService.login(AUTOLOGIN, "vaadin");
 			login(new LoginEvent(u));
@@ -119,6 +115,9 @@ public class MainAppUI extends UI {
 
 	public void logout(@Observes LogoutEvent e) {
 
+		if (fb != null) {
+			fb.logout();
+		}
 		getCurrent().close();
 		getCurrent().getPage().setLocation("");
 	}
@@ -168,6 +167,11 @@ public class MainAppUI extends UI {
 	}
 
 	public void loginFromFB() {
+
+		fb = new Facebook(APPID);
+		addExtension(fb);
+		fb.addListener(loginPresenter);
+
 		fb.login();
 	}
 
