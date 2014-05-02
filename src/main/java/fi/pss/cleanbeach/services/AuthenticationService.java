@@ -43,7 +43,7 @@ public class AuthenticationService {
 			@SuppressWarnings("unchecked")
 			List<User> users = q.getResultList();
 
-			if (users.size() == 0) {
+			if (users.size() == 1) {
 				u = users.get(0);
 			} else {
 				// loop through, find user without OID
