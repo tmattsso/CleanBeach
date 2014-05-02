@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -39,7 +40,20 @@ public class AuthenticationService {
 
 		User u = null;
 		try {
-			u = (User) q.getSingleResult();
+			@SuppressWarnings("unchecked")
+			List<User> users = q.getResultList();
+
+			if (users.size() == 0) {
+				u = users.get(0);
+			} else {
+				// loop through, find user without OID
+				for (User us : users) {
+					if (us.getOid() == null) {
+						u = us;
+						break;
+					}
+				}
+			}
 		} catch (NoResultException e) {
 			// Ignore
 		}
@@ -105,7 +119,7 @@ public class AuthenticationService {
 			throws RegistrationException {
 		checkValid(u, password);
 
-		if (u.getOid() != null) {
+		if (u.getOid() == null) {
 			byte[] salt = new byte[User.SALT_LENGTH_BYTES];
 			try {
 				SecureRandom.getInstance("SHA1PRNG").nextBytes(salt);
