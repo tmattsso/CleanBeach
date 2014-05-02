@@ -4,6 +4,8 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
+import org.vaadin.se.facebook.Facebook;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
@@ -17,6 +19,7 @@ import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.events.PublicEventView;
 import fi.pss.cleanbeach.ui.views.login.LoginEvent;
+import fi.pss.cleanbeach.ui.views.login.LoginPresenter;
 import fi.pss.cleanbeach.ui.views.login.LoginView;
 
 /**
@@ -30,6 +33,10 @@ public class MainAppUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
 
+	/**
+	 * Thomas' id; TODO replace
+	 */
+	private static final String APPID = "594614240628457";
 	private User currentUser;
 
 	@Inject
@@ -41,7 +48,12 @@ public class MainAppUI extends UI {
 	@Inject
 	private EventService eService;
 
+	@Inject
+	private LoginPresenter loginPresenter;
+
 	private Long selectedEventId;
+
+	private Facebook fb;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -89,6 +101,9 @@ public class MainAppUI extends UI {
 
 	public void logout(@Observes LogoutEvent e) {
 
+		if (fb != null) {
+			fb.logout();
+		}
 		getCurrent().close();
 		getCurrent().getPage().setLocation("");
 	}
@@ -135,6 +150,15 @@ public class MainAppUI extends UI {
 
 	public static MainAppUI getCurrent() {
 		return (MainAppUI) UI.getCurrent();
+	}
+
+	public void loginFromFB() {
+
+		fb = new Facebook(APPID);
+		addExtension(fb);
+		fb.addListener(loginPresenter);
+
+		fb.login();
 	}
 
 	public void loginFromPublic(Long id) {

@@ -57,7 +57,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 
 		main = new VerticalLayout();
 		main.setSpacing(true);
-		register = new RegisterLayout(presenter);
+		register = new RegisterLayout(null, null, presenter);
 
 		Label desc = new Label("<span>" + Lang.get("login.caption.big")
 				+ "</span>" + Lang.get("login.caption.small"), ContentMode.HTML);
@@ -155,6 +155,15 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		Button fbLogin = new Button(Lang.get("login.fb"));
 		TouchKitIcon.facebook.addTo(fbLogin);
 		fbLogin.setWidth("100%");
+		fbLogin.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 8781936707317808266L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				MainAppUI.getCurrent().loginFromFB();
+			}
+		});
 
 		Button twitterLogin = new Button(Lang.get("login.twitter"));
 		TouchKitIcon.twitter.addTo(twitterLogin);
@@ -201,6 +210,12 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 	@Override
 	public void showRegistrationError(String message) {
 		register.showError(message);
+	}
+
+	@Override
+	public void showRegister(String userId, String provider) {
+		register = new RegisterLayout(userId, provider, presenter);
+		showRegister();
 	}
 
 }
