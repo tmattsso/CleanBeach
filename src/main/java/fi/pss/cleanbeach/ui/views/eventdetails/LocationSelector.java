@@ -53,8 +53,11 @@ public class LocationSelector extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				listener.selected((Location) cb.getValue());
-				getNavigationManager().navigateBack();
+				Location value = (Location) cb.getValue();
+				if (value != null) {
+					listener.selected(value);
+					getNavigationManager().navigateBack();
+				}
 			}
 		});
 	}

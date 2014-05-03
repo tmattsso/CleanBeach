@@ -12,6 +12,7 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
+import fi.pss.cleanbeach.ui.util.ExceptionUtil;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 @SessionScoped
@@ -19,35 +20,32 @@ public class PSSErrorHandler implements ErrorHandler, Serializable {
 
 	private static final long serialVersionUID = 2471422708554126603L;
 
+	private static final boolean prodMode = false;
+
 	private transient final Logger log = Logger.getLogger("ErrorLogger");
 
 	@Override
 	public void error(ErrorEvent event) {
 
+		log.log(Level.SEVERE, "Current user "
+				+ MainAppUI.getCurrentUser().getEmail());
 		log.log(Level.SEVERE, "Uncaught Exception in UI", event.getThrowable());
 
-		Throwable root = getRootCause(event.getThrowable());
-		// log.error("Root cause:", root);
+		Throwable root = ExceptionUtil.getRootCause(event.getThrowable());
 
-		Notification n = new Notification(
-				Lang.get("main.errornotification.caption"), "<br/>"
-						+ root.getClass().getSimpleName() + ": "
-						+ root.getMessage(), Type.ERROR_MESSAGE, true);
+		Notification n = new Notification("", "", Type.ERROR_MESSAGE, true);
 		n.setHtmlContentAllowed(true);
-		n.setDescription("<br/>" + root.getClass().getSimpleName() + ": "
-				+ root.getMessage());
+		n.setCaption(Lang.get("main.errornotification.caption"));
 		n.setDelayMsec(-1);
 
-		n.show(Page.getCurrent());
-	}
-
-	private static Throwable getRootCause(Throwable throwable) {
-
-		Throwable root = throwable;
-		while (root.getCause() != null && root.getCause() != root) {
-			root = root.getCause();
+		if (prodMode) {
+			n.setDescription(Lang.get("main.errornotification.msg"));
+		} else {
+			n.setDescription("<br/>" + root.getClass().getSimpleName() + ": "
+					+ root.getMessage());
 		}
-		return root;
+
+		n.show(Page.getCurrent());
 	}
 
 }
