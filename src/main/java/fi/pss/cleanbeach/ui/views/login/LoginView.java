@@ -3,7 +3,8 @@ package fi.pss.cleanbeach.ui.views.login;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
+import org.vaadin.se.facebook.LoginButton;
+
 import com.vaadin.addon.touchkit.ui.EmailField;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -43,6 +44,8 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 	private VerticalLayout root;
 
 	private Button registerButton;
+
+	private HorizontalLayout socialButtons;
 
 	public LoginView() {
 	}
@@ -137,7 +140,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		root.setExpandRatio(main, 1);
 
 		registerButton = new Button(Lang.get("login.register"));
-		root.addComponent(registerButton);
+		registerButton.setWidth("100%");
 		registerButton.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -5189522876236967527L;
@@ -153,29 +156,36 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 			}
 		});
 
-		Button fbLogin = new Button(Lang.get("login.fb"));
-		TouchKitIcon.facebook.addTo(fbLogin);
-		fbLogin.setWidth("100%");
-		fbLogin.addClickListener(new ClickListener() {
+		LoginButton test = new LoginButton();
+		test.setWidth("123px");
+		test.setHeight("40px");
 
-			private static final long serialVersionUID = 8781936707317808266L;
+		// Button fbLogin = new Button(Lang.get("login.fb"));
+		// TouchKitIcon.facebook.addTo(fbLogin);
+		// fbLogin.setWidth("100%");
+		// fbLogin.addClickListener(new ClickListener() {
+		//
+		// private static final long serialVersionUID = 8781936707317808266L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// MainAppUI.getCurrent().loginFromFB();
+		// }
+		// });
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				MainAppUI.getCurrent().loginFromFB();
-			}
-		});
+		// Button twitterLogin = new Button(Lang.get("login.twitter"));
+		// TouchKitIcon.twitter.addTo(twitterLogin);
+		// twitterLogin.setWidth("100%");
 
-		Button twitterLogin = new Button(Lang.get("login.twitter"));
-		TouchKitIcon.twitter.addTo(twitterLogin);
-		twitterLogin.setWidth("100%");
-
-		hl = new HorizontalLayout(fbLogin, twitterLogin);
-		hl.addStyleName("socialbuttons");
-		hl.addStyleName("actionbuttons");
-		hl.setWidth("100%");
-		hl.setSpacing(true);
-		root.addComponent(hl);
+		socialButtons = new HorizontalLayout(test, registerButton);
+		socialButtons.addStyleName("socialbuttons");
+		socialButtons.addStyleName("actionbuttons");
+		socialButtons.setWidth("100%");
+		socialButtons.setSpacing(true);
+		socialButtons.setExpandRatio(registerButton, 1);
+		socialButtons.setComponentAlignment(registerButton,
+				Alignment.MIDDLE_RIGHT);
+		root.addComponent(socialButtons);
 
 		return root;
 	}

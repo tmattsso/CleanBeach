@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.ui.views.login;
 
+import com.vaadin.addon.touchkit.ui.EmailField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -43,7 +44,7 @@ public class RegisterLayout extends VerticalLayout {
 		name.setRequired(true);
 		addComponent(name);
 
-		final TextField email = new TextField(Lang.get("register.email"));
+		final EmailField email = new EmailField(Lang.get("register.email"));
 		email.setWidth("100%");
 		email.setRequired(true);
 		addComponent(email);
