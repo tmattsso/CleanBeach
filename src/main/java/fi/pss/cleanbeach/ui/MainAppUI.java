@@ -139,10 +139,6 @@ public class MainAppUI extends UI {
 	}
 
 	private void setCookie() {
-		// check for old
-		if (getUsernameCookie() != null) {
-			return;
-		}
 
 		// check for OID
 		if (currentUser.getOidProvider() != null) {
