@@ -529,13 +529,15 @@ public class EventService {
 		return event;
 	}
 
-	public Collection<fi.pss.cleanbeach.data.Event> getEventsNear(
-			Double latitude, Double longitude, Integer zoomLevel) {
+	public Collection<Event> getEventsNear(Double latitude, Double longitude,
+			Integer zoomLevel) {
 
 		Query q = em
-				.createQuery("SELECT e FROM Event e WHERE "
+				.createQuery("SELECT e FROM Event e WHERE e.start>:now AND "
 						+ "(e.location.latitude<:latMax AND e.location.latitude>:latMin) "
 						+ "AND (e.location.longitude<:longMax AND e.location.longitude>:longMin)");
+
+		q.setParameter("now", new Date());
 
 		// TODO base threshold on zoom level
 		q.setParameter("latMax", latitude + 1);
@@ -545,7 +547,23 @@ public class EventService {
 
 		@SuppressWarnings("unchecked")
 		java.util.List<Event> list = q.getResultList();
+		if (list == null) {
+			return new HashSet<Event>();
+		}
 
-		return list == null ? new HashSet<Event>() : new HashSet<Event>(list);
+		// filter duplicate events for same location
+		Map<Location, Event> nextEvents = new HashMap<Location, Event>();
+		for (Event event : list) {
+			if (!nextEvents.containsKey(event.getLocation())) {
+				nextEvents.put(event.getLocation(), event);
+				continue;
+			}
+			Event other = nextEvents.get(event.getLocation());
+			if (other.getStart().getTime() > event.getStart().getTime()) {
+				nextEvents.put(event.getLocation(), other);
+			}
+		}
+
+		return nextEvents.values();
 	}
 }
