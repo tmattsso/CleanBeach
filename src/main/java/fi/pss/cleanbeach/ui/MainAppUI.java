@@ -87,6 +87,10 @@ public class MainAppUI extends UI {
 
 		// build login
 		setContent(login);
+
+		fb = new Facebook(APPID);
+		addExtension(fb);
+		fb.addListener(loginPresenter);
 	}
 
 	public void login(@Observes LoginEvent e) {
@@ -153,10 +157,6 @@ public class MainAppUI extends UI {
 	}
 
 	public void loginFromFB() {
-
-		fb = new Facebook(APPID);
-		addExtension(fb);
-		fb.addListener(loginPresenter);
 
 		fb.login();
 	}

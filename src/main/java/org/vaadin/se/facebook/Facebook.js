@@ -25,7 +25,8 @@ window.org_vaadin_se_facebook_Facebook = function() {
 				appId : fbAppId,
 				cookie : true,
 				status : true,
-				xfbml : true
+				xfbml : true,
+				version : 'v2.0'
 			});
 
 			/* Subscribe to all facebook login events */
@@ -76,13 +77,15 @@ window.org_vaadin_se_facebook_Facebook = function() {
 				
 				FB.login(function(response) {
 					// We subscribed the events, so don't need to do anything here.
-				});
+				},{display:'touch'});
+//			});
 			} else {
 				// the user isn't logged in to Facebook.
 				
 				FB.login(function(response) {
 					// We subscribed the events, so don't need to do anything here.
-				});
+				},{display:'touch'});
+//				});
 			}
 		});
 
@@ -119,7 +122,7 @@ window.org_vaadin_se_facebook_LoginButton = function() {
 
 		self.getElement().innerHTML = "<fb:login-button "
 				+ (showFaces ? "show-faces=\"true\"" : "")
-				+ " width=\"200\" max-rows=\"1\"></fb:login-button>";
+				+ " width=\"200\" data-size=\"xlarge\" max-rows=\"1\"></fb:login-button>";
 		if (window.FB) {
 			FB.XFBML.parse();
 		}
