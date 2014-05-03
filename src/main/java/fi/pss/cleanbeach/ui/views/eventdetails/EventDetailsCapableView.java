@@ -92,4 +92,8 @@ public abstract class EventDetailsCapableView<T extends EventDetailsPresenter<?>
 		updateEventDetails(edited);
 	}
 
+	@Override
+	public void showThrashTotal(fi.pss.cleanbeach.data.Event selectedEvent) {
+		navigateTo(new ThrashDetailLayout(selectedEvent, presenter));
+	}
 }

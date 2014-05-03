@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ThrashDAO {
@@ -51,5 +52,27 @@ public class ThrashDAO {
 			}
 		}
 		return null;
+	}
+
+	public List<Thrash> getOtherMarkings() {
+		List<Thrash> other = new ArrayList<Thrash>();
+		for (Thrash t : list) {
+			if (t.getType().isOther()) {
+				other.add(t);
+			}
+		}
+		return other;
+	}
+
+	public boolean isEmpty() {
+		if (list == null) {
+			return true;
+		}
+		for (Thrash t : list) {
+			if (t.getNum() > 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
