@@ -1,0 +1,25 @@
+/* No need to import anything from Vaadin; touchkit imports it's theme with GWT */
+
+.v-window-detailpop {
+	left: 50% !important;
+}
+.v-window-detailpop .v-window-contents {
+	border-radius: 5px;	
+}
+.v-window-modalitycurtain {
+	opacity: 0.2 !important;
+}
+
+.details .caption {
+	font-size:18pt;
+}
+
+.details .time {
+	padding-bottom: 7px;
+}
+.details .time span {
+	font-weight: bold;
+}
+.details .joined {
+	padding-top: 7px;
+}

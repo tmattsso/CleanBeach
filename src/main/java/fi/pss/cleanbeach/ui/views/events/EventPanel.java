@@ -81,20 +81,26 @@ public class EventPanel extends CustomComponent {
 		} else {
 			root.addComponent(members, 1, 2, 2, 2);
 		}
-		Iterator<User> users = e.getJoinedUsers().iterator();
-		if (e.getJoinedUsers().size() > 2) {
-			members.setValue(users.next().getName() + ", "
-					+ users.next().getName() + ", "
-					+ Lang.get("events.details.joined.andseparator") + " "
-					+ (e.getJoinedUsers().size() - 2) + " "
-					+ Lang.get("events.details.joined.more"));
-		} else if (e.getJoinedUsers().size() == 2) {
-			members.setValue(users.next().getName() + ", "
-					+ users.next().getName());
-		} else if (e.getJoinedUsers().size() == 1) {
-			members.setValue(users.next().getName());
-		} else {
+
+		if (e.getJoinedUsers().isEmpty()) {
+
 			members.setValue(Lang.get("events.details.joined.none"));
+		} else {
+			Iterator<User> users = e.getJoinedUsers().iterator();
+
+			String content = Lang.get("events.details.joined.volunteers", e
+					.getJoinedUsers().size())
+					+ " " + users.next().getName();
+			if (e.getJoinedUsers().size() > 2) {
+				members.setValue(content + ", " + users.next().getName() + ", "
+						+ Lang.get("events.details.joined.andseparator") + " "
+						+ (e.getJoinedUsers().size() - 2) + " "
+						+ Lang.get("events.details.joined.more"));
+			} else if (e.getJoinedUsers().size() == 2) {
+				members.setValue(content + ", " + users.next().getName());
+			} else if (e.getJoinedUsers().size() == 1) {
+				members.setValue(content);
+			}
 		}
 
 		root.addLayoutClickListener(new LayoutClickListener() {

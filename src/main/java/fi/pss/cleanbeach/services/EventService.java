@@ -2,9 +2,11 @@ package fi.pss.cleanbeach.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -525,5 +527,43 @@ public class EventService {
 		event = em.merge(event);
 		event = loadDetails(event);
 		return event;
+	}
+
+	public Collection<Event> getEventsNear(Double latitude, Double longitude,
+			Integer zoomLevel) {
+
+		Query q = em
+				.createQuery("SELECT e FROM Event e WHERE e.start>:now AND "
+						+ "(e.location.latitude<:latMax AND e.location.latitude>:latMin) "
+						+ "AND (e.location.longitude<:longMax AND e.location.longitude>:longMin)");
+
+		q.setParameter("now", new Date());
+
+		// TODO base threshold on zoom level
+		q.setParameter("latMax", latitude + 1);
+		q.setParameter("latMin", latitude - 1);
+		q.setParameter("longMax", longitude + 1);
+		q.setParameter("longMin", longitude - 1);
+
+		@SuppressWarnings("unchecked")
+		java.util.List<Event> list = q.getResultList();
+		if (list == null) {
+			return new HashSet<Event>();
+		}
+
+		// filter duplicate events for same location
+		Map<Location, Event> nextEvents = new HashMap<Location, Event>();
+		for (Event event : list) {
+			if (!nextEvents.containsKey(event.getLocation())) {
+				nextEvents.put(event.getLocation(), event);
+				continue;
+			}
+			Event other = nextEvents.get(event.getLocation());
+			if (other.getStart().getTime() > event.getStart().getTime()) {
+				nextEvents.put(event.getLocation(), other);
+			}
+		}
+
+		return nextEvents.values();
 	}
 }

@@ -80,7 +80,7 @@ public class CommentInputLayout extends NavigationView {
 			ProgressListener {
 		private static final long serialVersionUID = 1L;
 
-		final static int maxLength = 10000000;
+		final static int maxLength = 5 * 1024 * 1024;// 5M
 		ByteArrayOutputStream fos = null;
 		String filename;
 		Upload upload;
