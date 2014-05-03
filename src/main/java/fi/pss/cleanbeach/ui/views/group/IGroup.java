@@ -44,4 +44,6 @@ public interface IGroup extends IEventDetails {
 
 	void showGroupSearch();
 
+	void showGroupDeleteConfirm();
+
 }
