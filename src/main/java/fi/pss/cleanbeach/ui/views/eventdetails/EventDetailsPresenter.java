@@ -106,6 +106,7 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 	}
 
 	public void openEditEvent(fi.pss.cleanbeach.data.Event e) {
+		e = service.loadDetails(e);
 		view.openEditEvent(e);
 	}
 
