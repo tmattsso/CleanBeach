@@ -4,3 +4,4 @@ src/main/webapp/VAADIN/widgetsets
 .project
 .classpath
 .DS_Store
+/SuperDevMode code server for cleanbeach.launch
