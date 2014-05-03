@@ -57,6 +57,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 
 		main = new VerticalLayout();
 		main.setSpacing(true);
+		main.addStyleName("mainlogin");
 		register = new RegisterLayout(null, null, presenter);
 
 		Label desc = new Label("<span>" + Lang.get("login.caption.big")

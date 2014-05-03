@@ -39,8 +39,8 @@ public class MainAppUI extends UI {
 	 */
 	private static final String APPID = "594614240628457";
 
-	// private static String AUTOLOGIN = null;
-	private static String AUTOLOGIN = "thomas@t.com";
+	private static String AUTOLOGIN = null;
+	// private static String AUTOLOGIN = "thomas@t.com";
 	// private static String AUTOLOGIN = "demo@demo.com";
 
 	private User currentUser;

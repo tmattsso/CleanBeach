@@ -4,6 +4,7 @@
 @IMPORT url("events.css");
 @IMPORT url("locations.css");
 @IMPORT url("groups.css");
+@IMPORT url("login.css");
 
 .v-caption {
 	color: #00a3e8;
@@ -19,13 +20,7 @@
 	font-size: 24pt;
 }
 
-.login .logo {
-	
-}
 
-.login .error {
-	color: red;
-}
 
 .actionbuttons .v-button-caption {
 	display: block;
