@@ -30,4 +30,6 @@ public interface IEventDetails extends IView {
 	void showCreateEvent(UsersGroup selectedGroup, Location selectedLocation);
 
 	void navigateBackAfterEdit(Event saveEvent);
+
+	void showThrashTotal(Event selectedEvent);
 }

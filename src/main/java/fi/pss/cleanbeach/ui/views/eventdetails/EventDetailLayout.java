@@ -205,6 +205,15 @@ public class EventDetailLayout extends NavigationView {
 		itemsButton.setHeight("100%");
 		itemsButton.addStyleName("thrash");
 		itemsButton.setHtmlContentAllowed(true);
+		itemsButton.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = -2279988918696258780L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.showTotalTrash(selectedEvent);
+			}
+		});
 
 		updateItemsButton(e);
 		return itemsButton;

@@ -134,4 +134,9 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 
 		return selectedEvent.getOrganizer().isAdmin(currentUser);
 	}
+
+	public void showTotalTrash(fi.pss.cleanbeach.data.Event selectedEvent) {
+		selectedEvent = service.loadDetails(selectedEvent);
+		view.showThrashTotal(selectedEvent);
+	}
 }
