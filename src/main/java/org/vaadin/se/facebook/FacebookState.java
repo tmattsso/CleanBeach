@@ -19,9 +19,9 @@ package org.vaadin.se.facebook;
 import com.vaadin.shared.JavaScriptExtensionState;
 
 /**
- *
+ * 
  * @author Sami Ekblad
  */
 public class FacebookState extends JavaScriptExtensionState {
-       public String appId;
+	public String appId;
 }

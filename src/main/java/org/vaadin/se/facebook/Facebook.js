@@ -24,7 +24,7 @@ window.org_vaadin_se_facebook_Facebook = function() {
 			FB.init({
 				appId : fbAppId,
 				cookie : true,
-				status : true,
+				status : false,
 				xfbml : true,
 				version : 'v2.0'
 			});
@@ -78,14 +78,12 @@ window.org_vaadin_se_facebook_Facebook = function() {
 				FB.login(function(response) {
 					// We subscribed the events, so don't need to do anything here.
 				},{display:'touch'});
-//			});
 			} else {
 				// the user isn't logged in to Facebook.
 				
 				FB.login(function(response) {
 					// We subscribed the events, so don't need to do anything here.
 				},{display:'touch'});
-//				});
 			}
 		});
 
