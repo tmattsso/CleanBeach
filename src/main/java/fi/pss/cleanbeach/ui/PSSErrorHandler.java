@@ -20,7 +20,7 @@ public class PSSErrorHandler implements ErrorHandler, Serializable {
 
 	private static final long serialVersionUID = 2471422708554126603L;
 
-	private static final boolean prodMode = false;
+	private static final boolean prodMode = true;
 
 	private transient final Logger log = Logger.getLogger("ErrorLogger");
 
