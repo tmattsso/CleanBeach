@@ -140,7 +140,7 @@ public class EditGroupLayout extends NavigationView {
 
 		private static final long serialVersionUID = -6303362300158056742L;
 
-		final static int maxLength = 256 * 1024; // 256K;
+		final static int maxLength = 1024 * 1024; // 1M;
 		ByteArrayOutputStream fos = null;
 		String filename;
 		Upload upload;
