@@ -198,6 +198,7 @@ public class GroupPresenter extends EventDetailsPresenter<IGroup> {
 		try {
 			groupService.delete(group);
 			loadGroups();
+			view.showGroupDeleteConfirm();
 		} catch (CannotDeleteException e) {
 			view.showErrorNotification(Lang.get("Group.errors.delete.caption"),
 					Lang.get("Group.errors.delete.msg"));

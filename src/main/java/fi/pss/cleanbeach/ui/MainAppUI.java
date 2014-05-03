@@ -112,7 +112,7 @@ public class MainAppUI extends UI {
 		getCurrent().getPage().setLocation("");
 	}
 
-	public static Cookie getUsernameCookie() {
+	public Cookie getUsernameCookie() {
 		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
 		if (cookies != null) {
 			for (Cookie c : cookies) {
@@ -124,17 +124,19 @@ public class MainAppUI extends UI {
 		return null;
 	}
 
-	public static void setCookie() {
+	private void setCookie() {
 		// check for old
 		if (getUsernameCookie() != null) {
 			return;
 		}
 
-		Cookie newCookie = new Cookie(COOKIE_NAME,
-				((MainAppUI) UI.getCurrent()).currentUser.getEmail());
-		newCookie.setDomain("localhost");
+		// check for OID
+		if (currentUser.getOidProvider() != null) {
+			return;
+		}
+
+		Cookie newCookie = new Cookie(COOKIE_NAME, currentUser.getEmail());
 		newCookie.setPath(VaadinService.getCurrentRequest().getContextPath());
-		// newCookie.setSecure(true); TODO enable
 		// store for 30 days
 		newCookie.setMaxAge(60 * 60 * 24 * 30);
 

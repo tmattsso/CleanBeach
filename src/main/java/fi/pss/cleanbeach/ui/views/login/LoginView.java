@@ -124,7 +124,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		main.addComponent(login);
 
 		// auto-fill username
-		Cookie c = MainAppUI.getUsernameCookie();
+		Cookie c = MainAppUI.getCurrent().getUsernameCookie();
 		if (c != null) {
 			username.setValue(c.getValue());
 			password.focus();
