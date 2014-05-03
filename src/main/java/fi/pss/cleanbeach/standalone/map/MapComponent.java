@@ -6,9 +6,9 @@
 
 package fi.pss.cleanbeach.standalone.map;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -17,19 +17,19 @@ import org.vaadin.addon.leaflet.LMarker;
 import org.vaadin.addon.leaflet.LTileLayer;
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
-import org.vaadin.addon.leaflet.client.PopupState;
 import org.vaadin.addon.leaflet.shared.Point;
 
 import com.vaadin.addon.touchkit.extensions.Geolocator;
 import com.vaadin.addon.touchkit.extensions.PositionCallback;
 import com.vaadin.addon.touchkit.gwt.client.vcom.Position;
+import com.vaadin.addon.touchkit.ui.Popover;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.server.ClassResource;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
 import fi.pss.cleanbeach.data.Location;
-import fi.pss.cleanbeach.services.LocationService;
+import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.ui.util.Lang;
 
 /**
@@ -46,7 +46,10 @@ public class MapComponent extends LMap implements PositionCallback {
 	private boolean positioningHasBeenRun;
 
 	@Inject
-	private LocationService locService;
+	private EventService eService;
+
+	@Inject
+	private EventDetails details;
 
 	public MapComponent() {
 
@@ -82,7 +85,10 @@ public class MapComponent extends LMap implements PositionCallback {
 		return getCenter().getLat();
 	}
 
-	public void addPoint(final Location l) {
+	public void addPoint(final fi.pss.cleanbeach.data.Event e) {
+
+		Location l = e.getLocation();
+
 		LMarker m = new LMarker(l.getLatitude(), l.getLongitude());
 		m.setData(l);
 		addComponent(m);
@@ -90,34 +96,36 @@ public class MapComponent extends LMap implements PositionCallback {
 		setIcon(m, l);
 		m.setIconAnchor(new Point(16, 32));
 
-		m.setPopup(l.getName());
-		PopupState state = new PopupState();
-		state.closeButton = false;
-		state.zoomAnimation = false;
-		state.minWidth = 150;
-		state.offset = new Point(0, -32);
-		state.autoPan = true;
-		state.autoPanPadding = new Point(10, 10);
-		m.setPopupState(state);
-
 		m.addClickListener(new LeafletClickListener() {
 
 			@Override
 			public void onClick(LeafletClickEvent event) {
-				// TODO open detail popup
+				details.update(e);
+				Popover pop = new Popover(details);
+				pop.addStyleName("detailpop");
+				pop.setModal(true);
+				getUI().addWindow(pop);
+
+				setCenter(e.getLocation().getLatitude(), e.getLocation()
+						.getLongitude() + getDetailsPosOffset());
 			}
+
 		});
 		markers.put(l, m);
+	}
+
+	private double getDetailsPosOffset() {
+		return 0.00033333 * Math.pow(2, Math.abs(getZoomLevel() - 18));
 	}
 
 	@Override
 	public void onSuccess(Position position) {
 		setCenter(position.getLatitude(), position.getLongitude());
 
-		Set<Location> locationsNear = locService.getLocationsNear(getLat(),
-				getLong());
-		for (Location l : locationsNear) {
-			addPoint(l);
+		Collection<fi.pss.cleanbeach.data.Event> eventsNear = eService
+				.getEventsNear(getLat(), getLong(), getZoomLevel());
+		for (fi.pss.cleanbeach.data.Event e : eventsNear) {
+			addPoint(e);
 		}
 	}
 

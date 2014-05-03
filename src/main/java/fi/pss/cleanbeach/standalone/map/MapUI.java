@@ -9,7 +9,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 
 @Widgetset("fi.pss.cleanbeach.standalone.map.MapWidgetSet")
-@Theme("cleanbeachtheme")
+@Theme("maptheme")
 @CDIUI("map")
 public class MapUI extends UI {
 

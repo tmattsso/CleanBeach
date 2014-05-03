@@ -2,9 +2,11 @@ package fi.pss.cleanbeach.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -525,5 +527,25 @@ public class EventService {
 		event = em.merge(event);
 		event = loadDetails(event);
 		return event;
+	}
+
+	public Collection<fi.pss.cleanbeach.data.Event> getEventsNear(
+			Double latitude, Double longitude, Integer zoomLevel) {
+
+		Query q = em
+				.createQuery("SELECT e FROM Event e WHERE "
+						+ "(e.location.latitude<:latMax AND e.location.latitude>:latMin) "
+						+ "AND (e.location.longitude<:longMax AND e.location.longitude>:longMin)");
+
+		// TODO base threshold on zoom level
+		q.setParameter("latMax", latitude + 1);
+		q.setParameter("latMin", latitude - 1);
+		q.setParameter("longMax", longitude + 1);
+		q.setParameter("longMin", longitude - 1);
+
+		@SuppressWarnings("unchecked")
+		java.util.List<Event> list = q.getResultList();
+
+		return list == null ? new HashSet<Event>() : new HashSet<Event>(list);
 	}
 }
