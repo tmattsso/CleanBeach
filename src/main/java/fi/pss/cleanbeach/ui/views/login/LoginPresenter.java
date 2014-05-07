@@ -1,5 +1,7 @@
 package fi.pss.cleanbeach.ui.views.login;
 
+import java.util.Locale;
+
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
@@ -93,6 +95,10 @@ public class LoginPresenter extends AbstractPresenter<ILogin> implements
 			view.showRegister(userId, AuthenticationService.PROVIDER_FB);
 		}
 
+	}
+
+	public void changeLang(Locale lang) {
+		view.setLocale(lang);
 	}
 
 }

@@ -32,6 +32,7 @@ import fi.pss.cleanbeach.ui.views.login.LoginView;
 public class MainAppUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
+	private static final String COOKIE_LANG = "CleanBeachLang";
 
 	/**
 	 * Thomas' id; TODO replace
@@ -124,23 +125,39 @@ public class MainAppUI extends UI {
 		return null;
 	}
 
-	private void setCookie() {
-		// check for old
-		if (getUsernameCookie() != null) {
-			return;
+	public Cookie getLangCookie() {
+		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if (c.getName().equals(COOKIE_LANG)) {
+					return c;
+				}
+			}
 		}
+		return null;
+	}
+
+	private void setCookie() {
+
+		Cookie newCookie = new Cookie(COOKIE_LANG, getLocale().getLanguage());
+		newCookie.setPath(VaadinService.getCurrentRequest().getContextPath());
+		// store for 30 days
+		newCookie.setMaxAge(60 * 60 * 24 * 30);
+
+		VaadinService.getCurrentResponse().addCookie(newCookie);
 
 		// check for OID
 		if (currentUser.getOidProvider() != null) {
 			return;
 		}
 
-		Cookie newCookie = new Cookie(COOKIE_NAME, currentUser.getEmail());
+		newCookie = new Cookie(COOKIE_NAME, currentUser.getEmail());
 		newCookie.setPath(VaadinService.getCurrentRequest().getContextPath());
 		// store for 30 days
 		newCookie.setMaxAge(60 * 60 * 24 * 30);
 
 		VaadinService.getCurrentResponse().addCookie(newCookie);
+
 	}
 
 	/**
