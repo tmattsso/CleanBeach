@@ -1,5 +1,7 @@
 package fi.pss.cleanbeach.ui.views.login;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
@@ -20,6 +22,7 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.VerticalLayout;
@@ -58,10 +61,59 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		root.setSizeFull();
 		root.addStyleName("login");
 
+		Cookie c = MainAppUI.getCurrent().getLangCookie();
+		if (c == null) {
+			build(null);
+		} else if (c != null) {
+			Locale selectedLocale = new Locale(c.getValue());
+			super.setLocale(selectedLocale);
+			build(selectedLocale);
+		}
+
+		return root;
+	}
+
+	private void build(Locale selectedLocale) {
+
+		root.removeAllComponents();
+
 		main = new VerticalLayout();
 		main.setSpacing(true);
 		main.addStyleName("mainlogin");
+
 		register = new RegisterLayout(null, null, presenter);
+
+		final NativeSelect langSelect = new NativeSelect();
+		langSelect.setImmediate(true);
+		langSelect.setNullSelectionAllowed(false);
+		langSelect.setWidth("100%");
+
+		Locale l = new Locale("fi");
+		langSelect.addItem(l);
+		langSelect.setItemCaption(l, "Suomeksi");
+		l = new Locale("sv");
+		langSelect.addItem(l);
+		langSelect.setItemCaption(l, "På Svenska");
+		l = new Locale("en");
+		langSelect.addItem(l);
+		langSelect.setItemCaption(l, "In English");
+		main.addComponent(langSelect);
+
+		if (selectedLocale != null) {
+			langSelect.setValue(selectedLocale);
+		} else {
+			langSelect.setValue(Lang.getLangInUse());
+		}
+
+		langSelect.addValueChangeListener(new ValueChangeListener() {
+
+			private static final long serialVersionUID = -4623575640110949845L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				presenter.changeLang((Locale) langSelect.getValue());
+			}
+		});
 
 		Label desc = new Label("<span>" + Lang.get("login.caption.big")
 				+ "</span>" + Lang.get("login.caption.small"), ContentMode.HTML);
@@ -187,7 +239,6 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 				Alignment.MIDDLE_RIGHT);
 		root.addComponent(socialButtons);
 
-		return root;
 	}
 
 	protected void showRegister() {
@@ -229,4 +280,9 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		showRegister();
 	}
 
+	@Override
+	public void setLocale(Locale locale) {
+		super.setLocale(locale);
+		build(locale);
+	}
 }

@@ -4,7 +4,9 @@
 package fi.pss.cleanbeach.ui.util;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -16,40 +18,19 @@ import fi.pss.cleanbeach.data.ThrashType;
 
 public class Lang {
 
-	private static final Locale DEFAULTLANG = new Locale("en");
+	private static final Locale DEFAULTLANG = new Locale("fi");
 
 	private static Map<Locale, ResourceBundle> bundles = new HashMap<>();
 
-	protected static Locale getLocaleInUse() {
-		// load from browser
-		Locale l = UI.getCurrent().getLocale();
-
-		if (l == null) {
-			l = DEFAULTLANG;
-			UI.getCurrent().setLocale(l);
-		} else if (l.getCountry() != null) {
-			// parse only language
-			l = new Locale(l.getLanguage());
-			UI.getCurrent().setLocale(l);
-		}
-
-		// test loading bundle
-		if (!loadBundle(l)) {
-
-			ResourceBundle b = bundles.get(l);
-			if (b == null) {
-				System.out.println("Bundle not available for locale '" + l
-						+ "', replacing with default (" + DEFAULTLANG + ")");
-				l = DEFAULTLANG;
-				loadBundle(l);
-			}
-		}
+	protected static Locale loadUsedBundle() {
+		Locale l = getLangInUse();
+		loadBundle(l);
 
 		return l;
 	}
 
 	protected static ResourceBundle getBundle() {
-		return bundles.get(getLocaleInUse());
+		return bundles.get(loadUsedBundle());
 	}
 
 	/**
@@ -80,7 +61,8 @@ public class Lang {
 
 	public static String get(Enum<?> e) {
 
-		String key = e.getClass().getSimpleName().toLowerCase() + "." + e.name().toLowerCase();
+		String key = e.getClass().getSimpleName().toLowerCase() + "."
+				+ e.name().toLowerCase();
 		return get(key);
 	}
 
@@ -127,6 +109,42 @@ public class Lang {
 
 	public static String get(ThrashType type) {
 		return get("thrashtype." + type.getName());
+	}
+
+	public static List<Locale> getAvailableLocales() {
+		List<Locale> locs = new ArrayList<Locale>();
+		locs.add(new Locale("en"));
+		locs.add(new Locale("fi"));
+		locs.add(new Locale("sv"));
+		return locs;
+	}
+
+	public static Locale getLangInUse() {
+
+		// load from browser
+		Locale l = UI.getCurrent().getLocale();
+
+		if (l == null) {
+			l = DEFAULTLANG;
+			UI.getCurrent().setLocale(l);
+		} else if (l.getCountry() != null) {
+			// parse only language
+			l = new Locale(l.getLanguage());
+			UI.getCurrent().setLocale(l);
+		}
+
+		// test loading bundle
+		if (!loadBundle(l)) {
+
+			ResourceBundle b = bundles.get(l);
+			if (b == null) {
+				System.out.println("Bundle not available for locale '" + l
+						+ "', replacing with default (" + DEFAULTLANG + ")");
+				l = DEFAULTLANG;
+			}
+		}
+
+		return l;
 	}
 
 }

@@ -1,6 +1,7 @@
 package fi.pss.cleanbeach.ui.mvp;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 
@@ -62,7 +63,13 @@ public abstract class AbstractView<P extends AbstractPresenter> extends
 		Notification.show(string, msg, Type.ERROR_MESSAGE);
 	}
 
+	@Override
 	public void setUser(User current) {
 		MainAppUI.setCurrentUser(current);
+	}
+
+	@Override
+	public void setLocale(Locale locale) {
+		getUI().setLocale(locale);
 	}
 }
