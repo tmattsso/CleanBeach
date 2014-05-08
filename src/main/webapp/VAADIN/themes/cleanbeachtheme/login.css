@@ -11,3 +11,16 @@
 	z-index: 9000;
 	background-color: #F5F5F2;
 }
+
+.v-touchkit-navpanel-login .v-touchkit-navpanel-wrapper .v-touchkit-navpanel-container {
+	
+	height : auto !important;
+
+	}
+.v-touchkit-navpanel-login .v-touchkit-navpanel-wrapper{
+	height : auto !important;
+}
+.v-touchkit-navpanel-login {
+	overflow: scroll !important;
+	height: 100% !important;
+}
