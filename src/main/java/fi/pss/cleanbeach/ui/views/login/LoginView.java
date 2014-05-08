@@ -58,7 +58,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		root = new VerticalLayout();
 		root.setSpacing(true);
 		root.setMargin(true);
-		root.setSizeFull();
+		// root.setSizeFull();
 		root.addStyleName("login");
 
 		Cookie c = MainAppUI.getCurrent().getLangCookie();
