@@ -95,6 +95,9 @@ public class MainAppUI extends UI {
 		// return;
 		// }
 
+		// build login
+		setContent(login);
+
 		fb = new Facebook(APPID);
 		addExtension(fb);
 		fb.addListener(loginPresenter);

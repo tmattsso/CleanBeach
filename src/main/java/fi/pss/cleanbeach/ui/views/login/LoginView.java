@@ -70,6 +70,8 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 			build(selectedLocale);
 		}
 
+		setSizeUndefined();
+		addStyleName("login");
 		return root;
 	}
 

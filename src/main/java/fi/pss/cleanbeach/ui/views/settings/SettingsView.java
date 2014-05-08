@@ -10,7 +10,6 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -49,10 +48,7 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 		VerticalLayout root = new VerticalLayout();
 		root.setMargin(true);
 		root.setSpacing(true);
-		root.setSizeFull();
 		vl.setContent(root);
-
-		Component toExpand;
 
 		nf = new TextField(Lang.get("settings.changename.caption"));
 		nf.setWidth("100%");
@@ -87,7 +83,6 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 		doChange = new Button(Lang.get("settings.changeemail.button"));
 		doChange.addClickListener(new EmailChanger());
 		root.addComponent(doChange);
-		toExpand = doChange;
 
 		doChange = new Button(Lang.get("settings.logout.button"));
 		doChange.addClickListener(new ClickListener() {
@@ -101,7 +96,6 @@ public class SettingsView extends AbstractView<SettingsPresenter> implements
 		});
 		root.addComponent(doChange);
 
-		root.setExpandRatio(toExpand, 1);
 		return vl;
 	}
 
