@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -28,9 +29,11 @@ import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
 import fi.pss.cleanbeach.ui.util.ImageUtil;
 
 @Stateless
+@Interceptors(LoggingInterceptor.class)
 public class EventService {
 
 	private final Logger log = Logger.getLogger(getClass().getSimpleName());
@@ -83,7 +86,7 @@ public class EventService {
 	public List<Event> getEventsForUser(User u, Double latitude,
 			Double longitude) {
 
-		u = em.merge(u);
+		u = em.find(User.class, u.getId());
 
 		String q = "SELECT e FROM Event e WHERE (";
 		if (!u.getMemberIn().isEmpty()) {
@@ -345,7 +348,7 @@ public class EventService {
 		return l;
 	}
 
-	public ThrashDAO getCollectedThrash(Event e) {
+	private ThrashDAO getCollectedThrash(Event e) {
 
 		String q = "SELECT t FROM Thrash t WHERE t.event=:e";
 		Query query = em.createQuery(q);

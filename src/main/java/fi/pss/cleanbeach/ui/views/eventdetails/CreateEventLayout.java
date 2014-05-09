@@ -125,7 +125,6 @@ public class CreateEventLayout extends NavigationView {
 				}
 			});
 			root.addComponent(locationSelect);
-			root.setExpandRatio(locationSelect, 1);
 		}
 
 		if (group == null && e == null) {

@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.interceptor.Interceptors;
 
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Image;
@@ -22,9 +23,11 @@ import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException;
 import fi.pss.cleanbeach.services.GroupService.CannotDeleteException;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
 
 @Singleton
 @Startup
+@Interceptors(LoggingInterceptor.class)
 public class BootstrapService {
 
 	private static final boolean INIT = false;
