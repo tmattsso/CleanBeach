@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -19,8 +20,10 @@ import org.apache.commons.lang.ArrayUtils;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException.REGISTRATION_CAUSE;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
 
 @Stateless
+@Interceptors(LoggingInterceptor.class)
 public class AuthenticationService {
 
 	private static final int MIN_PASS_LENTGH = 6;

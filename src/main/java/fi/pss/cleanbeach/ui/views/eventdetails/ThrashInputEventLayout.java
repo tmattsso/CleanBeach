@@ -3,6 +3,7 @@ package fi.pss.cleanbeach.ui.views.eventdetails;
 import java.util.List;
 
 import fi.pss.cleanbeach.data.ThrashType;
+import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.components.ThrashInputLayout;
 
 public class ThrashInputEventLayout extends ThrashInputLayout {
@@ -41,7 +42,8 @@ public class ThrashInputEventLayout extends ThrashInputLayout {
 
 	@Override
 	protected int getValue(ThrashType type) {
-		return event.getThrash().getOfType(type);
+		return event.getThrash().getOfTypeForUser(type,
+				MainAppUI.getCurrentUser());
 	}
 
 	@Override

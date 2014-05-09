@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -20,8 +21,10 @@ import fi.pss.cleanbeach.data.Thrash;
 import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
 
 @Stateless
+@Interceptors(LoggingInterceptor.class)
 public class LocationService {
 
 	/**
@@ -124,7 +127,8 @@ public class LocationService {
 
 	public ThrashDAO getThrash(Location selected, User user) {
 
-		String q = "SELECT t FROM Thrash t WHERE t.location=:loc AND t.reporter=:user AND t.pickupTime=CURRENT_DATE";
+		String q = "SELECT t FROM Thrash t WHERE "
+				+ "t.location=:loc AND t.reporter=:user AND t.pickupTime=CURRENT_DATE";
 		Query query = em.createQuery(q);
 		query.setParameter("loc", selected);
 		query.setParameter("user", user);
@@ -144,10 +148,26 @@ public class LocationService {
 
 	public void setDescription(ThrashType t, User currentUser, String value,
 			Event event, Location l) {
-		String q = "SELECT t FROM Thrash t WHERE t.type=:t AND t.reporter=:user AND t.pickupTime=CURRENT_DATE";
+		String q = "SELECT t FROM Thrash t WHERE "
+				+ "t.type=:t AND t.reporter=:user AND t.pickupTime=CURRENT_DATE ";
+
+		if (event != null) {
+			q += "AND t.event=:event ";
+		}
+		if (l != null) {
+			q += "AND t.location=:loc ";
+		}
+
 		Query query = em.createQuery(q);
 		query.setParameter("t", t);
 		query.setParameter("user", currentUser);
+
+		if (event != null) {
+			query.setParameter("event", event);
+		}
+		if (l != null) {
+			query.setParameter("loc", l);
+		}
 
 		Thrash thrash = null;
 		try {

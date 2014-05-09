@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -14,12 +15,14 @@ import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
 
 /**
  * @author denis
  * 
  */
 @Stateless
+@Interceptors(LoggingInterceptor.class)
 public class InviteService {
 
 	@PersistenceContext(unitName = "cleanbeach")
