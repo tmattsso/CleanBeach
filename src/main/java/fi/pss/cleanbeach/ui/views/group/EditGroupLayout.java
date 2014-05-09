@@ -51,9 +51,7 @@ public class EditGroupLayout extends NavigationView {
 		root = new VerticalLayout();
 		root.setMargin(true);
 		root.setSpacing(true);
-		root.setSizeFull();
 		setContent(root);
-		setSizeFull();
 
 		if (isNew()) {
 			setCaption(Lang.get("Group.edit.caption.new"));
@@ -103,8 +101,6 @@ public class EditGroupLayout extends NavigationView {
 		logo.addFailedListener(listener);
 		logo.addProgressListener(listener);
 		root.addComponent(logo);
-
-		root.setExpandRatio(logo, 1);
 
 		Button save = new Button(Lang.get("Group.edit.save"));
 		root.addComponent(save);
