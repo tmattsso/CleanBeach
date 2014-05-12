@@ -95,6 +95,7 @@ public class MapComponent extends LMap {
 			public void onClick(LeafletClickEvent event) {
 				details.update(e);
 				Window pop = new Window(null, details);
+				pop.setResizable(false);
 				pop.addStyleName("detailpop");
 				pop.setModal(true);
 				getUI().addWindow(pop);

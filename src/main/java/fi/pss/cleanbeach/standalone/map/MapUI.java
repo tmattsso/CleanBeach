@@ -58,6 +58,7 @@ public class MapUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
+		addStyleName("dawn");
 		setSizeFull();
 		setContent(map);
 		map.init();
