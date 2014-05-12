@@ -17,6 +17,8 @@ import org.vaadin.addon.leaflet.LMarker;
 import org.vaadin.addon.leaflet.LTileLayer;
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
+import org.vaadin.addon.leaflet.LeafletMoveEndEvent;
+import org.vaadin.addon.leaflet.LeafletMoveEndListener;
 import org.vaadin.addon.leaflet.shared.Point;
 
 import com.vaadin.cdi.UIScoped;
@@ -130,14 +132,31 @@ public class MapComponent extends LMap {
 
 	}
 
-	public void init() {
-		setZoomLevel(10);
+	private void loadEvents() {
+
+		for (LMarker m : markers.values()) {
+			removeComponent(m);
+		}
 
 		Collection<fi.pss.cleanbeach.data.Event> eventsNear = eService
 				.getEventsNear(getLat(), getLong(), getZoomLevel());
 		for (fi.pss.cleanbeach.data.Event e : eventsNear) {
 			addPoint(e);
 		}
+	}
+
+	public void init() {
+		setZoomLevel(10);
+
+		loadEvents();
+
+		addMoveEndListener(new LeafletMoveEndListener() {
+
+			@Override
+			public void onMoveEnd(LeafletMoveEndEvent event) {
+				loadEvents();
+			}
+		});
 	}
 
 }
