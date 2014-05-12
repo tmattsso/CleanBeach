@@ -1,4 +1,7 @@
-/* No need to import anything from Vaadin; touchkit imports it's theme with GWT */
+
+@import "../reindeer/styles.scss";
+
+@include reindeer;
 
 .v-window-detailpop {
 	left: 50% !important;

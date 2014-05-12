@@ -5,10 +5,10 @@ import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 
-import com.vaadin.addon.touchkit.ui.Popover;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.SingleComponentContainer;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.pss.cleanbeach.services.EventService;
@@ -34,7 +34,7 @@ public class EventDetails extends VerticalLayout {
 	public void update(fi.pss.cleanbeach.data.Event e) {
 
 		if (getParent() != null) {
-			((Popover) getParent()).setContent(null);
+			((SingleComponentContainer) getParent()).setContent(null);
 		}
 		removeAllComponents();
 
