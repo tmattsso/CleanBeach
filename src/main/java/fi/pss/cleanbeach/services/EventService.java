@@ -532,6 +532,11 @@ public class EventService {
 		return event;
 	}
 
+	private static double getCoordinateMinMaxForZoomlevel(int level) {
+		return 0.006 * Math.pow(2, Math.abs(level - 18));
+	}
+
+	@SuppressWarnings("deprecation")
 	public Collection<Event> getEventsNear(Double latitude, Double longitude,
 			Integer zoomLevel) {
 
@@ -540,13 +545,17 @@ public class EventService {
 						+ "(e.location.latitude<:latMax AND e.location.latitude>:latMin) "
 						+ "AND (e.location.longitude<:longMax AND e.location.longitude>:longMin)");
 
-		q.setParameter("now", new Date());
+		Date now = new Date();
+		now.setHours(0);
+		now.setMinutes(0);
+		q.setParameter("now", now);
 
-		// TODO base threshold on zoom level
-		q.setParameter("latMax", latitude + 1);
-		q.setParameter("latMin", latitude - 1);
-		q.setParameter("longMax", longitude + 1);
-		q.setParameter("longMin", longitude - 1);
+		double offset = getCoordinateMinMaxForZoomlevel(zoomLevel);
+
+		q.setParameter("latMax", latitude + offset);
+		q.setParameter("latMin", latitude - offset);
+		q.setParameter("longMax", longitude + offset);
+		q.setParameter("longMin", longitude - offset);
 
 		@SuppressWarnings("unchecked")
 		java.util.List<Event> list = q.getResultList();
