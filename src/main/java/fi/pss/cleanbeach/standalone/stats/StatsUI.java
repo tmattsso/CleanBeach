@@ -1,5 +1,7 @@
 package fi.pss.cleanbeach.standalone.stats;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -113,7 +115,7 @@ public class StatsUI extends UI {
 		setContent(main);
 
 		Label l = new Label("Users:");
-		l.addStyleName(Reindeer.LABEL_H2);
+		l.addStyleName(Reindeer.LABEL_H1);
 		main.addComponent(l);
 
 		for (User u : authService.getUsers()) {
@@ -122,11 +124,15 @@ public class StatsUI extends UI {
 		}
 
 		l = new Label("Groups:");
-		l.addStyleName(Reindeer.LABEL_H2);
+		l.addStyleName(Reindeer.LABEL_H1);
 		main.addComponent(l);
 
-		for (UsersGroup g : groupService.getGroups()) {
+		List<UsersGroup> groups = groupService.getGroups();
+		l = new Label("total of " + groups.size() + " groups");
+		main.addComponent(l);
+		for (UsersGroup g : groups) {
 			l = new Label(g.getName());
+			l.addStyleName(Reindeer.LABEL_H2);
 			main.addComponent(l);
 			l = new Label("Creator: " + g.getCreator().getEmail());
 			main.addComponent(l);
@@ -137,6 +143,7 @@ public class StatsUI extends UI {
 			}
 
 			l = new Label("Members:");
+			l.addStyleName(Reindeer.LABEL_H2);
 			main.addComponent(l);
 			StringBuilder users = new StringBuilder();
 			for (User u : g.getMembers()) {
@@ -146,6 +153,8 @@ public class StatsUI extends UI {
 			main.addComponent(l);
 
 			l = new Label("Group events:");
+			l.addStyleName(Reindeer.LABEL_H2);
+			main.addComponent(l);
 			for (fi.pss.cleanbeach.data.Event u : eService.getEvents(g)) {
 				l = new Label(u.getId() + ": " + u.getLocation().getName()
 						+ " " + u.getStart());
@@ -154,12 +163,16 @@ public class StatsUI extends UI {
 		}
 
 		l = new Label("Events");
-		l.addStyleName(Reindeer.LABEL_H2);
+		l.addStyleName(Reindeer.LABEL_H1);
 		main.addComponent(l);
-		for (fi.pss.cleanbeach.data.Event e : eService.getEvents()) {
+		List<fi.pss.cleanbeach.data.Event> events = eService.getEvents();
+		l = new Label("Total of " + events.size() + " events");
+		main.addComponent(l);
+		for (fi.pss.cleanbeach.data.Event e : events) {
 
 			l = new Label(e.getId() + ": " + e.getLocation().getName() + " "
 					+ e.getStart());
+			l.addStyleName(Reindeer.LABEL_H2);
 			main.addComponent(l);
 			l = new Label("Organizer: " + e.getOrganizer().getName());
 			main.addComponent(l);
@@ -172,6 +185,10 @@ public class StatsUI extends UI {
 			l = new Label(users.toString());
 			main.addComponent(l);
 
+			l = new Label("Event thrash:");
+			l.addStyleName(Reindeer.LABEL_H2);
+			main.addComponent(l);
+
 			ThrashDAO trash = e.getThrash();
 
 			printThrash(trash, main);
@@ -179,21 +196,25 @@ public class StatsUI extends UI {
 		}
 
 		l = new Label("Beaches:");
-		l.addStyleName(Reindeer.LABEL_H2);
+		l.addStyleName(Reindeer.LABEL_H1);
 		main.addComponent(l);
 		for (Location loc : locService.getLocations()) {
 			l = new Label(loc.getId() + " " + loc.getName());
+			l.addStyleName(Reindeer.LABEL_H2);
 			main.addComponent(l);
 			l = new Label(eService.getEvents(loc).size() + " events held");
 			main.addComponent(l);
 			ThrashDAO trash = locService.getThrash(loc);
 
+			l = new Label("Location thrash:");
+			l.addStyleName(Reindeer.LABEL_H2);
+			main.addComponent(l);
 			printThrash(trash, main);
 
 		}
 
 		l = new Label("All thrash");
-		l.addStyleName(Reindeer.LABEL_H2);
+		l.addStyleName(Reindeer.LABEL_H1);
 		main.addComponent(l);
 
 		ThrashDAO trash = locService.getThrash();
