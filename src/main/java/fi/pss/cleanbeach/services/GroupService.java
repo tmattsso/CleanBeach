@@ -178,4 +178,10 @@ public class GroupService {
 
 		return l;
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<UsersGroup> getGroups() {
+		return entityManager.createQuery("Select g from UsersGroup g")
+				.getResultList();
+	}
 }

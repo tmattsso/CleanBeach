@@ -221,4 +221,10 @@ public class AuthenticationService {
 
 		return em.merge(user);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<User> getUsers() {
+		Query q = em.createQuery("SELECT u FROM User u");
+		return q.getResultList();
+	}
 }

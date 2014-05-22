@@ -212,4 +212,28 @@ public class LocationService {
 		return list == null ? new HashSet<Location>() : new HashSet<Location>(
 				list);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Location> getLocations() {
+		return em.createQuery("SELECT l FROM Location l").getResultList();
+	}
+
+	public ThrashDAO getThrash(Location loc) {
+		String q = "SELECT t FROM Thrash t WHERE " + "t.location=:loc";
+		Query query = em.createQuery(q);
+		query.setParameter("loc", loc);
+		@SuppressWarnings("unchecked")
+		List<Thrash> l = query.getResultList();
+
+		return new ThrashDAO(l);
+	}
+
+	public ThrashDAO getThrash() {
+		String q = "SELECT t FROM Thrash t ";
+		Query query = em.createQuery(q);
+		@SuppressWarnings("unchecked")
+		List<Thrash> l = query.getResultList();
+
+		return new ThrashDAO(l);
+	}
 }
