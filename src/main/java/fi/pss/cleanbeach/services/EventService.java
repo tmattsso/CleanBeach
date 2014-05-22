@@ -578,4 +578,15 @@ public class EventService {
 
 		return nextEvents.values();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Event> getEvents() {
+		List<Event> resultList = em.createQuery("Select g from Event g")
+				.getResultList();
+
+		fillWithThrashDetails(resultList);
+		fillWithUserDetails(resultList);
+
+		return resultList;
+	}
 }
