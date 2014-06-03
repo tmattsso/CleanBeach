@@ -46,8 +46,10 @@ public class ReportDirtyPopover extends Popover {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				l.confirm(tf.getValue());
-				close();
+				if (tf.getValue() != null && tf.getValue().length() > 0) {
+					l.confirm(tf.getValue());
+					close();
+				}
 			}
 		});
 	}

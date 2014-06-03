@@ -13,6 +13,8 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.Upload;
+import com.vaadin.ui.Upload.FailedEvent;
+import com.vaadin.ui.Upload.FailedListener;
 import com.vaadin.ui.Upload.ProgressListener;
 import com.vaadin.ui.Upload.Receiver;
 import com.vaadin.ui.Upload.SucceededEvent;
@@ -29,10 +31,11 @@ public class CommentInputLayout extends NavigationView {
 
 	private Image uploadedImage;
 	private final EventDetailsPresenter<?> presenter;
+	private final Button saveComment;
 
 	public CommentInputLayout(final fi.pss.cleanbeach.data.Event e,
-			boolean addImageImmediately,
-			final EventDetailsPresenter<?> presenter) {
+
+	final EventDetailsPresenter<?> presenter) {
 
 		this.presenter = presenter;
 		VerticalLayout root = new VerticalLayout();
@@ -42,11 +45,7 @@ public class CommentInputLayout extends NavigationView {
 		addStyleName("addcomment");
 
 		setContent(root);
-		if (addImageImmediately) {
-			setCaption(Lang.get("events.comment.addimage"));
-		} else {
-			setCaption(Lang.get("events.comment.addcomment"));
-		}
+		setCaption(Lang.get("events.comment.addcomment"));
 
 		final TextArea comment = new TextArea();
 		comment.setSizeFull();
@@ -60,10 +59,11 @@ public class CommentInputLayout extends NavigationView {
 		ImageUploader ul = new ImageUploader(addImage);
 		addImage.setReceiver(ul);
 		addImage.addSucceededListener(ul);
+		addImage.addFailedListener(ul);
 		TouchKitIcon.cameraRetro.addTo(addImage);
 		root.addComponent(addImage);
 
-		Button saveComment = new Button(Lang.get("events.comment.addcomment"));
+		saveComment = new Button(Lang.get("events.comment.addcomment"));
 		TouchKitIcon.comment.addTo(saveComment);
 		saveComment.addClickListener(new ClickListener() {
 
@@ -76,22 +76,15 @@ public class CommentInputLayout extends NavigationView {
 		});
 		root.addComponent(saveComment);
 
-		if (addImageImmediately) {
-			openUpload();
-		}
-	}
-
-	protected void openUpload() {
-		// TODO how?
 	}
 
 	// Implement both receiver that saves upload in a file and
 	// listener for successful upload
-	class ImageUploader implements Receiver, SucceededListener,
+	class ImageUploader implements Receiver, SucceededListener, FailedListener,
 			ProgressListener {
 		private static final long serialVersionUID = 1L;
 
-		final static int maxLength = 10000000;
+		final static int maxLength = 5 * 1024 * 1024;// 5M
 		ByteArrayOutputStream fos = null;
 		String filename;
 		Upload upload;
@@ -103,15 +96,17 @@ public class CommentInputLayout extends NavigationView {
 		@Override
 		public OutputStream receiveUpload(String filename, String mimeType) {
 			this.filename = filename;
-			fos = new ByteArrayOutputStream(maxLength + 1);
+			fos = new ByteArrayOutputStream();
 			return fos; // Return the output stream to write to
 		}
 
 		@Override
 		public void updateProgress(long readBytes, long contentLength) {
+			saveComment.setEnabled(false);
 			if (readBytes > maxLength) {
-				Notification.show(Lang.get("events.comment.toolong"));
+				Notification.show(Lang.get("events.comment.imageFailed"));
 				upload.interruptUpload();
+				saveComment.setEnabled(true);
 			}
 		}
 
@@ -126,6 +121,14 @@ public class CommentInputLayout extends NavigationView {
 			}
 			uploadedImage.setMimetype("image/jpeg");
 			uploadedImage.setUploaded(new Date());
+
+			saveComment.setEnabled(true);
+		}
+
+		@Override
+		public void uploadFailed(FailedEvent event) {
+
+			Notification.show(Lang.get("events.comment.imageFailed"));
 		}
 	};
 }

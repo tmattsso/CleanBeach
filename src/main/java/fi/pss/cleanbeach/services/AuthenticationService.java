@@ -4,11 +4,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -18,12 +20,15 @@ import org.apache.commons.lang.ArrayUtils;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException.REGISTRATION_CAUSE;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
 
 @Stateless
+@Interceptors(LoggingInterceptor.class)
 public class AuthenticationService {
 
 	private static final int MIN_PASS_LENTGH = 6;
 	private static final int HASH_ITERATIONS = 1000;
+	public static final String PROVIDER_FB = "facebook";
 	private final Pattern emailpattern = Pattern
 			.compile("^([a-zA-Z0-9_\\.\\-+])+@(([a-zA-Z0-9-])+\\.)+([a-zA-Z0-9]{2,4})+$");
 
@@ -38,7 +43,20 @@ public class AuthenticationService {
 
 		User u = null;
 		try {
-			u = (User) q.getSingleResult();
+			@SuppressWarnings("unchecked")
+			List<User> users = q.getResultList();
+
+			if (users.size() == 1) {
+				u = users.get(0);
+			} else {
+				// loop through, find user without OID
+				for (User us : users) {
+					if (us.getOid() == null) {
+						u = us;
+						break;
+					}
+				}
+			}
 		} catch (NoResultException e) {
 			// Ignore
 		}
@@ -52,8 +70,7 @@ public class AuthenticationService {
 			return null;
 		}
 
-		byte[] salt = Arrays.copyOfRange(u.getHashedPass(), 0,
-				User.SALT_LENGTH_BYTES);
+		byte[] salt = getSalt(u);
 		byte[] pass = Arrays.copyOfRange(u.getHashedPass(),
 				User.SALT_LENGTH_BYTES, u.getHashedPass().length);
 
@@ -64,6 +81,10 @@ public class AuthenticationService {
 		}
 
 		return null;
+	}
+
+	private static byte[] getSalt(User u) {
+		return Arrays.copyOfRange(u.getHashedPass(), 0, User.SALT_LENGTH_BYTES);
 	}
 
 	private static byte[] hash(byte[] salt, String pwd) {
@@ -82,28 +103,35 @@ public class AuthenticationService {
 		return null;
 	}
 
-	public User getUser(String oid, String oidProvider) {
+	public User getUser(String oid, String oidProvider) throws NoSuchUser {
 		Query q = em
 				.createQuery("Select u From User u where oid=? and oidProvider=?");
 		q.setParameter(1, oid);
 		q.setParameter(2, oidProvider);
 
-		User u = (User) q.getSingleResult();
-		return u;
+		try {
+			User u = (User) q.getSingleResult();
+
+			return u;
+		} catch (NoResultException e) {
+			throw new NoSuchUser();
+		}
 	}
 
 	public User createUser(User u, String password)
 			throws RegistrationException {
 		checkValid(u, password);
 
-		byte[] salt = new byte[User.SALT_LENGTH_BYTES];
-		try {
-			SecureRandom.getInstance("SHA1PRNG").nextBytes(salt);
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
+		if (u.getOid() == null) {
+			byte[] salt = new byte[User.SALT_LENGTH_BYTES];
+			try {
+				SecureRandom.getInstance("SHA1PRNG").nextBytes(salt);
+			} catch (NoSuchAlgorithmException e) {
+				throw new RuntimeException(e);
+			}
+			byte[] both = ArrayUtils.addAll(salt, hash(salt, password));
+			u.setHashedPass(both);
 		}
-		byte[] both = ArrayUtils.addAll(salt, hash(salt, password));
-		u.setHashedPass(both);
 
 		try {
 			em.persist(u);
@@ -132,13 +160,15 @@ public class AuthenticationService {
 			throw new RegistrationException(REGISTRATION_CAUSE.EMAILNOTVALID);
 		}
 
-		if (password == null || password.isEmpty()) {
-			log.info("No password provided");
-			throw new RegistrationException(REGISTRATION_CAUSE.NOPASS);
-		}
-		if (password.length() < MIN_PASS_LENTGH) {
-			log.info("Pass not long enough");
-			throw new RegistrationException(REGISTRATION_CAUSE.PASSTOOSHORT);
+		if (u.getOid() == null) {
+			if (password == null || password.isEmpty()) {
+				log.info("No password provided");
+				throw new RegistrationException(REGISTRATION_CAUSE.NOPASS);
+			}
+			if (password.length() < MIN_PASS_LENTGH) {
+				log.info("Pass not long enough");
+				throw new RegistrationException(REGISTRATION_CAUSE.PASSTOOSHORT);
+			}
 		}
 
 	}
@@ -164,5 +194,31 @@ public class AuthenticationService {
 		public REGISTRATION_CAUSE getFault() {
 			return cause;
 		}
+	}
+
+	public static class NoSuchUser extends Exception {
+
+		private static final long serialVersionUID = 7351005755063615170L;
+
+	}
+
+	public User changeUserEmail(User currentUser, String newMail) {
+		currentUser = refresh(currentUser);
+		currentUser.setEmail(newMail);
+		currentUser = em.merge(currentUser);
+		return currentUser;
+	}
+
+	public void changeUserPassword(User user, String value) {
+		user = refresh(user);
+		user.setHashedPass(hash(getSalt(user), value));
+		em.merge(user);
+	}
+
+	public User changeUserName(User user, String value) {
+		user = refresh(user);
+		user.setName(value);
+
+		return em.merge(user);
 	}
 }

@@ -4,15 +4,20 @@ import java.util.Collection;
 
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Invite;
+import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.ui.mvp.IView;
 
-public interface IEventDetails extends ICreateEvent {
+public interface IEventDetails extends IView {
 
 	void showDetails(Event e);
 
 	void openThrashDetails(Event e);
 
-	void openAddComment(Event e, boolean addImage);
+	void openEditEvent(Event e);
+
+	void openAddComment(Event e);
 
 	void updateEventDetails(Event e);
 
@@ -22,4 +27,9 @@ public interface IEventDetails extends ICreateEvent {
 
 	void navigateBackAfterDelete(long eventId);
 
+	void showCreateEvent(UsersGroup selectedGroup, Location selectedLocation);
+
+	void navigateBackAfterEdit(Event saveEvent);
+
+	void showThrashTotal(Event selectedEvent);
 }

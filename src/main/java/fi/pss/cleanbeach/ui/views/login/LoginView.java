@@ -1,9 +1,13 @@
 package fi.pss.cleanbeach.ui.views.login;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
+import org.vaadin.se.facebook.LoginButton;
+
+import com.vaadin.addon.touchkit.ui.EmailField;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -18,9 +22,9 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
@@ -44,6 +48,8 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 
 	private Button registerButton;
 
+	private HorizontalLayout socialButtons;
+
 	public LoginView() {
 	}
 
@@ -52,12 +58,64 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		root = new VerticalLayout();
 		root.setSpacing(true);
 		root.setMargin(true);
-		root.setSizeFull();
+		// root.setSizeFull();
 		root.addStyleName("login");
+
+		Cookie c = MainAppUI.getCurrent().getLangCookie();
+		if (c == null) {
+			build(null);
+		} else if (c != null) {
+			Locale selectedLocale = new Locale(c.getValue());
+			super.setLocale(selectedLocale);
+			build(selectedLocale);
+		}
+
+		setSizeUndefined();
+		addStyleName("login");
+		return root;
+	}
+
+	private void build(Locale selectedLocale) {
+
+		root.removeAllComponents();
 
 		main = new VerticalLayout();
 		main.setSpacing(true);
-		register = new RegisterLayout(presenter);
+		main.addStyleName("mainlogin");
+
+		register = new RegisterLayout(null, null, presenter);
+
+		final NativeSelect langSelect = new NativeSelect();
+		langSelect.setImmediate(true);
+		langSelect.setNullSelectionAllowed(false);
+		langSelect.setWidth("100%");
+
+		Locale l = new Locale("fi");
+		langSelect.addItem(l);
+		langSelect.setItemCaption(l, "Suomeksi");
+		l = new Locale("sv");
+		langSelect.addItem(l);
+		langSelect.setItemCaption(l, "På Svenska");
+		l = new Locale("en");
+		langSelect.addItem(l);
+		langSelect.setItemCaption(l, "In English");
+		main.addComponent(langSelect);
+
+		if (selectedLocale != null) {
+			langSelect.setValue(selectedLocale);
+		} else {
+			langSelect.setValue(Lang.getLangInUse());
+		}
+
+		langSelect.addValueChangeListener(new ValueChangeListener() {
+
+			private static final long serialVersionUID = -4623575640110949845L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				presenter.changeLang((Locale) langSelect.getValue());
+			}
+		});
 
 		Label desc = new Label("<span>" + Lang.get("login.caption.big")
 				+ "</span>" + Lang.get("login.caption.small"), ContentMode.HTML);
@@ -77,7 +135,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		hl.addStyleName("logolayout");
 		main.addComponent(hl);
 
-		final TextField username = new TextField(Lang.get("login.username"));
+		final EmailField username = new EmailField(Lang.get("login.username"));
 		username.setWidth("100%");
 		username.setImmediate(true);
 		username.addStyleName("username");
@@ -120,7 +178,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		main.addComponent(login);
 
 		// auto-fill username
-		Cookie c = MainAppUI.getUsernameCookie();
+		Cookie c = MainAppUI.getCurrent().getUsernameCookie();
 		if (c != null) {
 			username.setValue(c.getValue());
 			password.focus();
@@ -136,7 +194,7 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		root.setExpandRatio(main, 1);
 
 		registerButton = new Button(Lang.get("login.register"));
-		root.addComponent(registerButton);
+		registerButton.setWidth("100%");
 		registerButton.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -5189522876236967527L;
@@ -152,22 +210,37 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 			}
 		});
 
-		Button fbLogin = new Button(Lang.get("login.fb"));
-		TouchKitIcon.facebook.addTo(fbLogin);
-		fbLogin.setWidth("100%");
+		LoginButton test = new LoginButton();
+		test.setWidth("123px");
+		test.setHeight("40px");
 
-		Button twitterLogin = new Button(Lang.get("login.twitter"));
-		TouchKitIcon.twitter.addTo(twitterLogin);
-		twitterLogin.setWidth("100%");
+		// Button fbLogin = new Button(Lang.get("login.fb"));
+		// TouchKitIcon.facebook.addTo(fbLogin);
+		// fbLogin.setWidth("100%");
+		// fbLogin.addClickListener(new ClickListener() {
+		//
+		// private static final long serialVersionUID = 8781936707317808266L;
+		//
+		// @Override
+		// public void buttonClick(ClickEvent event) {
+		// MainAppUI.getCurrent().loginFromFB();
+		// }
+		// });
 
-		hl = new HorizontalLayout(fbLogin, twitterLogin);
-		hl.addStyleName("socialbuttons");
-		hl.addStyleName("actionbuttons");
-		hl.setWidth("100%");
-		hl.setSpacing(true);
-		root.addComponent(hl);
+		// Button twitterLogin = new Button(Lang.get("login.twitter"));
+		// TouchKitIcon.twitter.addTo(twitterLogin);
+		// twitterLogin.setWidth("100%");
 
-		return root;
+		socialButtons = new HorizontalLayout(test, registerButton);
+		socialButtons.addStyleName("socialbuttons");
+		socialButtons.addStyleName("actionbuttons");
+		socialButtons.setWidth("100%");
+		socialButtons.setSpacing(true);
+		socialButtons.setExpandRatio(registerButton, 1);
+		socialButtons.setComponentAlignment(registerButton,
+				Alignment.MIDDLE_RIGHT);
+		root.addComponent(socialButtons);
+
 	}
 
 	protected void showRegister() {
@@ -203,4 +276,15 @@ public class LoginView extends AbstractView<LoginPresenter> implements ILogin {
 		register.showError(message);
 	}
 
+	@Override
+	public void showRegister(String userId, String provider) {
+		register = new RegisterLayout(userId, provider, presenter);
+		showRegister();
+	}
+
+	@Override
+	public void setLocale(Locale locale) {
+		super.setLocale(locale);
+		build(locale);
+	}
 }

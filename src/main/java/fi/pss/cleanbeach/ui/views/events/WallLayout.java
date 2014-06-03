@@ -81,7 +81,7 @@ public class WallLayout extends VerticalLayout implements PositionCallback {
 		if (!positioningHasBeenRun) {
 
 			removeAllComponents();
-			Label running = new Label("[updating list...");
+			Label running = new Label(Lang.get("events.updating"));
 			addComponent(running);
 			setComponentAlignment(running, Alignment.MIDDLE_CENTER);
 

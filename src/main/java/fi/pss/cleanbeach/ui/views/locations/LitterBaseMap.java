@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package fi.pss.cleanbeach.ui.views.locations;
 
 import java.util.HashMap;
@@ -80,15 +74,7 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 			@Override
 			public void onClick(LeafletClickEvent event) {
 
-				if (selected != null) {
-					for (Entry<Location, LMarker> e : markers.entrySet()) {
-						if (e.getValue().equals(selected)) {
-							setIcon(selected, e.getKey());
-							break;
-						}
-					}
-					selected = null;
-				}
+				clearSelection();
 
 				if (tempMarker == null || !tempMarker.isAttached()) {
 					tempMarker = new LMarker();
@@ -104,6 +90,30 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 			}
 		});
 
+	}
+
+	private void clearSelection() {
+		if (selected != null) {
+			for (Entry<Location, LMarker> e : markers.entrySet()) {
+				if (e.getValue().equals(selected)) {
+					setIcon(selected, e.getKey());
+					break;
+				}
+			}
+			selected = null;
+		}
+	}
+
+	public void select(Location l) {
+
+		clearSelection();
+		for (Entry<Location, LMarker> e : markers.entrySet()) {
+			if (e.getKey().equals(l)) {
+				selected = e.getValue();
+				selected.setIcon(new ClassResource("flag_yellow.png"));
+				break;
+			}
+		}
 	}
 
 	LMarker getMarker() {
@@ -130,8 +140,7 @@ public class LitterBaseMap extends LMap implements PositionCallback {
 
 			@Override
 			public void onClick(LeafletClickEvent event) {
-				selected = m;
-				m.setIcon(new ClassResource("flag_yellow.png"));
+
 				listener.selectedExisting(l);
 			}
 		});

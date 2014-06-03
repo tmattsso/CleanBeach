@@ -76,4 +76,10 @@ public class HistoryLayout extends NavigationView {
 	public void remove(long eventId) {
 		root.removeComponent(eventToPanel.get(eventId));
 	}
+
+	public void update(fi.pss.cleanbeach.data.Event e) {
+		if (eventToPanel.containsKey(e.getId())) {
+			eventToPanel.get(e.getId()).update(e);
+		}
+	}
 }

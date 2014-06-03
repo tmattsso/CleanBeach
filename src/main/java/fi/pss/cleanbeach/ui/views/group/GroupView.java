@@ -12,6 +12,7 @@ import com.vaadin.cdi.UIScoped;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.UsersGroup;
@@ -143,4 +144,14 @@ public class GroupView extends EventDetailsCapableView<GroupPresenter>
 		}
 	}
 
+	@Override
+	protected void eventDetailsUpdated(fi.pss.cleanbeach.data.Event e) {
+		detailsComponent.update(e);
+	}
+
+	@Override
+	public void showGroupDeleteConfirm() {
+		Notification.show(Lang.get("Group.details.delete.success"),
+				Type.HUMANIZED_MESSAGE);
+	}
 }

@@ -7,6 +7,8 @@ public interface ILogin extends IView {
 
 	void showLoginError();
 
+	void showRegister(String userId, String provider);
+
 	void showRegisterSuccess(User u);
 
 	void showRegistrationError(String message);

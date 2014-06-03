@@ -1,5 +1,6 @@
 package fi.pss.cleanbeach.ui.views.login;
 
+import com.vaadin.addon.touchkit.ui.EmailField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -17,16 +18,24 @@ public class RegisterLayout extends VerticalLayout {
 
 	private final Label error;
 
-	public RegisterLayout(final LoginPresenter presenter) {
+	public RegisterLayout(final String id, final String provider,
+			final LoginPresenter presenter) {
 
 		addStyleName("register");
 		setSpacing(true);
+
+		boolean oauth = id != null;
 
 		Label caption = new Label(Lang.get("register.caption"));
 		caption.addStyleName("caption");
 		addComponent(caption);
 
-		Label desc = new Label(Lang.get("register.desc"));
+		Label desc = new Label();
+		if (oauth) {
+			desc.setValue(Lang.get("register.desc.oauth"));
+		} else {
+			desc.setValue(Lang.get("register.desc"));
+		}
 		desc.addStyleName("desc");
 		addComponent(desc);
 
@@ -35,7 +44,7 @@ public class RegisterLayout extends VerticalLayout {
 		name.setRequired(true);
 		addComponent(name);
 
-		final TextField email = new TextField(Lang.get("register.email"));
+		final EmailField email = new EmailField(Lang.get("register.email"));
 		email.setWidth("100%");
 		email.setRequired(true);
 		addComponent(email);
@@ -44,7 +53,9 @@ public class RegisterLayout extends VerticalLayout {
 				Lang.get("register.pass"));
 		password.setWidth("100%");
 		password.setRequired(true);
-		addComponent(password);
+		if (!oauth) {
+			addComponent(password);
+		}
 
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addStyleName("actionbuttons");
@@ -57,7 +68,7 @@ public class RegisterLayout extends VerticalLayout {
 					@Override
 					public void buttonClick(ClickEvent event) {
 						presenter.register(name.getValue(), email.getValue(),
-								password.getValue());
+								password.getValue(), id, provider);
 					}
 				});
 		addComponent(register);

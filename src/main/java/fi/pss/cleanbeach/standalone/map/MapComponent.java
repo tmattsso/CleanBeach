@@ -6,9 +6,9 @@
 
 package fi.pss.cleanbeach.standalone.map;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -17,36 +17,31 @@ import org.vaadin.addon.leaflet.LMarker;
 import org.vaadin.addon.leaflet.LTileLayer;
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
-import org.vaadin.addon.leaflet.client.PopupState;
 import org.vaadin.addon.leaflet.shared.Point;
 
-import com.vaadin.addon.touchkit.extensions.Geolocator;
-import com.vaadin.addon.touchkit.extensions.PositionCallback;
-import com.vaadin.addon.touchkit.gwt.client.vcom.Position;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.server.ClassResource;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.Window;
 
 import fi.pss.cleanbeach.data.Location;
-import fi.pss.cleanbeach.services.LocationService;
-import fi.pss.cleanbeach.ui.util.Lang;
+import fi.pss.cleanbeach.services.EventService;
 
 /**
  * 
  * @author mattitahvonenitmill, thomas
  */
 @UIScoped
-public class MapComponent extends LMap implements PositionCallback {
+public class MapComponent extends LMap {
 
 	private static final long serialVersionUID = -4582977579039441885L;
 
 	private final Map<Location, LMarker> markers = new HashMap<>();
 
-	private boolean positioningHasBeenRun;
+	@Inject
+	private EventService eService;
 
 	@Inject
-	private LocationService locService;
+	private EventDetails details;
 
 	public MapComponent() {
 
@@ -71,7 +66,8 @@ public class MapComponent extends LMap implements PositionCallback {
 		// peruskartta.setDetectRetina(true);
 
 		// default
-		setCenter(60.08504, 22.15187);
+		setCenter(60.4, 22.0);
+		setZoomLevel(9);
 	}
 
 	public Double getLong() {
@@ -82,7 +78,10 @@ public class MapComponent extends LMap implements PositionCallback {
 		return getCenter().getLat();
 	}
 
-	public void addPoint(final Location l) {
+	public void addPoint(final fi.pss.cleanbeach.data.Event e) {
+
+		Location l = e.getLocation();
+
 		LMarker m = new LMarker(l.getLatitude(), l.getLongitude());
 		m.setData(l);
 		addComponent(m);
@@ -90,48 +89,27 @@ public class MapComponent extends LMap implements PositionCallback {
 		setIcon(m, l);
 		m.setIconAnchor(new Point(16, 32));
 
-		m.setPopup(l.getName());
-		PopupState state = new PopupState();
-		state.closeButton = false;
-		state.zoomAnimation = false;
-		state.minWidth = 150;
-		state.offset = new Point(0, -32);
-		state.autoPan = true;
-		state.autoPanPadding = new Point(10, 10);
-		m.setPopupState(state);
-
 		m.addClickListener(new LeafletClickListener() {
 
 			@Override
 			public void onClick(LeafletClickEvent event) {
-				// TODO open detail popup
+				details.update(e);
+				Window pop = new Window(null, details);
+				pop.setResizable(false);
+				pop.addStyleName("detailpop");
+				pop.setModal(true);
+				getUI().addWindow(pop);
+
+				setCenter(e.getLocation().getLatitude(), e.getLocation()
+						.getLongitude() + getDetailsPosOffset());
 			}
+
 		});
 		markers.put(l, m);
 	}
 
-	@Override
-	public void onSuccess(Position position) {
-		setCenter(position.getLatitude(), position.getLongitude());
-
-		Set<Location> locationsNear = locService.getLocationsNear(getLat(),
-				getLong());
-		for (Location l : locationsNear) {
-			addPoint(l);
-		}
-	}
-
-	@Override
-	public void onFailure(int errorCode) {
-		Notification.show(Lang.get("locations.map.noposition"),
-				Type.WARNING_MESSAGE);
-	}
-
-	private void runPositioning() {
-		if (!positioningHasBeenRun) {
-			Geolocator.detect(this);
-			positioningHasBeenRun = true;
-		}
+	private double getDetailsPosOffset() {
+		return 0.00033333 * Math.pow(2, Math.abs(getZoomLevel() - 18));
 	}
 
 	private static void setIcon(LMarker m, Location loc) {
@@ -153,7 +131,13 @@ public class MapComponent extends LMap implements PositionCallback {
 	}
 
 	public void init() {
-		runPositioning();
+		setZoomLevel(10);
+
+		Collection<fi.pss.cleanbeach.data.Event> eventsNear = eService
+				.getEventsNear(getLat(), getLong(), getZoomLevel());
+		for (fi.pss.cleanbeach.data.Event e : eventsNear) {
+			addPoint(e);
+		}
 	}
 
 }

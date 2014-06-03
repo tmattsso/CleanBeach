@@ -4,16 +4,23 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 
+import org.vaadin.se.facebook.Facebook;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService;
+import fi.pss.cleanbeach.services.EventService;
+import fi.pss.cleanbeach.ui.util.Lang;
+import fi.pss.cleanbeach.ui.views.events.PublicEventView;
 import fi.pss.cleanbeach.ui.views.login.LoginEvent;
+import fi.pss.cleanbeach.ui.views.login.LoginPresenter;
 import fi.pss.cleanbeach.ui.views.login.LoginView;
 
 /**
@@ -26,9 +33,15 @@ import fi.pss.cleanbeach.ui.views.login.LoginView;
 public class MainAppUI extends UI {
 
 	private static final String COOKIE_NAME = "CleanBeachUser";
+	private static final String COOKIE_LANG = "CleanBeachLang";
 
-	// private static String AUTOLOGIN = null;
-	private static String AUTOLOGIN = "thomas@t.com";
+	/**
+	 * Thomas' id; TODO replace
+	 */
+	private static final String APPID = "594614240628457";
+
+	private static String AUTOLOGIN = null;
+	// private static String AUTOLOGIN = "thomas@t.com";
 	// private static String AUTOLOGIN = "demo@demo.com";
 
 	private User currentUser;
@@ -42,10 +55,39 @@ public class MainAppUI extends UI {
 	@Inject
 	private AuthenticationService authService;
 
+	@Inject
+	private EventService eService;
+
+	@Inject
+	private LoginPresenter loginPresenter;
+
+	private Long selectedEventId;
+
+	private Facebook fb;
+
 	@Override
 	protected void init(VaadinRequest request) {
 
 		setErrorHandler(new PSSErrorHandler());
+
+		String parameter = request.getParameter("event");
+		if (parameter != null) {
+
+			try {
+				long eventId = Long.parseLong(parameter);
+				fi.pss.cleanbeach.data.Event e = eService.loadDetails(eventId);
+				if (e != null) {
+					setContent(new PublicEventView(e));
+					return;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			Label noEventFound = new Label(Lang.get("public.noevent"));
+			setContent(noEventFound);
+			return;
+		}
 
 		// if (!getPage().getWebBrowser().isTouchDevice()) {
 		// // TODO proper redirection; this obviously doesn't work :)
@@ -53,8 +95,15 @@ public class MainAppUI extends UI {
 		// return;
 		// }
 
+		// build login
+		setContent(login);
+
+		fb = new Facebook(APPID);
+		addExtension(fb);
+		fb.addListener(loginPresenter);
+
 		if (AUTOLOGIN != null) {
-			User u = authService.login("thomas@t.com", "vaadin");
+			User u = authService.login(AUTOLOGIN, "vaadin");
 			login(new LoginEvent(u));
 		} else {
 			// build login
@@ -69,10 +118,19 @@ public class MainAppUI extends UI {
 		setCookie();
 
 		setContent(mainView);
-		mainView.init();
+		mainView.init(selectedEventId);
 	}
 
-	public static Cookie getUsernameCookie() {
+	public void logout(@Observes LogoutEvent e) {
+
+		if (fb != null) {
+			fb.logout();
+		}
+		getCurrent().close();
+		getCurrent().getPage().setLocation("");
+	}
+
+	public Cookie getUsernameCookie() {
 		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
 		if (cookies != null) {
 			for (Cookie c : cookies) {
@@ -84,31 +142,65 @@ public class MainAppUI extends UI {
 		return null;
 	}
 
-	public static void setCookie() {
-		// check for old
-		if (getUsernameCookie() != null) {
-			return;
+	public Cookie getLangCookie() {
+		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if (c.getName().equals(COOKIE_LANG)) {
+					return c;
+				}
+			}
 		}
+		return null;
+	}
 
-		Cookie newCookie = new Cookie(COOKIE_NAME,
-				((MainAppUI) UI.getCurrent()).currentUser.getEmail());
-		newCookie.setDomain("localhost");
-		// newCookie.setSecure(true); TODO enable
+	private void setCookie() {
+
+		Cookie newCookie = new Cookie(COOKIE_LANG, getLocale().getLanguage());
+		newCookie.setPath(VaadinService.getCurrentRequest().getContextPath());
 		// store for 30 days
 		newCookie.setMaxAge(60 * 60 * 24 * 30);
 
 		VaadinService.getCurrentResponse().addCookie(newCookie);
+
+		// check for OID
+		if (currentUser.getOidProvider() != null) {
+			return;
+		}
+
+		newCookie = new Cookie(COOKIE_NAME, currentUser.getEmail());
+		newCookie.setPath(VaadinService.getCurrentRequest().getContextPath());
+		// store for 30 days
+		newCookie.setMaxAge(60 * 60 * 24 * 30);
+
+		VaadinService.getCurrentResponse().addCookie(newCookie);
+
 	}
 
 	/**
 	 * Returns the currently logged in user.
 	 */
 	public static User getCurrentUser() {
-		return ((MainAppUI) getCurrent()).currentUser;
+		return getCurrent().currentUser;
 	}
 
 	public static void setCurrentUser(User current) {
-		((MainAppUI) getCurrent()).currentUser = current;
+		getCurrent().currentUser = current;
+	}
+
+	public static MainAppUI getCurrent() {
+		return (MainAppUI) UI.getCurrent();
+	}
+
+	public void loginFromFB() {
+
+		fb.login();
+	}
+
+	public void loginFromPublic(Long id) {
+
+		selectedEventId = id;
+		setContent(login);
 	}
 
 }

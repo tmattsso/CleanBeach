@@ -34,18 +34,20 @@ public class EventDetailLayout extends NavigationView {
 	private final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 	private final EventDetailsPresenter<?> presenter;
 
-	private fi.pss.cleanbeach.data.Event selectedEvent;
+	protected fi.pss.cleanbeach.data.Event selectedEvent;
 
 	private final Label caption;
 	private final Label desc;
-	private final Label members;
-	private final Label creator;
+	protected final Label members;
+	protected final Label creator;
 
-	private final HorizontalLayout actions;
+	protected final HorizontalLayout actions;
 
-	private final VerticalLayout comments;
+	protected final VerticalLayout comments;
 
 	private Button itemsButton;
+
+	protected VerticalLayout content;
 
 	public EventDetailLayout(final fi.pss.cleanbeach.data.Event e,
 			final EventDetailsPresenter<?> p) {
@@ -56,7 +58,7 @@ public class EventDetailLayout extends NavigationView {
 		addStyleName("eventdetail");
 		setCaption(Lang.get("events.details.caption"));
 
-		VerticalLayout content = new VerticalLayout();
+		content = new VerticalLayout();
 		content.setMargin(true);
 		content.setSpacing(true);
 		setContent(content);
@@ -143,23 +145,10 @@ public class EventDetailLayout extends NavigationView {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.openAddComment(false, selectedEvent);
+				presenter.openAddComment(selectedEvent);
 			}
 		});
 		actions.addComponent(comment);
-
-		Button photo = new Button(Lang.get("events.details.photo"));
-		TouchKitIcon.cameraRetro.addTo(photo);
-		photo.addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = -5417239994058318781L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				presenter.openAddComment(true, selectedEvent);
-			}
-		});
-		actions.addComponent(photo);
 
 		Button addThrash = new Button(Lang.get("events.details.thrash"));
 		TouchKitIcon.exclamationSign.addTo(addThrash);
@@ -187,6 +176,21 @@ public class EventDetailLayout extends NavigationView {
 		});
 		actions.addComponent(invite);
 
+		if (presenter.canUserEdit(selectedEvent, MainAppUI.getCurrentUser())) {
+			Button edit = new Button(Lang.get("events.details.edit"));
+			TouchKitIcon.edit.addTo(edit);
+			edit.addClickListener(new ClickListener() {
+
+				private static final long serialVersionUID = 3852409971806848078L;
+
+				@Override
+				public void buttonClick(ClickEvent event) {
+					presenter.openEditEvent(e);
+				}
+			});
+			actions.addComponent(edit);
+		}
+
 		comments = new VerticalLayout();
 		comments.setCaption(Lang.get("events.details.comments"));
 		comments.setSpacing(true);
@@ -201,6 +205,15 @@ public class EventDetailLayout extends NavigationView {
 		itemsButton.setHeight("100%");
 		itemsButton.addStyleName("thrash");
 		itemsButton.setHtmlContentAllowed(true);
+		itemsButton.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = -2279988918696258780L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				presenter.showTotalTrash(selectedEvent);
+			}
+		});
 
 		updateItemsButton(e);
 		return itemsButton;

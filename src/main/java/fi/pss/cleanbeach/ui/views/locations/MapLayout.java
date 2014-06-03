@@ -16,7 +16,6 @@ import com.vaadin.ui.Label;
 
 import fi.pss.cleanbeach.data.Location;
 import fi.pss.cleanbeach.ui.util.Lang;
-import fi.pss.cleanbeach.ui.views.locations.CreateLocationPopover.ConfirmLocationListener;
 import fi.pss.cleanbeach.ui.views.locations.ReportDirtyPopover.ConfirmThrashListener;
 
 public class MapLayout extends NavigationView implements
@@ -49,21 +48,9 @@ public class MapLayout extends NavigationView implements
 			@Override
 			public void buttonClick(ClickEvent event) {
 
-				// TODO check if too close to existing location
+				final Point p = lMap.getMarker().getPoint();
+				presenter.checkExistingLocs(p.getLat(), p.getLon());
 
-				// ask name for new location
-				CreateLocationPopover pop = new CreateLocationPopover(
-						new ConfirmLocationListener() {
-
-							@Override
-							public void confirm(String name) {
-								Point p = lMap.getMarker().getPoint();
-								presenter.addLocation(p.getLat(), p.getLon(),
-										name);
-								lMap.clearTempMarker();
-							}
-						});
-				pop.showRelativeTo(addLocation);
 			}
 		});
 
@@ -193,6 +180,11 @@ public class MapLayout extends NavigationView implements
 		selected = loc;
 
 		locName.setValue(loc.getName());
+		lMap.clearTempMarker();
+		lMap.select(loc);
+	}
+
+	void clearMarker() {
 		lMap.clearTempMarker();
 	}
 }

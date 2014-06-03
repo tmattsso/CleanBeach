@@ -46,8 +46,13 @@ public class EventsPresenter extends EventDetailsPresenter<IEvents> implements
 	@Override
 	public void createEvent(UsersGroup creator, String desc, Date start,
 			Location loc) {
-		// TODO Auto-generated method stub
+		Event event = service.createEvent(start, loc, creator, desc);
+		view.showDetails(event);
+	}
 
+	public void openSingleEvent(Long selectedEventId) {
+		Event e = service.loadDetails(selectedEventId);
+		view.showDetails(e);
 	}
 
 }

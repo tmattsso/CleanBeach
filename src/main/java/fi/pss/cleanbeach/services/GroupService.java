@@ -10,19 +10,24 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
+import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
+import fi.pss.cleanbeach.ui.util.ImageUtil;
 
 /**
  * @author denis
  * 
  */
 @Stateless
+@Interceptors(LoggingInterceptor.class)
 public class GroupService {
 
 	private final Logger log = Logger.getLogger(getClass().getSimpleName());
@@ -89,6 +94,16 @@ public class GroupService {
 	}
 
 	public UsersGroup save(UsersGroup group) {
+
+		if (group.getLogo() != null) {
+
+			Image uploadedImage = group.getLogo();
+
+			byte[] image = ImageUtil.resizeIfBigger(uploadedImage.getContent(),
+					150, uploadedImage.getMimetype());
+			uploadedImage.setContent(image);
+		}
+
 		return entityManager.merge(group);
 	}
 

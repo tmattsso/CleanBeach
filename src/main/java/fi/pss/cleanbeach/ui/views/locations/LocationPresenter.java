@@ -3,6 +3,7 @@ package fi.pss.cleanbeach.ui.views.locations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
 import fi.pss.cleanbeach.services.EventService;
 import fi.pss.cleanbeach.services.LocationService;
+import fi.pss.cleanbeach.ui.util.Lang;
 import fi.pss.cleanbeach.ui.views.eventdetails.EventDetailsPresenter;
 
 @UIScoped
@@ -40,7 +42,8 @@ public class LocationPresenter extends EventDetailsPresenter<ILocation> {
 			view.updateMarker(l);
 			view.selectMarker(l);
 		} else {
-			view.showErrorNotification("* Could not create location; it might be too close to an existing one.");
+			view.showErrorNotification(Lang
+					.get("locations.create.couldntcreate"));
 		}
 	}
 
@@ -96,5 +99,21 @@ public class LocationPresenter extends EventDetailsPresenter<ILocation> {
 
 	private Collection<Event> getEvents(Location selected) {
 		return eService.getEvents(selected);
+	}
+
+	public void checkExistingLocs(Double lat, Double lon) {
+		HashSet<Location> locationsNearForCreate = locService
+				.getLocationsNearForCreate(lat, lon);
+		if (locationsNearForCreate.isEmpty()) {
+			view.showLocCreate(lat, lon);
+		} else {
+			String locs = "";
+			for (Location l : locationsNearForCreate) {
+				locs += l.getName() + ", ";
+			}
+			locs = locs.substring(0, locs.length() - 2);
+			view.showErrorNotification(
+					Lang.get("locations.create.foundexisting"), locs);
+		}
 	}
 }

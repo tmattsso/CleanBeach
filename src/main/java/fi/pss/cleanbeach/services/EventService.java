@@ -2,14 +2,17 @@ package fi.pss.cleanbeach.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -26,8 +29,11 @@ import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.data.UsersGroup;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
+import fi.pss.cleanbeach.ui.util.ImageUtil;
 
 @Stateless
+@Interceptors(LoggingInterceptor.class)
 public class EventService {
 
 	private final Logger log = Logger.getLogger(getClass().getSimpleName());
@@ -80,7 +86,7 @@ public class EventService {
 	public List<Event> getEventsForUser(User u, Double latitude,
 			Double longitude) {
 
-		u = em.merge(u);
+		u = em.find(User.class, u.getId());
 
 		String q = "SELECT e FROM Event e WHERE (";
 		if (!u.getMemberIn().isEmpty()) {
@@ -302,6 +308,10 @@ public class EventService {
 		c.setWritetime(new Date());
 
 		if (img != null) {
+
+			img.setContent(ImageUtil.resizeIfBigger(img.getContent(), 1024,
+					img.getMimetype()));
+
 			img.setUploaded(new Date());
 		}
 
@@ -338,7 +348,7 @@ public class EventService {
 		return l;
 	}
 
-	public ThrashDAO getCollectedThrash(Event e) {
+	private ThrashDAO getCollectedThrash(Event e) {
 
 		String q = "SELECT t FROM Thrash t WHERE t.event=:e";
 		Query query = em.createQuery(q);
@@ -503,5 +513,69 @@ public class EventService {
 		em.remove(e);
 
 		em.flush();
+	}
+
+	public fi.pss.cleanbeach.data.Event loadDetails(long eventId) {
+		Event e = em.find(Event.class, eventId);
+		if (e != null) {
+			e = loadDetails(e);
+		}
+		return e;
+	}
+
+	public Event saveEvent(Event event, String desc, Date start) {
+		event = em.find(Event.class, event.getId());
+		event.setDescription(desc);
+		event.setStart(start);
+		event = em.merge(event);
+		event = loadDetails(event);
+		return event;
+	}
+
+	private static double getCoordinateMinMaxForZoomlevel(int level) {
+		return 0.006 * Math.pow(2, Math.abs(level - 18));
+	}
+
+	@SuppressWarnings("deprecation")
+	public Collection<Event> getEventsNear(Double latitude, Double longitude,
+			Integer zoomLevel) {
+
+		Query q = em
+				.createQuery("SELECT e FROM Event e WHERE e.start>:now AND "
+						+ "(e.location.latitude<:latMax AND e.location.latitude>:latMin) "
+						+ "AND (e.location.longitude<:longMax AND e.location.longitude>:longMin)");
+
+		Date now = new Date();
+		now.setHours(0);
+		now.setMinutes(0);
+		q.setParameter("now", now);
+
+		double offset = getCoordinateMinMaxForZoomlevel(zoomLevel);
+
+		q.setParameter("latMax", latitude + offset);
+		q.setParameter("latMin", latitude - offset);
+		q.setParameter("longMax", longitude + offset);
+		q.setParameter("longMin", longitude - offset);
+
+		@SuppressWarnings("unchecked")
+		java.util.List<Event> list = q.getResultList();
+		if (list == null) {
+			return new HashSet<Event>();
+		}
+
+		// filter duplicate events for same location
+		Map<Location, Event> nextEvents = new HashMap<Location, Event>();
+		for (Event event : list) {
+			if (!nextEvents.containsKey(event.getLocation())) {
+				nextEvents.put(event.getLocation(), event);
+				continue;
+			}
+			Event other = nextEvents.get(event.getLocation());
+			if (other.getStart().getTime() > event.getStart().getTime()) {
+				nextEvents.put(event.getLocation(), other);
+			}
+		}
+
+		return nextEvents.values();
 	}
 }

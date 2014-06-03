@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -20,13 +21,15 @@ import fi.pss.cleanbeach.data.Thrash;
 import fi.pss.cleanbeach.data.ThrashDAO;
 import fi.pss.cleanbeach.data.ThrashType;
 import fi.pss.cleanbeach.data.User;
+import fi.pss.cleanbeach.services.util.LoggingInterceptor;
 
 @Stateless
+@Interceptors(LoggingInterceptor.class)
 public class LocationService {
 
 	/**
 	 * Coordinates closer than this to an existing location are not allowed.
-	 * Should be roughly 100 meter radius.
+	 * Should be roughly 50 meter radius.
 	 */
 	private final static double LOCATION_CREATE_COORDINATE_THRESHOLD = 0.0009;
 
@@ -124,7 +127,8 @@ public class LocationService {
 
 	public ThrashDAO getThrash(Location selected, User user) {
 
-		String q = "SELECT t FROM Thrash t WHERE t.location=:loc AND t.reporter=:user AND t.pickupTime=CURRENT_DATE";
+		String q = "SELECT t FROM Thrash t WHERE "
+				+ "t.location=:loc AND t.reporter=:user AND t.pickupTime=CURRENT_DATE";
 		Query query = em.createQuery(q);
 		query.setParameter("loc", selected);
 		query.setParameter("user", user);
@@ -144,10 +148,26 @@ public class LocationService {
 
 	public void setDescription(ThrashType t, User currentUser, String value,
 			Event event, Location l) {
-		String q = "SELECT t FROM Thrash t WHERE t.type=:t AND t.reporter=:user AND t.pickupTime=CURRENT_DATE";
+		String q = "SELECT t FROM Thrash t WHERE "
+				+ "t.type=:t AND t.reporter=:user AND t.pickupTime=CURRENT_DATE ";
+
+		if (event != null) {
+			q += "AND t.event=:event ";
+		}
+		if (l != null) {
+			q += "AND t.location=:loc ";
+		}
+
 		Query query = em.createQuery(q);
 		query.setParameter("t", t);
 		query.setParameter("user", currentUser);
+
+		if (event != null) {
+			query.setParameter("event", event);
+		}
+		if (l != null) {
+			query.setParameter("loc", l);
+		}
 
 		Thrash thrash = null;
 		try {
@@ -168,6 +188,23 @@ public class LocationService {
 
 	public Collection<Location> getLocationsForCreate() {
 		Query q = em.createQuery("SELECT l FROM Location l");
+
+		@SuppressWarnings("unchecked")
+		java.util.List<Location> list = q.getResultList();
+
+		return list == null ? new HashSet<Location>() : new HashSet<Location>(
+				list);
+	}
+
+	public HashSet<Location> getLocationsNearForCreate(Double lat, Double lon) {
+		Query q = em.createQuery("SELECT l FROM Location l WHERE "
+				+ "(latitude<:latMax AND latitude>:latMin) "
+				+ "AND (longitude<:longMax AND longitude>:longMin)");
+
+		q.setParameter("latMax", lat + LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("latMin", lat - LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("longMax", lon + LOCATION_CREATE_COORDINATE_THRESHOLD);
+		q.setParameter("longMin", lon - LOCATION_CREATE_COORDINATE_THRESHOLD);
 
 		@SuppressWarnings("unchecked")
 		java.util.List<Location> list = q.getResultList();
