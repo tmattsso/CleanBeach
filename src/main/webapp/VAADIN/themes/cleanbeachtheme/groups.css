@@ -22,8 +22,8 @@
 	padding: 10px;
 	background-color: white;
 	border-radius: 5px;
-	border: 1px solid gray;
 	position:relative;
+    box-shadow: 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .groups .groupview-details-invitations .invitations-prefix,.groups .groupview-details-invitations .invitations-link,.groups .groupview-details-invitations .invitations-link .v-button-wrap
