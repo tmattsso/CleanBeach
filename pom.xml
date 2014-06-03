@@ -238,6 +238,13 @@
 						<persistentunitcachedir>${project.build.directory}</persistentunitcachedir>
 						<deploy>${project.build.directory}/gwt-deploy</deploy>
 						<runTarget>http://localhost:8080/cleanbeach</runTarget>
+						<modules>
+							<!-- Bizarre bug in Vaadin: with java 7 this don't compile 
+							if the order of modules is reversed. Also if autodetected modules.
+							With java 8 it compiles always. Probably a regression sinse 7.2  -->
+							<module>fi.pss.cleanbeach.standalone.map.MapWidgetSet</module>
+		    	            <module>fi.pss.cleanbeach.ui.gwt.AppWidgetSet</module>
+	    	            </modules>
 					</configuration>
 					<executions>
 						<execution>
