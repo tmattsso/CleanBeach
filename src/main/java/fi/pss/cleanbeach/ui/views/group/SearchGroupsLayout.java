@@ -2,9 +2,9 @@ package fi.pss.cleanbeach.ui.views.group;
 
 import java.util.List;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -41,7 +41,7 @@ public class SearchGroupsLayout extends NavigationView {
 
 		Button search = new Button(Lang.get("group.search.search"));
 		search.setClickShortcut(KeyCode.ENTER);
-		TouchKitIcon.search.addTo(search);
+		search.setIcon(FontAwesome.SEARCH);
 		vl.addComponent(search);
 		search.addClickListener(new ClickListener() {
 

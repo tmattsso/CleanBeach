@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -163,7 +163,7 @@ public class GroupDetailsLayout extends NavigationView {
 		layout.addStyleName("actionbuttons");
 
 		Button createButton = new Button(Lang.get("Group.details.create.event"));
-		TouchKitIcon.plus.addTo(createButton);
+		createButton.setIcon(FontAwesome.PLUS);
 		createButton.addStyleName("group-details-create-event");
 		createButton.addClickListener(new ClickListener() {
 
@@ -177,7 +177,7 @@ public class GroupDetailsLayout extends NavigationView {
 		layout.addComponent(createButton);
 
 		Button manage = new Button(Lang.get("Group.details.manage.admin"));
-		TouchKitIcon.user.addTo(manage);
+		manage.setIcon(FontAwesome.USER);
 		manage.addStyleName("group-details-manage-admins");
 		manage.addClickListener(new ClickListener() {
 
@@ -191,7 +191,7 @@ public class GroupDetailsLayout extends NavigationView {
 		layout.addComponent(manage);
 
 		Button edit = new Button(Lang.get("Group.details.manage.edit"));
-		TouchKitIcon.edit.addTo(edit);
+		edit.setIcon(FontAwesome.PENCIL);
 		edit.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 2574122824910031111L;

@@ -2,9 +2,9 @@ package fi.pss.cleanbeach.ui;
 
 import javax.inject.Inject;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.TabBarView;
 import com.vaadin.cdi.UIScoped;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.TabSheet.Tab;
 
 import fi.pss.cleanbeach.ui.util.Lang;
@@ -39,16 +39,16 @@ public class MainView extends TabBarView {
 		Tab tab;
 
 		tab = addTab(eventsView, Lang.get("events.caption"));
-		TouchKitIcon.flag.addTo(tab);
+		tab.setIcon(FontAwesome.FLAG);
 
 		tab = addTab(groupView, Lang.get("Groups.view.caption"));
-		TouchKitIcon.group.addTo(tab);
+		tab.setIcon(FontAwesome.USERS);
 
 		tab = addTab(mapView, Lang.get("locations.caption"));
-		TouchKitIcon.globe.addTo(tab);
+		tab.setIcon(FontAwesome.GLOBE);
 
 		tab = addTab(settingsView, Lang.get("settings.caption"));
-		TouchKitIcon.cogs.addTo(tab);
+		tab.setIcon(FontAwesome.COGS);
 
 		if (selectedEventId != null) {
 			eventsView.showEvent(selectedEventId);

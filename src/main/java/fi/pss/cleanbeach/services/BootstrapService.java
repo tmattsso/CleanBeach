@@ -15,6 +15,8 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.interceptor.Interceptors;
 
+import org.apache.commons.io.IOUtils;
+
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.Invite;
@@ -129,10 +131,9 @@ public class BootstrapService {
 		Image img = new Image();
 		img.setMimetype("image/png");
 		img.setUploaded(new Date());
-		Path path = Paths.get(getClass().getResource("../ui/logo.png")
-				.getPath());
 		try {
-			img.setContent(Files.readAllBytes(path));
+			byte[] byteArray = IOUtils.toByteArray(getClass().getResource("/fi/pss/cleanbeach/ui/logo.png"));
+			img.setContent(byteArray);
 		} catch (IOException e1) {
 			log.log(Level.WARNING, "read of image failed", e1);
 		}

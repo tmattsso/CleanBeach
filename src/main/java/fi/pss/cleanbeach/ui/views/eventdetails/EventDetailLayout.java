@@ -4,8 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -82,16 +82,14 @@ public class EventDetailLayout extends NavigationView {
 		Component items = getItemsButton(e);
 		gl.addComponent(items, 1, 0, 2, 0);
 
-		Button fb = new Button();
+		Button fb = new Button(FontAwesome.FACEBOOK);
 		fb.setWidth("100%");
 		fb.setEnabled(false);
-		TouchKitIcon.facebookSign.addTo(fb);
 		gl.addComponent(fb, 1, 1);
 
-		Button twitter = new Button();
+		Button twitter = new Button(FontAwesome.TWITTER);
 		twitter.setWidth("100%");
 		twitter.setEnabled(false);
-		TouchKitIcon.twitterSign.addTo(twitter);
 		gl.addComponent(twitter, 2, 1);
 
 		if (e.getOrganizer().isAdmin(MainAppUI.getCurrentUser())) {
@@ -138,7 +136,7 @@ public class EventDetailLayout extends NavigationView {
 		content.addComponent(actions);
 
 		Button comment = new Button(Lang.get("events.details.comment"));
-		TouchKitIcon.comment.addTo(comment);
+		comment.setIcon(FontAwesome.COMMENT);
 		comment.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 3214768233962554854L;
@@ -151,7 +149,7 @@ public class EventDetailLayout extends NavigationView {
 		actions.addComponent(comment);
 
 		Button addThrash = new Button(Lang.get("events.details.thrash"));
-		TouchKitIcon.exclamationSign.addTo(addThrash);
+		addThrash.setIcon(FontAwesome.EXCLAMATION);
 		addThrash.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -2718050820972847459L;
@@ -164,7 +162,7 @@ public class EventDetailLayout extends NavigationView {
 		actions.addComponent(addThrash);
 
 		Button invite = new Button(Lang.get("events.details.invite"));
-		TouchKitIcon.user.addTo(invite);
+		invite.setIcon(FontAwesome.USER);
 		invite.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 3852409971806848078L;
@@ -178,7 +176,7 @@ public class EventDetailLayout extends NavigationView {
 
 		if (presenter.canUserEdit(selectedEvent, MainAppUI.getCurrentUser())) {
 			Button edit = new Button(Lang.get("events.details.edit"));
-			TouchKitIcon.edit.addTo(edit);
+			edit.setIcon(FontAwesome.PENCIL_SQUARE);
 			edit.addClickListener(new ClickListener() {
 
 				private static final long serialVersionUID = 3852409971806848078L;
