@@ -2,8 +2,8 @@ package fi.pss.cleanbeach.ui.views.events;
 
 import java.util.List;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -52,24 +52,24 @@ public class MainEventsLayout extends NavigationView implements ClickListener {
 		allEvents.addClickListener(this);
 		allEvents.setData(allEventsLayout = new WallLayout(presenter));
 		allEvents.addStyleName("selected");
-		TouchKitIcon.group.addTo(allEvents);
+		allEvents.setIcon(FontAwesome.USERS);
 		tabs.addComponent(allEvents);
 
 		joinedEvents = new Button(Lang.get("events.main.joinedevents"));
 		joinedEvents.addClickListener(this);
 		joinedEvents.setData(joinedEventsLayout = new WallLayout(presenter));
-		TouchKitIcon.star.addTo(joinedEvents);
+		joinedEvents.setIcon(FontAwesome.STAR);
 		tabs.addComponent(joinedEvents);
 
 		search = new Button(Lang.get("events.main.search"));
 		search.addClickListener(this);
 		search.setData(searchLayout = new EventSearchLayout(presenter));
-		TouchKitIcon.search.addTo(search);
+		search.setIcon(FontAwesome.SEARCH);
 		tabs.addComponent(search);
 
 		create = new Button(Lang.get("events.main.create"));
 		create.addClickListener(this);
-		TouchKitIcon.plus.addTo(create);
+		create.setIcon(FontAwesome.PLUS);
 		tabs.addComponent(create);
 
 		content = new CssLayout((Component) allEvents.getData());

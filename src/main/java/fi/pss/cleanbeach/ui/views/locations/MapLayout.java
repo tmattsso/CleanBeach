@@ -4,8 +4,8 @@ import java.util.Set;
 
 import org.vaadin.addon.leaflet.shared.Point;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -40,7 +40,7 @@ public class MapLayout extends NavigationView implements
 		lMap.setSizeFull();
 
 		final Button addLocation = new Button(Lang.get("locations.map.addloc"));
-		TouchKitIcon.plus.addTo(addLocation);
+		addLocation.setIcon(FontAwesome.PLUS);
 		addLocation.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 5940636967467650018L;
@@ -55,7 +55,7 @@ public class MapLayout extends NavigationView implements
 		});
 
 		Button markDirty = new Button(Lang.get("locations.map.marklocdirty"));
-		TouchKitIcon.eyeOpen.addTo(markDirty);
+		markDirty.setIcon(FontAwesome.EYE);
 		markDirty.setSizeFull();
 		markDirty.addClickListener(new ClickListener() {
 
@@ -76,7 +76,7 @@ public class MapLayout extends NavigationView implements
 		});
 
 		Button markThrash = new Button(Lang.get("locations.map.reportthrash"));
-		TouchKitIcon.exclamationSign.addTo(markThrash);
+		markThrash.setIcon(FontAwesome.EXCLAMATION);
 		markThrash.setSizeFull();
 		markThrash.addClickListener(new ClickListener() {
 
@@ -101,7 +101,7 @@ public class MapLayout extends NavigationView implements
 		// });
 
 		Button showEvents = new Button(Lang.get("locations.map.showhistory"));
-		TouchKitIcon.listAlt.addTo(showEvents);
+		showEvents.setIcon(FontAwesome.LIST_ALT);
 		showEvents.setSizeFull();
 		showEvents.addClickListener(new ClickListener() {
 

@@ -46,11 +46,12 @@
 			<artifactId>vaadin-touchkit-agpl</artifactId>
 			<version>4.0.0-SNAPSHOT</version>
 			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-server</artifactId>
-			<version>${vaadin.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>vaadin-server</artifactId>
+					<groupId>com.vaadin</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<!-- Needed for possible offline mode -->
@@ -69,8 +70,13 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiler</artifactId>
 			<version>${vaadin.version}</version>
-                        <scope>provided</scope>
-                </dependency>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-server</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.vaadin.addon</groupId>
 			<artifactId>v-leaflet</artifactId>
@@ -81,6 +87,12 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-cdi</artifactId>
 			<version>1.0.0.alpha1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>vaadin-server</artifactId>
+					<groupId>com.vaadin</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -89,13 +101,13 @@
 			<version>1.0.1.Final</version>
 			<scope>provided</scope>
 		</dependency>
-	        <dependency>
-	                <artifactId>jetty-util</artifactId>
-	                <groupId>org.mortbay.jetty</groupId>
-	                <type>jar</type>
-	                <version>6.1.11</version>
-	        </dependency>
-	        <dependency>
+		<dependency>
+			<artifactId>jetty-util</artifactId>
+			<groupId>org.mortbay.jetty</groupId>
+			<type>jar</type>
+			<version>6.1.11</version>
+		</dependency>
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>6.0</version>
@@ -108,9 +120,20 @@
 			<version>2.3</version>
 		</dependency>
 
-		<!-- used under development -->
-		<!--dependency> <groupId>hsqldb</groupId> <artifactId>hsqldb</artifactId> 
-			<version>1.8.0.10</version> </dependency -->
+		<dependency>
+			<groupId>org.imgscalr</groupId>
+			<artifactId>imgscalr-lib</artifactId>
+			<version>4.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>2.7.4</version>
+		</dependency>
 
 	</dependencies>
 
@@ -129,7 +152,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-                                    <packagingExcludes></packagingExcludes>
+					<packagingExcludes></packagingExcludes>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>

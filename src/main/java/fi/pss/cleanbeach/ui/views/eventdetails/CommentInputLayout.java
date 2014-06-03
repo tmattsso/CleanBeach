@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -60,11 +60,11 @@ public class CommentInputLayout extends NavigationView {
 		addImage.setReceiver(ul);
 		addImage.addSucceededListener(ul);
 		addImage.addFailedListener(ul);
-		TouchKitIcon.cameraRetro.addTo(addImage);
+		addImage.setIcon(FontAwesome.CAMERA_RETRO);
 		root.addComponent(addImage);
 
 		saveComment = new Button(Lang.get("events.comment.addcomment"));
-		TouchKitIcon.comment.addTo(saveComment);
+		saveComment.setIcon(FontAwesome.COMMENT);
 		saveComment.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 5577262959129927178L;

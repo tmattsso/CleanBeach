@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.NavigationView;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -106,7 +106,7 @@ class GroupsLayout extends NavigationView {
 	private Button createSearchButton() {
 		Button button = new Button(Lang.get("Groups.view.search.button"));
 		button.addStyleName("search-button");
-		TouchKitIcon.search.addTo(button);
+		button.setIcon(FontAwesome.SEARCH);
 		button.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 841184184854521982L;
@@ -122,7 +122,7 @@ class GroupsLayout extends NavigationView {
 	private Button createGroupButton() {
 		Button button = new Button(Lang.get("Groups.view.create.button"));
 		button.addStyleName("create-button");
-		TouchKitIcon.plus.addTo(button);
+		button.setIcon(FontAwesome.PLUS);
 		button.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -6331201462849263479L;

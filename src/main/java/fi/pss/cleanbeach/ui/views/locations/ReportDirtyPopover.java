@@ -1,8 +1,8 @@
 package fi.pss.cleanbeach.ui.views.locations;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
 import com.vaadin.addon.touchkit.ui.Popover;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -32,7 +32,7 @@ public class ReportDirtyPopover extends Popover {
 		tf.focus();
 		Button create = new Button(Lang.get("locations.report.submit"));
 		create.addStyleName("submit");
-		TouchKitIcon.plus.addTo(create);
+		create.setIcon(FontAwesome.PLUS);
 		create.setClickShortcut(KeyCode.ENTER);
 		VerticalLayout vl = new VerticalLayout(description, tf, create);
 		vl.addStyleName("actionbuttons");
