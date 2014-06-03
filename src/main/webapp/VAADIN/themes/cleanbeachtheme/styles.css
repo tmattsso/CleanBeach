@@ -6,8 +6,10 @@
 @IMPORT url("groups.css");
 @IMPORT url("login.css");
 
-.v-caption {
-	color: #00a3e8;
+
+.v-widget>.v-textfield,
+.v-slot>.v-textfield {
+    padding: 10px;
 }
 
 .v-touchkit-toolbar {
