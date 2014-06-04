@@ -41,17 +41,19 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
+        <!-- Note, as Vaadin 7.2 has conflicting dependency (org/android json) with testbench, 
+            it needs to be on top of the dependency list... -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-testbench</artifactId>
+            <version>3.1.3</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>com.vaadin.addon</groupId>
 			<artifactId>vaadin-touchkit-agpl</artifactId>
 			<version>4.0.0-SNAPSHOT</version>
 			<type>jar</type>
-			<exclusions>
-				<exclusion>
-					<artifactId>vaadin-server</artifactId>
-					<groupId>com.vaadin</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<!-- Needed for possible offline mode -->
@@ -80,19 +82,13 @@
 		<dependency>
 			<groupId>org.vaadin.addon</groupId>
 			<artifactId>v-leaflet</artifactId>
-			<version>0.5.2</version>
+            <version>0.5.5</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-cdi</artifactId>
-			<version>1.0.0.alpha1</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>vaadin-server</artifactId>
-					<groupId>com.vaadin</groupId>
-				</exclusion>
-			</exclusions>
+            <version>1.0.0.alpha2</version>
 		</dependency>
 
 		<dependency>
@@ -163,6 +159,35 @@
 				<groupId>org.wildfly.plugins</groupId>
 				<artifactId>wildfly-maven-plugin</artifactId>
 				<version>1.0.1.Final</version>
+                <executions>
+                    <execution>
+                        <id>start-wildfly</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.12</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -252,6 +277,13 @@
 						<persistentunitcachedir>${project.build.directory}</persistentunitcachedir>
 						<deploy>${project.build.directory}/gwt-deploy</deploy>
 						<runTarget>http://localhost:8080/cleanbeach</runTarget>
+                        <modules>
+                            <!-- Bizarre bug in Vaadin: with java 7 this don't compile 
+                            if the order of modules is reversed. Also if autodetected modules.
+                            With java 8 it compiles always. Probably a regression sinse 7.2  -->
+                            <module>fi.pss.cleanbeach.standalone.map.MapWidgetSet</module>
+                            <module>fi.pss.cleanbeach.ui.gwt.AppWidgetSet</module>
+                        </modules>
 					</configuration>
 					<executions>
 						<execution>
