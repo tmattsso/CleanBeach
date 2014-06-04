@@ -1,5 +1,6 @@
 package unittests;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import javax.enterprise.event.Event;
@@ -8,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService;
 import fi.pss.cleanbeach.ui.views.login.LoginEvent;
 import fi.pss.cleanbeach.ui.views.login.LoginPresenter;
@@ -30,6 +32,9 @@ public class LoginPresenterTest {
 		authServMock = Mockito.mock(AuthenticationService.class);
 		presenter.setAuthService(authServMock);
 
+		Mockito.when(authServMock.login("correct", "correct")).thenReturn(
+				new User());
+
 		// Mockito can't mock this, unfortunately
 		event = new FakeEvent();
 		presenter.setEvent(event);
@@ -44,5 +49,15 @@ public class LoginPresenterTest {
 		Mockito.verify(view).showLoginError();
 
 		assertNull(((FakeEvent) event).sentEvent);
+	}
+
+	@Test
+	public void testLoginWithCorrect() {
+		presenter.login("correct", "correct");
+		Mockito.verify(authServMock).login("correct", "correct");
+
+		Mockito.verify(view, Mockito.never()).showLoginError();
+
+		assertNotNull(((FakeEvent) event).sentEvent);
 	}
 }
