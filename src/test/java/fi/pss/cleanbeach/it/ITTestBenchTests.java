@@ -1,7 +1,6 @@
 package fi.pss.cleanbeach.it;
 
 
-import fi.pss.cleanbeach.it.po.MainPage;
 import fi.pss.cleanbeach.it.po.LoginPage;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.commands.TestBenchCommands;
@@ -68,18 +67,7 @@ public class ITTestBenchTests {
 
     @AfterClass
     public static void tearDown() {
-        // Sleeping for demonstration purposes so that the browser won't close
-        // too fast.
-        sleep(2000);
         driver.quit();
-    }
-
-    private static void sleep(int i) {
-        try {
-            Thread.sleep(i);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 }
