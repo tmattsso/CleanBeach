@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.it;
+package fi.pss.cleanbeach.it.po;
 
 import org.openqa.selenium.WebDriver;
 

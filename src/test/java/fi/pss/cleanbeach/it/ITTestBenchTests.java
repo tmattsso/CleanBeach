@@ -1,14 +1,20 @@
 package fi.pss.cleanbeach.it;
 
 
+import fi.pss.cleanbeach.it.po.MainPage;
+import fi.pss.cleanbeach.it.po.LoginPage;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.commands.TestBenchCommands;
+import fi.pss.cleanbeach.it.po.EventPage;
+import fi.pss.cleanbeach.it.po.EventsPage;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * This is an example if an automated integration/acceptance test for a TouchKit
@@ -23,7 +29,9 @@ public class ITTestBenchTests {
     
     @BeforeClass
     public static void setup() {
-        driver = TestBench.createDriver(new ChromeDriver());
+        ChromeDriver d = new ChromeDriver();
+        d.manage().timeouts().implicitlyWait(2000, TimeUnit.MILLISECONDS);
+        driver = TestBench.createDriver(d);
         driver.manage().window().setSize(new Dimension(320, 640));
     }
 
@@ -38,8 +46,13 @@ public class ITTestBenchTests {
      * on real devices or on emulators/simulators.
      */
     @Test
-    public void login() {
-        MainUI mainUI = new LoginPage(driver).loginWith(TEST_USER,TEST_PW);
+    public void commentOnVaadinEvent() {
+        EventsPage eventspage = new LoginPage(driver).loginWith(TEST_USER,TEST_PW);
+        eventspage.searchFor("vaadin");
+        EventPage firstEvent = eventspage.openFirstEvent();
+        final String comment = "Is there some litter at Vaadin HQ?";
+        firstEvent.fillComment(comment);
+        firstEvent.verifyCommentPresent(comment);
         reportExecutionTime();
     }
 

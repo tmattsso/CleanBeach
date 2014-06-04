@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.it;
+package fi.pss.cleanbeach.it.po;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,11 +11,11 @@ public class LoginPage extends AbstractPageObject {
 
     private static final String TARGET_URL = "http://localhost:8080/cleanbeach/";
 
-    LoginPage(WebDriver driver) {
+    public LoginPage(WebDriver driver) {
         super(driver);
     }
 
-    public MainUI loginWith(String email, String password) {
+    public EventsPage loginWith(String email, String password) {
         driver.get(TARGET_URL);
         WebElement usernameInput = driver.findElement(By.xpath("//input[@type='email']"));
         usernameInput.clear();
@@ -28,7 +28,7 @@ public class LoginPage extends AbstractPageObject {
         WebElement loginButton = driver.findElement(By.xpath("//*[@class='v-button-caption']"));
         loginButton.click();
 
-        return new MainUI(driver);
+        return new EventsPage(driver);
     }
 
 }
