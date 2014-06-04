@@ -220,7 +220,7 @@ public class GroupDetailsLayout extends NavigationView {
 	}
 
 	private Component createDeleteButton(final UsersGroup group) {
-		Button button = new Button(Lang.get("Group.details.delete.group"));
+		final Button button = new Button(Lang.get("Group.details.delete.group"));
 		button.setStyleName(BaseTheme.BUTTON_LINK);
 		button.addClickListener(new ClickListener() {
 
@@ -236,7 +236,7 @@ public class GroupDetailsLayout extends NavigationView {
 						presenter.delete(group);
 					}
 				}, Lang.get("Group.details.delete.confirmation"));
-				pop.showRelativeTo(GroupDetailsLayout.this);
+				pop.showRelativeTo(button);
 			}
 		});
 		return button;

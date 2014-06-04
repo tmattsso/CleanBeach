@@ -51,3 +51,8 @@
 .groupmembers .user span {
 	font-weight: bold;
 }
+
+.invite .v-caption {
+    font-weight:bold;
+    padding-top:5px;
+}
