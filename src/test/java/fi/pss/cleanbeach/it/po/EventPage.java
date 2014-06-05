@@ -13,10 +13,19 @@ public class EventPage extends MainPage {
     }
 
     public EventPage fillComment(String comment) {
+        try {
+            joinEvent();
+        } catch (Exception e) {
+            // Already joined
+        }
         driver.findElement(By.xpath("//*[text() = 'Comment']")).click();
         driver.findElement(By.tagName("textarea")).sendKeys(comment);
         driver.findElement(By.xpath("//*[@class = 'v-button-caption' and text() = 'Add comment']")).click();
         return this;
+    }
+
+    private void joinEvent() {
+        driver.findElement(By.xpath("//*[text() = 'Join event']")).click();
     }
 
     public EventPage verifyCommentPresent(String comment) {
