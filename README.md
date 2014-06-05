@@ -1,4 +1,4 @@
-# USING THE GENERATED PROJECT:
+# CleanBeach mobile app
 
 A mobile app to organize events to collect litter and report the results from the beautiful archipelago of Finland.
 
