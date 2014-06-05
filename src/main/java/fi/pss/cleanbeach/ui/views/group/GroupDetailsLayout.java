@@ -221,7 +221,6 @@ public class GroupDetailsLayout extends NavigationView {
 
 	private Component createDeleteButton(final UsersGroup group) {
 		final Button button = new Button(Lang.get("Group.details.delete.group"));
-		button.setStyleName(BaseTheme.BUTTON_LINK);
 		button.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 4414454544724918833L;
@@ -290,7 +289,6 @@ public class GroupDetailsLayout extends NavigationView {
 
 	private Button createLeaveButton(final UsersGroup group) {
 		Button button = new Button(Lang.get("Group.details.leave.group"));
-		button.setStyleName(BaseTheme.BUTTON_LINK);
 		button.addStyleName("groupview-details-leave");
 		button.addClickListener(new ClickListener() {
 
@@ -307,7 +305,6 @@ public class GroupDetailsLayout extends NavigationView {
 	private Component createJoinButton(final GroupPresenter presenter,
 			final UsersGroup group) {
 		Button button = new Button(Lang.get("Group.details.join.group"));
-		button.setStyleName(BaseTheme.BUTTON_LINK);
 		button.addStyleName("groupview-details-join");
 		button.addClickListener(new ClickListener() {
 
