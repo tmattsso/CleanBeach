@@ -1,5 +1,8 @@
 package arquilliantests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -15,11 +18,11 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.vaadin.se.facebook.FacebookListener;
 
 import fi.pss.cleanbeach.data.User;
 import fi.pss.cleanbeach.services.AuthenticationService;
+import fi.pss.cleanbeach.services.AuthenticationService.RegistrationException;
 import fi.pss.cleanbeach.services.util.LoggingInterceptor;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 import fi.pss.cleanbeach.ui.mvp.IView;
@@ -49,7 +52,8 @@ public class LoginPresenterTest {
 				.addClass(AuthenticationService.class)
 				.addClass(LoggingInterceptor.class)
 
-				.addClass(LoginPresenter.class).addClass(ILogin.class)
+				.addClass(DummyLogin.class).addClass(LoginPresenter.class)
+				.addClass(ILogin.class)
 				.addClass(fi.pss.cleanbeach.ui.views.login.LoginEvent.class)
 				.addClass(IView.class).addClass(AbstractPresenter.class)
 				.addClass(FacebookListener.class)
@@ -61,18 +65,36 @@ public class LoginPresenterTest {
 
 	@Inject
 	private Presenter presenter;
-	private ILogin mock;
+
+	@Inject
+	private AuthenticationService aserv;
+
+	private DummyLogin mock;
 
 	@Before
-	public void preSetup() {
-		mock = Mockito.mock(ILogin.class);
+	public void preSetup() throws RegistrationException {
+		System.out.println(" ===== starting test");
+		mock = new DummyLogin();
 		presenter.setDummyView(mock);
+
+		User u = new User();
+		u.setName("Test");
+		u.setEmail("correct@correct.com");
+		User createUser = aserv.createUser(u, "correct");
+		System.out.println(" ===== created test user " + createUser);
 	}
 
 	@Test
 	public void loginWithNull() {
 
 		presenter.login(null, null);
-		Mockito.verify(mock).showLoginError();
+		assertTrue(mock.loginErrorShown);
+	}
+
+	@Test
+	public void loginWithCorrect() {
+
+		presenter.login("correct@correct.com", "correct");
+		assertFalse(mock.loginErrorShown);
 	}
 }
