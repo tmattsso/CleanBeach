@@ -3,15 +3,19 @@ package fi.pss.cleanbeach.it.po;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
-public abstract class MainPage extends AbstractPageObject {
+public abstract class MainPage {
+    
+    @FindBy(className = "v-touchkit-tabbar")
+    WebElement tabbar;
+    
+    final WebDriver driver;
 
     public MainPage(WebDriver driver) {
-        super(driver);
-        // ensure we have a tabbar in our browser
-        driver.findElement(By.className("v-touchkit-tabbar"));
+        this.driver = driver;
     }
-
+    
     public EventsPage goToEvents() {
         tabButtonWithText("Events").click();
         return new EventsPage(driver);
