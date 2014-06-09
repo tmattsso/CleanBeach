@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.vaadin.addon.touchkit.ui.NavigationView;
-import com.vaadin.ui.Button;
+import com.vaadin.addon.touchkit.ui.VerticalComponentGroup;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
 
 import fi.pss.cleanbeach.data.Invite;
 import fi.pss.cleanbeach.data.User;
@@ -23,18 +22,16 @@ public class InviteGroupsLayout extends NavigationView {
 			final fi.pss.cleanbeach.data.Event e, User u,
 			final EventDetailsPresenter<?> presenter) {
 
+        setStyleName("invite");
+
 		setCaption("Invite other groups");
 
-		GridLayout gl = new GridLayout(2, 1);
+		VerticalComponentGroup gl = new VerticalComponentGroup("Available groups");
 		setContent(gl);
-		gl.setSpacing(true);
-		gl.setMargin(true);
-		gl.setWidth("100%");
-		gl.setColumnExpandRatio(0, 1);
 
 		if (u.getMemberIn().isEmpty()) {
 			Label nein = new Label("You need to join some groups first!");
-			gl.addComponent(nein, 0, 0, 1, 0);
+			gl.addComponent(nein);
 			return;
 		}
 
@@ -44,11 +41,12 @@ public class InviteGroupsLayout extends NavigationView {
 		}
 
 		for (final UsersGroup g : u.getMemberIn()) {
-			Label l = new Label(g.getName());
-			gl.addComponent(l);
+
+            CssLayout groupLayout = new CssLayout();
+            groupLayout.setCaption(g.getName());
 
 			final Button b = new Button();
-			gl.addComponent(b);
+            groupLayout.addComponents(b);
 
 			if (e.getOrganizer().equals(g)) {
 				b.setCaption("Organizer");
@@ -70,6 +68,8 @@ public class InviteGroupsLayout extends NavigationView {
 					}
 				});
 			}
+
+            gl.addComponents(groupLayout);
 		}
 	}
 

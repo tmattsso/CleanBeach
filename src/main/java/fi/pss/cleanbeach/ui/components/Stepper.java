@@ -1,6 +1,6 @@
 package fi.pss.cleanbeach.ui.components;
 
-import com.vaadin.addon.touchkit.extensions.TouchKitIcon;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -30,11 +30,8 @@ public class Stepper extends CustomField<Integer> {
 
 	@Override
 	protected Component initContent() {
-		Button minus = new Button();
-		TouchKitIcon.minusSign.addTo(minus);
-
-		Button plus = new Button();
-		TouchKitIcon.plusSign.addTo(plus);
+		Button minus = new Button(FontAwesome.MINUS);
+		Button plus = new Button(FontAwesome.PLUS);
 
 		currentValue.setValue(getValue() + "");
 		currentValue.setWidth("100px");

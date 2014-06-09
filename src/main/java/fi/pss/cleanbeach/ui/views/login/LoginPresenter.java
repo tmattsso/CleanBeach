@@ -18,13 +18,13 @@ import fi.pss.cleanbeach.ui.util.Lang;
 
 @UIScoped
 public class LoginPresenter extends AbstractPresenter<ILogin> implements
-		FacebookListener {
+FacebookListener {
 
 	@Inject
-	private AuthenticationService authService;
+	protected AuthenticationService authService;
 
 	@Inject
-	private Event<LoginEvent> login;
+	protected Event<LoginEvent> login;
 
 	protected LoginPresenter() {
 	}

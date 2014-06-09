@@ -2,7 +2,7 @@
 .eventbox {
 	background-color: #FFF;
 	border-radius: 5px;
-	border: 1px solid gray;
+    box-shadow: 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .eventbox .people,
@@ -22,7 +22,6 @@
 	padding: 10px;
 	background-color: white;
 	border-radius: 5px;
-	border: 1px solid gray;
 }
 
 .eventdetail .comment .author {

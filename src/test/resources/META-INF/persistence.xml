@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+             http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+
+	<persistence-unit name="cleanbeach" transaction-type="JTA">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+
+		<class>fi.pss.cleanbeach.data.AbstractEntity</class>
+		<class>fi.pss.cleanbeach.data.Comment</class>
+		<class>fi.pss.cleanbeach.data.Event</class>
+		<class>fi.pss.cleanbeach.data.Image</class>
+		<class>fi.pss.cleanbeach.data.Invite</class>
+		<class>fi.pss.cleanbeach.data.Location</class>
+		<class>fi.pss.cleanbeach.data.Signup</class>
+		<class>fi.pss.cleanbeach.data.Thrash</class>
+		<class>fi.pss.cleanbeach.data.ThrashType</class>
+		<class>fi.pss.cleanbeach.data.User</class>
+		<class>fi.pss.cleanbeach.data.UsersGroup</class>
+
+		<properties>    
+		
+			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+			
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+			<property name="hibernate.showSql" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>

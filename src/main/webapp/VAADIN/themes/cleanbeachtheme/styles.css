@@ -6,8 +6,22 @@
 @IMPORT url("groups.css");
 @IMPORT url("login.css");
 
-.v-caption {
-	color: #00a3e8;
+
+.v-widget>.v-select,
+.v-slot>.v-select,
+.v-widget>.v-textfield,
+.v-slot>.v-textfield,
+.v-widget>.v-textarea,
+.v-slot>.v-textarea {
+    padding: 10px;
+    background: white;
+    border-radius: 3px;
+}
+
+.v-widget>.v-select::after,
+.v-slot>.v-select::after {
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 .v-touchkit-toolbar {
