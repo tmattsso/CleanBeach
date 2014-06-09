@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * This is an example if an automated integration/acceptance test for a TouchKit
@@ -46,9 +47,10 @@ public class ITTestBenchTests {
      */
     @Test
     public void commentOnVaadinEvent() {
-        EventsPage eventspage = new LoginPage(driver).loginWith(TEST_USER,TEST_PW);
-        eventspage.searchFor("vaadin");
-        EventPage firstEvent = eventspage.openFirstEvent();
+        LoginPage loginPage = PageFactory.initElements(driver, LoginPage.class);
+        EventsPage eventsPage = loginPage.loginWith(TEST_USER, TEST_PW);
+        eventsPage.searchFor("vaadin");
+        EventPage firstEvent = eventsPage.openFirstEvent();
         final String comment = "Is there some litter at Vaadin HQ?";
         firstEvent.fillComment(comment);
         firstEvent.verifyCommentPresent(comment);

@@ -1,25 +1,36 @@
 package fi.pss.cleanbeach.it.po;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
- * Created by mattitahvonenitmill on 04/06/14.
  */
 public class EventsPage extends MainPage {
+    
+    @FindBy(xpath = "//*[text() = 'Search']")
+    WebElement searchButton;
+    
+    @FindBy(tagName = "input")
+    WebElement searchInput;
+    
+    @FindBy(xpath = "//div[contains(@class, 'v-label-location')]")
+    WebElement firstEventElement;
     
     public EventsPage(WebDriver driver) {
         super(driver);
     }
 
     public void searchFor(String searchTerm) {
-        driver.findElement(By.xpath("//*[text() = 'Search']")).click();
-        driver.findElement(By.tagName("input")).sendKeys(searchTerm + "\n");
+        searchButton.click();
+        searchInput.sendKeys(searchTerm + "\n");
+        
     }
 
     public EventPage openFirstEvent() {
-        driver.findElement(By.xpath("//div[contains(@class, 'v-label-location')]")).click();
-        return new EventPage(driver);
+        firstEventElement.click();
+        return PageFactory.initElements(driver, EventPage.class);
     }
 
 }
