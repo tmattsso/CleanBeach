@@ -48,7 +48,7 @@ public class EventService {
 
 	/**
 	 * Create a new event.
-	 * 
+	 *
 	 * @param time
 	 * @param where
 	 * @param owner
@@ -79,7 +79,7 @@ public class EventService {
 	 * - any events that are near the user<br/>
 	 * - any events that a user group has endorsed<br/>
 	 * - that are max. 1 month old<br/>
-	 * 
+	 *
 	 * @param u
 	 * @return
 	 */
@@ -174,7 +174,7 @@ public class EventService {
 
 	/**
 	 * Gets all events the user has registered for (and not de-registered)
-	 * 
+	 *
 	 * @param u
 	 * @return
 	 */
@@ -204,10 +204,10 @@ public class EventService {
 
 	/**
 	 * Returns all events that match the query string.
-	 * 
+	 *
 	 * <p>
 	 * TODO what if user wants to search for old events?
-	 * 
+	 *
 	 * @param u
 	 * @param searchText
 	 * @return
@@ -291,7 +291,7 @@ public class EventService {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param e
 	 * @param text
 	 *            Maximum length is 248 characters.
@@ -396,7 +396,7 @@ public class EventService {
 
 	/**
 	 * TODO restrict time?
-	 * 
+	 *
 	 * @param group
 	 * @return
 	 */
@@ -405,7 +405,7 @@ public class EventService {
 				.createQuery(
 						"SELECT e from Event e WHERE e.organizer=:group OR e IN "
 								+ "(SELECT i.event FROM Invite i WHERE i.invitee=:group AND accepted=:acc)",
-						Event.class);
+								Event.class);
 		query.setParameter("group", group);
 		query.setParameter("acc", true);
 
@@ -418,7 +418,7 @@ public class EventService {
 
 	/**
 	 * TODO restrict time?
-	 * 
+	 *
 	 * @param group
 	 * @return
 	 */
@@ -462,7 +462,7 @@ public class EventService {
 				.createQuery(
 						"SELECT t from Thrash t WHERE "
 								+ "t.type=:type AND t.reporter=:user AND t.event=:event",
-						Thrash.class);
+								Thrash.class);
 		query.setParameter("type", type);
 		query.setParameter("user", currentUser);
 		query.setParameter("event", event);
@@ -588,5 +588,25 @@ public class EventService {
 		fillWithUserDetails(resultList);
 
 		return resultList;
+	}
+
+	public void delete(Comment c, Event e) {
+
+		e = loadDetails(e);
+
+		e.getComments().remove(c);
+
+		e.setNumComments(e.getComments().size());
+
+		int withImage = 0;
+		for (Comment comm : e.getComments()) {
+			if (comm.getImage() != null) {
+				withImage++;
+			}
+		}
+		e.setNumCommentsWithImage(withImage);
+
+		em.merge(e);
+		em.flush();
 	}
 }

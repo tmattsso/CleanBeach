@@ -1,4 +1,4 @@
-package fi.pss.cleanbeach.ui.views.events;
+package fi.pss.cleanbeach.ui.views.eventdetails;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -8,12 +8,20 @@ import java.text.SimpleDateFormat;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.themes.BaseTheme;
 
 import fi.pss.cleanbeach.data.Comment;
+import fi.pss.cleanbeach.ui.MainAppUI;
+import fi.pss.cleanbeach.ui.components.ConfirmPopover;
+import fi.pss.cleanbeach.ui.components.ConfirmPopover.ConfirmListener;
+import fi.pss.cleanbeach.ui.util.Lang;
 
 public class CommentComponent extends CustomComponent {
 
@@ -21,7 +29,9 @@ public class CommentComponent extends CustomComponent {
 
 	private final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
-	public CommentComponent(final Comment c) {
+	public CommentComponent(final Comment c,
+			final fi.pss.cleanbeach.data.Event event,
+			final EventDetailsPresenter<?> presenter) {
 
 		CssLayout root = new CssLayout();
 		setCompositionRoot(root);
@@ -32,6 +42,31 @@ public class CommentComponent extends CustomComponent {
 				+ df.format(c.getWritetime()), ContentMode.HTML);
 		author.addStyleName("author");
 		root.addComponent(author);
+
+		if (event.getOrganizer().isAdmin(MainAppUI.getCurrentUser())) {
+			final Button delete = new Button(Lang.get("events.comment.delete"));
+			delete.addStyleName(BaseTheme.BUTTON_LINK);
+			delete.addStyleName("delete");
+			root.addComponent(delete);
+
+			delete.addClickListener(new ClickListener() {
+
+				private static final long serialVersionUID = 4017668724515317210L;
+
+				@Override
+				public void buttonClick(ClickEvent e) {
+					ConfirmPopover pop = new ConfirmPopover(
+							new ConfirmListener() {
+
+								@Override
+								public void confirmed() {
+									presenter.deleteComment(c, event);
+								}
+							}, Lang.get("events.comment.delete.conf"));
+					pop.showRelativeTo(delete);
+				}
+			});
+		}
 
 		if (c.getImage() != null) {
 			Image img = new Image();

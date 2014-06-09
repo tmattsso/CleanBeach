@@ -29,10 +29,24 @@
 	padding-bottom: 5px;
 }
 
+.eventdetail .comment {
+	position: relative;
+}
 .eventdetail .comment .v-image {
 	padding: 5px;
 	padding-top: 0;
 	max-width: 100%;
+}
+
+.eventdetail .comment .delete {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	margin-top: 5px;
+	line-height: 12pt;
+}
+.eventdetail .comment .delete .v-button-caption{
+	font-size: 10pt;
 }
 
 .eventdetail .eventcaption {

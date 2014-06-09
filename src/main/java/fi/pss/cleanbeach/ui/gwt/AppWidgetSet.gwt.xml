@@ -14,4 +14,6 @@
 
     <inherits name="org.vaadin.addon.leaflet.draw.DrawWidgetset" />
     
+
+    <inherits name="fi.pss.cleanbeach.standalone.map.MapWidgetSet" />
 </module>

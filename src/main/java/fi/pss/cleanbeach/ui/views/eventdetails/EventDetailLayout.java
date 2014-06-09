@@ -24,7 +24,6 @@ import fi.pss.cleanbeach.ui.MainAppUI;
 import fi.pss.cleanbeach.ui.components.ConfirmPopover;
 import fi.pss.cleanbeach.ui.components.ConfirmPopover.ConfirmListener;
 import fi.pss.cleanbeach.ui.util.Lang;
-import fi.pss.cleanbeach.ui.views.events.CommentComponent;
 import fi.pss.cleanbeach.ui.views.events.SimpleMap;
 
 public class EventDetailLayout extends NavigationView {
@@ -288,7 +287,7 @@ public class EventDetailLayout extends NavigationView {
 
 		comments.removeAllComponents();
 		for (Comment c : e.getComments()) {
-			comments.addComponent(new CommentComponent(c));
+			comments.addComponent(new CommentComponent(c, e, presenter));
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import fi.pss.cleanbeach.data.Comment;
 import fi.pss.cleanbeach.data.Event;
 import fi.pss.cleanbeach.data.Image;
 import fi.pss.cleanbeach.data.Invite;
@@ -20,7 +21,7 @@ import fi.pss.cleanbeach.services.LocationService;
 import fi.pss.cleanbeach.ui.mvp.AbstractPresenter;
 
 public abstract class EventDetailsPresenter<T extends IEventDetails> extends
-		AbstractPresenter<T> {
+AbstractPresenter<T> {
 
 	@Inject
 	protected EventService service;
@@ -138,5 +139,11 @@ public abstract class EventDetailsPresenter<T extends IEventDetails> extends
 	public void showTotalTrash(fi.pss.cleanbeach.data.Event selectedEvent) {
 		selectedEvent = service.loadDetails(selectedEvent);
 		view.showThrashTotal(selectedEvent);
+	}
+
+	public void deleteComment(Comment c, Event e) {
+		service.delete(c, e);
+		e = service.loadDetails(e);
+		view.updateEventDetails(e);
 	}
 }
